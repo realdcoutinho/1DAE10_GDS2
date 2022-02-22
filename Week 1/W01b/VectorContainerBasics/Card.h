@@ -16,20 +16,17 @@ public:
 
 	explicit Card( Suit suit, int rank );
 	~Card();
-	void Draw( const Rectf& destRect ) const; // const member functions is new, will be explained in the theory
+	void Draw( const Rectf& destRect ) const;
 
 	static const int minRank;
 	static const int maxRank;
-	//float m_Scale{}; // do I need it?
-	float GetWidth() const;// const member functions is new, will be explained in the theory
-	float GetHeight() const;// const member functions is new, will be explained in the theory
-
+	float GetWidth() const;
+	float GetHeight() const;
 private:
 	float m_Width;
 	float m_Height;
 	const Texture *m_pTexture;
 	const Suit m_Suit;
 	const int m_Rank;
-	std::string GetImagePath(Suit suit, int rank) const;// const member functions is new, will be explained in the theory (it was 
-	//Rectf GenerateSourceRectangleForSprite(Texture texture);
+	std::string GetImagePath(Suit suit, int rank) const;
 };

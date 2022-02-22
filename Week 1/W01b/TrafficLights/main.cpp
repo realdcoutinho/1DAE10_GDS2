@@ -11,7 +11,7 @@ int main( int argc, char *argv[] )
 
 	StartHeapControl();
 
-	Core* pCore{ new Core{ Window{ "Traffic Lights - deMouraCoutinho, Diogo - 1DAEXX", 500.f , 500.f } } };
+	Core* pCore{ new Core{ Window{ "Traffic Lights - deMouraCoutinho, Diogo - 1DAE10E", 500.f , 500.f } } };
 	pCore->Run();
 	delete pCore;
 
