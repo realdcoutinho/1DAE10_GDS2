@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Game.h"
 #include "Texture.h"
+#include "Card.h"
 #include <iostream>
+#include <vector>
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -16,7 +18,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-
+	InitializeCards();
 }
 
 void Game::Cleanup( )
@@ -38,10 +40,10 @@ void Game::Update( float elapsedSec )
 	//}
 }
 
-void Game::Draw( ) const
+void Game::Draw( ) //const
 {
 	ClearBackground( );
-
+	DrawCards();
 
 
 }
@@ -66,6 +68,9 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		break;
 	case SDLK_LEFT:
 		Game::DownPressed();
+		break;
+	case SDLK_s:
+		Game::ShuffleCards();
 		break;
 	}
 }
@@ -209,19 +214,54 @@ void Game::DownPressed() {
 
 void Game::InitializeCards() 
 {
-	for (int suite = 0; suite < 4; suite++)
+	for (int suit{}; suit < int(Card::Suit::spades); suit++)
 	{
-		for (int card{ 0 }; card < 13; card++)
+		for (int rank{}; rank < int(Card::maxRank); rank++)
 		{
-			
+			m_Cards.push_back(new Card(Card::Suit(suit + 1), rank + 1));
 		}
+	}
+}
+
+void Game::DrawCards()
+{
+	float scale{ 0.45f };
+	float cardWidth{ m_Cards.at(0)->GetWidth() * scale };
+	float cardHeight{ m_Cards.at(0)->GetHeight() * scale };
+	Rectf destRect{ 0, 0, cardWidth, cardHeight };
+
+	for (size_t card{}; card < m_Cards.size(); ++card)
+	{
+		destRect.left = cardWidth * float(int(card) % int(Card::maxRank));
+		destRect.bottom = cardHeight * float(int(card) / int(Card::maxRank));
+		m_Cards.at(card)->Draw(destRect);
+	}
+}
+
+void Game::ShuffleCards()
+{
+	for (size_t card{}; card < m_Cards.size(); ++card)
+	{
+		int indexOne{ rand() % int(m_Cards.size())};
+		int indexTwo{ rand() % int(m_Cards.size()) };
+
+		do
+		{
+			indexOne = rand() % int(m_Cards.size());
+		} while (indexOne == indexTwo);
+
+		Card* holdingCard{ m_Cards.at(indexOne) };
+		m_Cards.at(indexOne) = m_Cards.at(indexTwo);
+		m_Cards.at(indexTwo) = holdingCard;
 	}
 }
 
 void Game::DeleteCards() 
 {
-	for (int i{}; i < m_NumberOfCards; ++i)
+	for (size_t card{}; card < m_Cards.size(); ++card)
 	{
-		delete m_pCards[i];
+		delete m_Cards.at(card);
+		m_Cards.at(card) = nullptr;
 	}
 }
+

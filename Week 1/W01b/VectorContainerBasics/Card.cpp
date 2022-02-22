@@ -12,6 +12,8 @@ Card::Card(Suit suit, int rank)
 {
 	std::string filename{ GetImagePath(suit,rank) };
 	m_pTexture = new Texture (filename);
+	m_Width = m_pTexture->GetWidth();
+	m_Height = m_pTexture->GetHeight();
 }
 
 Card::~Card()
@@ -19,28 +21,26 @@ Card::~Card()
 	m_pTexture->~Texture();
 }
 
-void Card::Draw(const Rectf& destRect)
+void Card::Draw(const Rectf& destRect) const
 {
-	std::string fullPath{ GetImagePath(Suit(m_Suit), m_Rank) };
 	m_pTexture->Draw(destRect);
 }
 
-float Card::GetWidth()
+float Card::GetWidth() const
 {
-	float width{ m_pTexture->GetWidth() };
-	return width;
+	return m_Width;
 }
 
-float Card::GetHeight()
+float Card::GetHeight() const
 {
-	float height{ m_pTexture->GetHeight() };
-	return height;
+	return m_Height;
 }
 
-std::string Card::GetImagePath(Suit suit, int rank)
+
+std::string Card::GetImagePath(Suit suit, int rank) const
 {
 	std::string fileType{ ".png" };
-	std::string path{ "resource" };
+	std::string path{ "resources/" };
 	int index{ int(suit) * 100 + rank };
 	std::string number{ std::to_string(index) };
 	

@@ -1,5 +1,6 @@
 #pragma once
-class Texture;
+
+class Card;
 #include <vector>
 
 class Game final
@@ -13,7 +14,7 @@ public:
 	~Game();
 
 	void Update( float elapsedSec );
-	void Draw( ) const;
+	void Draw();// const;
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -25,10 +26,10 @@ public:
 private:
 	// DATA MEMBERS
 	const Window m_Window;
-	static const int m_NumberOfCards{ 52 };
-	Texture* m_pCards[m_NumberOfCards]{};
-	//Texture* m_pCards[m_NumberOfCards]{};
+
 	std::vector<int> m_vector;
+	std::vector<Card*> m_Cards;
+
 
 	// FUNCTIONS
 	void Initialize( );
@@ -41,6 +42,9 @@ private:
 	void DownPressed();
 
 	void InitializeCards();
+	void DrawCards();
 	void DeleteCards();
-	
+	void ShuffleCards();
+
+	int GetIndex(int rowIndex, int columnIndex, int nrOfColumns);
 };
