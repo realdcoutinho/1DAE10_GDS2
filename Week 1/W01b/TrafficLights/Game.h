@@ -32,11 +32,8 @@ private:
 	void ClearBackground( ) const;
 
 	std::vector<TrafficLight*> m_Lights;
-
 	void InitializeTrafficLights();
 	void DrawTrafficLights();
 	void UpdateLights(float elapsed);
-	//void PrintState();
 	void DeleteTrafficLights();
-
 };

@@ -23,7 +23,6 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 	int GetNrOfTrafficLights() const;
-	//std::string GetState() const ;
 
 private:
 	State m_State{4};

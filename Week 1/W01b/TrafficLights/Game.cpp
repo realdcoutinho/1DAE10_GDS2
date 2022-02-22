@@ -29,9 +29,6 @@ void Game::Cleanup( )
 void Game::Update( float elapsedSec )
 {
 	UpdateLights(elapsedSec);
-
-	//PrintState();
-
 }
 
 void Game::Draw( ) //const
@@ -101,15 +98,6 @@ void Game::DrawTrafficLights()
 		m_Lights.at(i)->Draw();
 	}
 }
-
-//void Game::PrintState()
-//{
-//	for (size_t i{}; i < m_Lights.size(); ++i)
-//	{
-//		std::string state{ m_Lights.at(i)->GetState() };
-//		std::cout << "Light number " << i << " is " << state << '\n';
-//	}
-//}
 
 void Game::UpdateLights(float elapsed)
 {

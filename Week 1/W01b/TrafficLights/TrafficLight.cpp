@@ -144,27 +144,3 @@ int TrafficLight::GetNrOfTrafficLights() const
 {
 	return m_NumberOfTrafficLights;
 }
-
-//std::string TrafficLight::GetState() const
-//{
-//	std::string state{};
-//	switch (m_State)
-//	{
-//	case State(1): //green
-//		state = "Green";
-//		return state;
-//		break;
-//	case State(2): //orange
-//		state = "Orange";
-//		return state;
-//		break;
-//	case State(3): //red
-//		state = "Red";
-//		return state;
-//		break;
-//	case State(4):
-//		state = "Off";
-//		return state;
-//		break;
-//	}
-//}
