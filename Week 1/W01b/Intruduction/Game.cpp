@@ -153,6 +153,7 @@ void Game::ClearBackground( ) const
 	glClear( GL_COLOR_BUFFER_BIT );
 }
 
+
 void Game::VectorTest()
 {
 	std::vector<int> numbers{ 2, 4, 6, 8, 10, 12 };
