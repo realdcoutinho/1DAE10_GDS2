@@ -28,7 +28,7 @@ private:
 	//mine
 	static const int m_NrOfSmileys{ 10 };
 	Smiley* m_SmileysArray[m_NrOfSmileys];
-	float m_Border{ 50};
+	float m_Border{ 30};
 	Rectf m_SafeRect{ m_Border, m_Border, 900 - m_Border * 2, 500 - m_Border * 2 };
 	Rectf m_BouncingRect{ 0, 0, 900, 500 };
 
@@ -43,6 +43,8 @@ private:
 	Point2f GetInitialPosition();
 	void CreateSmileys();
 	void DrawSmileys() const;
+	void IncreaseSpeed();
+	void DecreaseSpeed();
 	void UpdatePosition(float elapsed);
 
 	void DeleteSmiley();

@@ -46,11 +46,34 @@ void Game::Draw( ) const
 	ClearBackground( );
 	DrawBorder();
 	DrawSmileys();
+
+
+	Point2f ground{ 800, 0 };
+	Point2f top{ 800, 500 };
+	//DrawLine(ground, top);
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+
+	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
+	switch ( e.keysym.sym )
+	{
+	case SDLK_LEFT:
+		std::cout << "Left arrow key released\n";
+		IncreaseSpeed();
+		break;
+	case SDLK_RIGHT:
+		std::cout << "`Right arrow key released\n";
+		DecreaseSpeed();
+		break;
+	case SDLK_1:
+	case SDLK_KP_1:
+		std::cout << "Key 1 released\n";
+		break;
+	}
+
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -78,19 +101,28 @@ void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 {
-	//std::cout << "MOUSEBUTTONDOWN event: ";
-	//switch ( e.button )
-	//{
-	//case SDL_BUTTON_LEFT:
-	//	std::cout << " left button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_RIGHT:
-	//	std::cout << " right button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	std::cout << " middle button " << std::endl;
-	//	break;
-	//}
+
+
+	Point2f mousePos{ float(e.x), float(e.y) };
+
+
+	std::cout << "MOUSEBUTTONDOWN event: ";
+	switch ( e.button )
+	{
+	case SDL_BUTTON_LEFT:
+		std::cout << " left button " << std::endl;
+		for (int i{}; i < m_NrOfSmileys; ++i)
+		{
+			m_SmileysArray[i]->HitTest(mousePos);
+		}
+		break;
+	case SDL_BUTTON_RIGHT:
+		std::cout << " right button " << std::endl;
+		break;
+	case SDL_BUTTON_MIDDLE:
+		std::cout << " middle button " << std::endl;
+		break;
+	}
 }
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
@@ -112,14 +144,14 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ClearBackground( ) const
 {
-	glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
+	glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }
 
 
 Point2f Game::GetInitialPosition()
 {
-	float width{ float(std::rand() % 900)};
+	float width{ float(std::rand() % 900) - 50};
 
 	Point2f initialPoint{ width, 250.0f };
 	return initialPoint;
@@ -127,11 +159,11 @@ Point2f Game::GetInitialPosition()
 
 void Game::CreateSmileys()
 {
-	Vector2f velocity{ 100, 100 };
+
 	for (int i{}; i < m_NrOfSmileys; ++i)
 	{
 		Point2f position{ GetInitialPosition() };
-		m_SmileysArray[i] = new Smiley(position, velocity);
+		m_SmileysArray[i] = new Smiley(position);
 	}
 }
 
@@ -164,4 +196,20 @@ void Game::DrawBorder() const
 	Color4f black{ 0,0, 0, 1 };
 	SetColor(black);
 	DrawRect(m_Border, m_Border, 900 - m_Border*2, 500 - m_Border*2);
+}
+
+void Game::IncreaseSpeed()
+{
+	for (int i{}; i < m_NrOfSmileys; ++i)
+	{
+		m_SmileysArray[i]->IncreaseSpeed();
+	}
+}
+
+void Game::DecreaseSpeed()
+{
+	for (int i{}; i < m_NrOfSmileys; ++i)
+	{
+		m_SmileysArray[i]->DecreaseSpeed();
+	}
 }

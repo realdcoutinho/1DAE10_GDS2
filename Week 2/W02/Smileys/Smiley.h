@@ -8,7 +8,16 @@ class  Texture; // class forward declaration
 class Smiley
 {
 public:
-	Smiley( const Point2f& position, Vector2f velocity );
+
+	enum class State
+	{
+		happy = 0,
+		neutral = 1,
+		angry = 2,
+		sleepy= 3
+	};
+
+	Smiley( const Point2f& position);
 	~Smiley( );
 
 	void Draw( );
@@ -31,22 +40,24 @@ private:
 	Point2f m_Position;
 	Vector2f m_Velocity;
 	bool m_IsHighest;
-	bool m_IsSleeping;
-	bool m_IsInSafeArea;
+	bool m_IsSleeping{false};
+	bool m_IsInSafeArea{};
 
 
 	//mine
 	float m_TextureWidth;
 	float m_TextureHeight;
+	int m_State{};
+
 
 	// FUNCTIONS
 	bool IsInSafeArea( const Rectf& safeRect );
 
 	//mine
 	void DeleteSmileys();
-
 	void CreateTextures();
-
+	void BoundingEdges(const Rectf& boundingRect, float elapsedSec);
+	void SetState(const Rectf& safeRect);
 };
 
 
