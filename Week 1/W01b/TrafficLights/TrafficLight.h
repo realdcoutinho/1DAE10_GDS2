@@ -18,7 +18,7 @@ public:
 	void DoHitTest(const Point2f& point);
 	void Update(float elapsedSec);
 	void LightChange();
-	void Draw();
+	void Draw() const;
 
 	float GetWidth() const;
 	float GetHeight() const;

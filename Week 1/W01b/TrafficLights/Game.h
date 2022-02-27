@@ -13,7 +13,7 @@ public:
 	~Game();
 
 	void Update( float elapsedSec );
-	void Draw(); //const;
+	void Draw() const;
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -33,7 +33,7 @@ private:
 
 	std::vector<TrafficLight*> m_Lights;
 	void InitializeTrafficLights();
-	void DrawTrafficLights();
+	void DrawTrafficLights() const;
 	void UpdateLights(float elapsed);
 	void DeleteTrafficLights();
 };

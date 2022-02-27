@@ -31,7 +31,7 @@ void Game::Update( float elapsedSec )
 	UpdateLights(elapsedSec);
 }
 
-void Game::Draw( ) //const
+void Game::Draw( ) const
 {
 	ClearBackground( );
 	DrawTrafficLights();
@@ -91,7 +91,7 @@ void Game::InitializeTrafficLights()
 	}
 }
 
-void Game::DrawTrafficLights()
+void Game::DrawTrafficLights() const
 {
 	for (size_t i{}; i < m_Lights.size(); ++i)
 	{

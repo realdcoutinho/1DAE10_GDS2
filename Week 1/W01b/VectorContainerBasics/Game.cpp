@@ -258,10 +258,15 @@ void Game::ShuffleCards()
 
 void Game::DeleteCards() 
 {
-	for (size_t card{}; card < m_Cards.size(); ++card)
+	//for (size_t index{}; index < m_Cards.size(); ++index)
+	//{
+	//	delete m_Cards[index];
+	//	m_Cards[index] = nullptr;
+	//}
+
+	for (Card* pCard : m_Cards)
 	{
-		delete m_Cards.at(card);
-		m_Cards.at(card) = nullptr;
+		delete pCard;
 	}
 }
 

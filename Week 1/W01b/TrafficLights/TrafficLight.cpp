@@ -60,35 +60,35 @@ void TrafficLight::Update(float elapsedSec)
 	m_AccumulatedSec += elapsedSec;
 }
 
-void TrafficLight::Draw()
+void TrafficLight::Draw() const
 {
 	SetColor(m_ColorBlack);
 	FillRect(m_Armature);
 
 	switch (m_State)
 	{
-	case State(1):
+	case State(State::green):
 		SetColor(m_ColorGreen);
 		FillEllipse(m_Green);
 		SetColor(m_ColorGrey);
 		FillEllipse(m_Orange);
 		FillEllipse(m_Red);
 		break;
-	case State(2):
+	case State(State::orange):
 		SetColor(m_ColorOrange);
 		FillEllipse(m_Orange);
 		SetColor(m_ColorGrey);
 		FillEllipse(m_Green);
 		FillEllipse(m_Red);
 		break;
-	case State(3):
+	case State(State::red):
 		SetColor(m_ColorRed);
 		FillEllipse(m_Red);
 		SetColor(m_ColorGrey);
 		FillEllipse(m_Green);
 		FillEllipse(m_Orange);
 		break;
-	case State(4):
+	case State(State::off):
 		SetColor(m_ColorGrey);
 		FillEllipse(m_Green);
 		FillEllipse(m_Orange);
@@ -116,25 +116,25 @@ void TrafficLight::LightChange()
 {
 	switch (m_State)
 	{
-	case State(1): //green
+	case (State::green):
 		if (m_AccumulatedSec >= 4) {
 			m_AccumulatedSec = 0;
-			m_State = State(2); // to orange
+			m_State = State(State::orange); //
 		}
 		break;
-	case State(2): //orange
+	case (State::orange): //orange
 		if (m_AccumulatedSec >= 1) {
 			m_AccumulatedSec = 0;
-			m_State = State(3); // to red
+			m_State = State(State::red); // to red
 		}
 		break;
-	case State(3): //red
+	case State(State::red): //red
 		if (m_AccumulatedSec >= 4) {
 			m_AccumulatedSec = 0;
-			m_State = State(1); // to green
+			m_State = State(State::green); // to green
 		}
 		break;
-	case State(4):
+	case State(State::off):
 		m_AccumulatedSec = 0;
 		break;
 	}
