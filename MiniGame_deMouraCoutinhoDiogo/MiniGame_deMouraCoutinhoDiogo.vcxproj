@@ -24,6 +24,7 @@
     <ProjectGuid>{c574a7d5-6d7d-43d1-9cc3-d2d7461de793}</ProjectGuid>
     <RootNamespace>MiniGamedeMouraCoutinhoDiogo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>PowerUpTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
