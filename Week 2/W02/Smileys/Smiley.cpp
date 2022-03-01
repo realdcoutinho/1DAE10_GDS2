@@ -5,7 +5,6 @@
 #include <iostream>
 #include "Texture.h"
 using namespace utils;
-// ....
 
 // Static Texture data
 Texture* Smiley::m_pSmileyTexture{ nullptr };
@@ -21,24 +20,32 @@ Smiley::Smiley(const Point2f& position)
 {
 	++m_InstanceCounter;
 	std::cout << "Constructor was built. You have " << m_InstanceCounter << " instances!" << '\n';
+	SetVelocity();
 	CreateTextures();
-
-	float velocityX = float(60 + (std::rand() % (180 - 60 + 1)));
-	float velocityY = float( 60 + (std::rand() % (180 - 60 + 1)));
-
-	Vector2f velocity{ velocityX , velocityY };
-	m_Velocity = velocity;
-
 }
 
 // Destructor
 // Deletes the Texture object when this is the last Smiley that is being destroyed.
 Smiley::~Smiley( )
 {
-	//delete m_pSmileyTexture;
-	//m_pSmileyTexture = nullptr;
 	std::cout << "We are deleting Instance number: " << m_InstanceCounter << '\n';
 	--m_InstanceCounter;
+	DeleteSmileys();
+}
+
+void Smiley::SetVelocity()
+{
+	m_VelocityZero = { 0,0 };
+
+	float velocityX = float(60 + (std::rand() % (180 - 60 + 1)));
+	float velocityY = float(60 + (std::rand() % (180 - 60 + 1)));
+
+	if (m_InstanceCounter % 2 == 0) {
+		m_Velocity = { velocityX , velocityY };
+	}
+	if (m_InstanceCounter % 2 != 0) {
+		m_Velocity = { -velocityX , -velocityY };
+	}
 }
 
 // Draw
@@ -55,22 +62,19 @@ void Smiley::Draw( )
 	switch (m_State)
 	{
 		case int(Smiley::State::happy) :
-		std::cout << "happyyyyyy" << '\n';
-		souceRect.left = int(Smiley::State::happy);
+		souceRect.left += int(Smiley::State::happy);
 		m_pSmileyTexture->Draw(m_Position, souceRect);
 		break;
 	case int(Smiley::State::neutral):
-		souceRect.left = m_TextureWidth * int(Smiley::State::neutral);
+		souceRect.left += m_TextureWidth * int(Smiley::State::neutral);
 		m_pSmileyTexture->Draw(m_Position, souceRect);
 		break;
 	case int(Smiley::State::angry) :
-		//std::cout << "angryyyyy" << '\n';
-		souceRect.left = m_TextureWidth * int(Smiley::State::angry);
+		souceRect.left += m_TextureWidth * int(Smiley::State::angry);
 		m_pSmileyTexture->Draw(m_Position, souceRect);
 		break;
 	case int(Smiley::State::sleepy):
-		std::cout << "sleeeepy" << '\n';
-		souceRect.left = m_TextureWidth * int(Smiley::State::sleepy);
+		souceRect.left += m_TextureWidth * int(Smiley::State::sleepy);
 		m_pSmileyTexture->Draw(m_Position, souceRect);
 		break;
 	}
@@ -96,35 +100,45 @@ void Smiley::HitTest( const Point2f& pos )
 
 	bool isHit{ IsPointInRect(pos, smile) };
 
-	if (isHit)
+	if (isHit && m_State != int(Smiley::State::sleepy))
 	{
-		switch (m_State)
-		{
-			case int(Smiley::State::happy) :
-				m_IsSleeping = true;
-				m_Velocity.x = 0;
-				m_Velocity.y = 0;
-				isHit = false;
-			break;
-			case int(Smiley::State::neutral) :
-				m_IsSleeping = true;
-				m_Velocity.x = 0;
-				m_Velocity.y = 0;
-				isHit = false;
-			break;
-			case int(Smiley::State::angry) :
-				m_IsSleeping = true;
-				m_Velocity.x = 0;
-				m_Velocity.y = 0;
-				isHit = false;
-			break;
-			case int(Smiley::State::sleepy) :
-				m_IsSleeping = false;
-				m_Velocity.x = 100;
-				m_Velocity.y = 100;
-				isHit = false;
-			break;
-		}
+		m_IsSleeping = true;
+		m_CurrentVelocity = m_Velocity;
+		m_Velocity = m_VelocityZero;
+		isHit = false;
+	}
+	if (isHit && m_State == int(Smiley::State::sleepy))
+	{
+		m_IsSleeping = false;
+		m_Velocity = m_CurrentVelocity;
+		isHit = false;
+		//switch (m_State)
+		//{
+		//	case int(Smiley::State::happy) :
+		//		m_IsSleeping = true;
+		//		m_Velocity.x = 0;
+		//		m_Velocity.y = 0;
+		//		isHit = false;
+		//	break;
+		//	case int(Smiley::State::neutral) :
+		//		m_IsSleeping = true;
+		//		m_Velocity.x = 0;
+		//		m_Velocity.y = 0;
+		//		isHit = false;
+		//	break;
+		//	case int(Smiley::State::angry) :
+		//		m_IsSleeping = true;
+		//		m_Velocity.x = 0;
+		//		m_Velocity.y = 0;
+		//		isHit = false;
+		//	break;
+		//	case int(Smiley::State::sleepy) :
+		//		m_IsSleeping = false;
+		//		m_Velocity.x = 100;
+		//		m_Velocity.y = 100;
+		//		isHit = false;
+		//	break;
+		//}
 	}
 }
 
@@ -146,6 +160,7 @@ Point2f Smiley::GetPosition( )
 // Setter of the m_IsHighest data member
 void Smiley::SetHighest( bool isHighest )
 {
+	m_IsHighest = isHighest;
 }
 
 // IncreaseSpeed
@@ -172,7 +187,8 @@ void Smiley::DecreaseSpeed( )
 
 void Smiley::DeleteSmileys()
 {
-
+	delete m_pSmileyTexture;
+	m_pSmileyTexture = nullptr;
 }
 
 
@@ -197,27 +213,25 @@ float Smiley::GetHeight() const
 
 void Smiley::BoundingEdges(const Rectf& boundingRect, float elapsedSec)
 {
-	const float bLeft{ boundingRect.left };
-	const float bBottom{ boundingRect.bottom };
-	const float bRight{ boundingRect.left + boundingRect.width };
-	const float bTop{ boundingRect.bottom + boundingRect.height };
+	Rectf bounding{ boundingRect.left, boundingRect.bottom, 
+		boundingRect.left + boundingRect.width, boundingRect.bottom + boundingRect.height };
 
 	m_Position.x += m_Velocity.x * elapsedSec;
 	m_Position.y += m_Velocity.y * elapsedSec;
 
-	if (m_Position.x + m_TextureWidth > bRight)
+	if (m_Position.x + m_TextureWidth > bounding.width)
 	{
 		m_Velocity.x *= -1;
 	}
-	if (m_Position.y + m_TextureHeight > bTop)
+	if (m_Position.y + m_TextureHeight > bounding.height)
 	{
 		m_Velocity.y *= -1;
 	}
-	if (m_Position.x < bLeft && m_Velocity.x < 0)
+	if (m_Position.x < bounding.left && m_Velocity.x < 0)
 	{
 		m_Velocity.x *= -1;
 	}
-	if (m_Position.y < bBottom && m_Velocity.y < 0)
+	if (m_Position.y < bounding.bottom && m_Velocity.y < 0)
 	{
 		m_Velocity.y *= -1;
 	}
@@ -250,19 +264,12 @@ void Smiley::SetState(const Rectf& safeRect)
 {
 	bool isSafe{ IsInSafeArea(safeRect) };
 
-	if (isSafe)
+	if (m_IsHighest && !(m_IsSleeping))
 	{
-		m_State = int(Smiley::State::neutral);
+		m_State = int(Smiley::State::happy);
+		std::cout << "Im the higest" << '\n';
 	}
-	else
-	{
-		m_State = int(Smiley::State::angry);
-	}
-	if (m_IsSleeping)
-	{
-		m_State = int(Smiley::State::sleepy);
-	}
-	else
+	else 
 	{
 		if (isSafe)
 		{
@@ -272,5 +279,21 @@ void Smiley::SetState(const Rectf& safeRect)
 		{
 			m_State = int(Smiley::State::angry);
 		}
+		if (m_IsSleeping)
+		{
+			m_State = int(Smiley::State::sleepy);
+		}
+		else
+		{
+			if (isSafe)
+			{
+				m_State = int(Smiley::State::neutral);
+			}
+			else
+			{
+				m_State = int(Smiley::State::angry);
+			}
+		}
+
 	}
 }

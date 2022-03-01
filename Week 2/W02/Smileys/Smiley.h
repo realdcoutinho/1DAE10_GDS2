@@ -39,6 +39,8 @@ private:
 
 	Point2f m_Position;
 	Vector2f m_Velocity;
+	Vector2f m_CurrentVelocity;
+	Vector2f m_VelocityZero;
 	bool m_IsHighest;
 	bool m_IsSleeping{false};
 	bool m_IsInSafeArea{};
@@ -57,6 +59,7 @@ private:
 	void DeleteSmileys();
 	void CreateTextures();
 	void BoundingEdges(const Rectf& boundingRect, float elapsedSec);
+	void SetVelocity();
 	void SetState(const Rectf& safeRect);
 };
 
