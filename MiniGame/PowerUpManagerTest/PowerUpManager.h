@@ -23,5 +23,9 @@ public:
 private:
 	std::vector<PowerUp*> m_pItems;
 
+
+
 	// Your helper functions
+	void Swap(PowerUp*& swapItem, PowerUp*& swapWithItem);
+	void DeletePowerUp();
 };

@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c574a7d5-6d7d-43d1-9cc3-d2d7461de793}</ProjectGuid>
-    <RootNamespace>MiniGamedeMouraCoutinhoDiogo</RootNamespace>
+    <ProjectGuid>{1d24458b-5d46-4df5-8b95-065eaf3da7f6}</ProjectGuid>
+    <RootNamespace>PowerUpManagerTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>PowerUpTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -60,19 +59,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SDLWin32.props" />
+    <Import Project="..\SDLWin32.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SDLWin32.props" />
+    <Import Project="..\SDLWin32.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SDLx64.props" />
+    <Import Project="..\SDLx64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="SDLx64.props" />
+    <Import Project="..\SDLx64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -162,9 +161,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="PowerUpManager.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="structs.cpp" />
     <ClCompile Include="SVGParser.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -177,6 +177,7 @@
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PowerUpManager.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />
     <ClInclude Include="structs.h" />
