@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3fa2851a-0987-4fc7-96b0-f8a77ac98e1d}</ProjectGuid>
-    <RootNamespace>Classes2Basics</RootNamespace>
+    <ProjectGuid>{70cda068-aede-46ee-8f69-bed4b26ad1dd}</ProjectGuid>
+    <RootNamespace>ShooterGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,22 +151,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Classes2Basics.cpp" />
-    <ClCompile Include="Container.cpp" />
+    <ClCompile Include="Avatar.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix2x3.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Square.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="SoundStream.cpp" />
+    <ClCompile Include="structs.cpp" />
+    <ClCompile Include="SVGParser.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Container.h" />
+    <ClInclude Include="Avatar.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Square.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="SoundStream.h" />
+    <ClInclude Include="structs.h" />
+    <ClInclude Include="SVGParser.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="Vector2f.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
