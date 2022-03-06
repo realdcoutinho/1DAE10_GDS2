@@ -12,6 +12,10 @@ DaeShape::DaeShape(const Point2f& center, float width, float height, const Color
 	std::cout << "Shape was created" << '\n';
 }
 
+void DaeShape::Draw() const
+{
+
+}
 void DaeShape::Translate(const Vector2f& tr) 
 {
 	m_Center += tr;

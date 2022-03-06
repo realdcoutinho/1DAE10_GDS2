@@ -9,6 +9,6 @@ DaeRectangle::DaeRectangle(const Point2f& center, float width, float height, con
 
 void DaeRectangle::Draw() const
 {
-	utils::SetColor(DaeShape::m_Color);
-	utils::FillRect(Point2f{ DaeShape::m_Center.x - DaeShape::m_Width / 2,DaeShape::m_Center.y - DaeShape::m_Height / 2 }, DaeShape::m_Width, DaeShape::m_Height);
+	utils::SetColor(m_Color);
+	utils::FillRect(Point2f{ m_Center.x - m_Width / 2,m_Center.y - m_Height / 2 }, m_Width, m_Height);
 }

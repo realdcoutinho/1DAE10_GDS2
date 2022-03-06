@@ -4,9 +4,7 @@
 
 Cat::Cat() :m_NightVision{ false }
 {
-	std::cout << "Cat constructor.\n";
 }
-
 Cat::~Cat()
 {
 	std::cout << "Cat destructor.\n";
