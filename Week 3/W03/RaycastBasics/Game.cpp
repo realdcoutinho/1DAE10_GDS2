@@ -160,7 +160,9 @@ void Game::DrawRaycast() const
 
 		//normal vector of the hit surface
 		SetColor(Color4f{ 0.0f, 1.0f, 0.0f, 1.0f });
-		DrawVector(hitInfo.normal * 30, hitInfo.intersectPoint);
+		//Vector2f normal{ }
+		DrawVector((hitInfo.normal * 30)*-1, hitInfo.intersectPoint);
+		DrawVector((hitInfo.normal * 30), hitInfo.intersectPoint);
 
 		//reflected ray(white)
 		//vector2f has a reflected method, parameter is the normal on the surface
