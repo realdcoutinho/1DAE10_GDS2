@@ -5,8 +5,8 @@ class Cat : public Animal
 {
 public:
 	Cat( );
-    virtual ~Cat( );
-    virtual void MakeSound() const override;
+    ~Cat( );
+    void MakeSound() const;
 	void SetNightVision(bool b);
 private:
 	bool m_NightVision;

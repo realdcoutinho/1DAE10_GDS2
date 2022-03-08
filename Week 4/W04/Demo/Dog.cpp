@@ -1,11 +1,9 @@
-//#include "pch.h"		
+/*#include "pch.h"	*/	
 #include "Dog.h"
 #include <iostream>
 
 Dog::Dog():m_SurveillanceMode{false}
 {
-	std::cout << "Dog constructor.\n";
-
 }
 
 Dog::~Dog()
