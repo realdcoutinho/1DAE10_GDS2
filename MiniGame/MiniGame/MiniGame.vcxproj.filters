@@ -60,15 +60,15 @@
     <ClCompile Include="Level.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="Avatar.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Framework Files</Filter>
     </ClInclude>
     <ClInclude Include="Vector2f.h">
-      <Filter>Framework Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
       <Filter>Framework Files</Filter>
     </ClInclude>
     <ClInclude Include="Matrix2x3.h">
@@ -101,8 +101,14 @@
     <ClInclude Include="PowerUp.h">
       <Filter>Game Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
+    <ClInclude Include="Core.h">
       <Filter>Framework Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Avatar.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,13 +147,25 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\Images\level.svg" />
-    <None Include="resources\Sounds\jingles.ogg" />
-    <None Include="resources\Sounds\laser.ogg" />
+    <None Include="resources\Sounds\jingles.ogg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\Sounds\laser.ogg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\Images\level.svg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="resources\Sounds\DonkeyKong.mp3" />
-    <Media Include="resources\Sounds\Mario.mp3" />
-    <Media Include="resources\Sounds\powerUp.mp3" />
+    <Media Include="resources\Sounds\DonkeyKong.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="resources\Sounds\Mario.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="resources\Sounds\powerUp.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>
