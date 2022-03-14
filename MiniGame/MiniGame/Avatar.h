@@ -18,6 +18,7 @@ public:
 	void Draw();
 	void PowerUpHit();
 	Rectf GetShape();
+
 private:
 	Rectf m_Shape{ 50, 280, 36, 97 };
 	float m_HorSpeed{ 200.0f };
@@ -28,6 +29,7 @@ private:
 	float m_AccuTransformSec{ 0.0f };
 	float m_MaxTransformSec{ 1.0f };
 	int m_Power{ 0 };
+
 
 	void Move(float elapsedSec);
 	void Transform(float elapsedSec);

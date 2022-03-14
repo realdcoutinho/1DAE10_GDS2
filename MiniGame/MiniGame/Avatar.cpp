@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Avatar.h"
 #include "Level.h"
+#include <iostream>
 using namespace utils;
 
 Avatar::Avatar()
@@ -13,9 +14,9 @@ Avatar::~Avatar()
 
 }
 
-void Avatar::Update(float elapsedSec, const Level* level)
+void Avatar::Update(float elapsedSec, const Level* pLevel)
 {
-	bool onGround{ level.IsOnGround(m_Shape) };
+	bool onGround{ pLevel->IsOnGround(m_Shape)};
 	if (m_ActionState == ActionState::transforming)
 	{
 		Transform(elapsedSec);
@@ -36,7 +37,7 @@ void Avatar::Draw()
 {
 	Color4f waitYellow{ 1.0f, 1.0f, 0.0f, 1.f };
 	Color4f moveRed{ 1.0f, 0.0f, 0.0f, 1.f };
-	Color4f transformBlue{ 1.0f, 1.0f, 0.0f, 1.f };
+	Color4f transformBlue{ 0.0f, 0.0f, 1.0f, 1.f };
 
 	switch (m_ActionState)
 	{
@@ -77,11 +78,13 @@ Rectf Avatar::GetShape()
 void Avatar::Transform(float elapsedSec)
 {
 	m_AccuTransformSec += elapsedSec;
+	m_Velocity = Vector2f{ 0,0 };
+	std::cout << " transform  " << m_Shape.bottom << '\n';
 	if (m_AccuTransformSec >= m_MaxTransformSec)
 	{
 		m_AccuTransformSec = 0;
-		m_ActionState = ActionState::waiting;
-		m_Velocity = Vector2f{ 0,0 };
+		m_ActionState = ActionState::moving;
+		std::cout << " done transform" << '\n';
 	}
 }
 
