@@ -19,6 +19,5 @@ private:
 	Point2f m_FenceBottomLeft;
 
 	void AddVertices();
-	bool CheckRaycast(const Rectf& actorShape);
 };
 

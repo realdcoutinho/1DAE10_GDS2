@@ -5,35 +5,41 @@
 using namespace utils;
 
 Avatar::Avatar()
+	: m_pSpritesTexture{ new Texture{"./resources/Images/AvatarSheet.png"} }
 {
 
 }
 
 Avatar::~Avatar()
 {
-
+	delete m_pSpritesTexture;
+	m_pSpritesTexture = nullptr;
 }
 
 void Avatar::Update(float elapsedSec, const Level* pLevel)
 {
-	bool onGround{ pLevel->IsOnGround(m_Shape)};
-	if (m_ActionState == ActionState::transforming)
-	{
-		Transform(elapsedSec);
-	}
-	if (onGround) 
-	{
-		Move(elapsedSec);
-	}
-	else
-	{
-		m_Velocity += m_Acceleration * elapsedSec;
-	}
-	m_Shape.left += m_Velocity.x;
-	m_Shape.bottom += m_Velocity.y * elapsedSec;
+	UpdateState(elapsedSec, pLevel);
+	UpdateFrames(elapsedSec);
 }
 
 void Avatar::Draw()
+{
+	//DrawRectAvatar();
+	DrawAvatarTexture();
+}
+
+void Avatar::PowerUpHit()
+{
+	m_ActionState = ActionState::transforming;
+	++m_Power;
+}
+
+Rectf Avatar::GetShape()
+{
+	return m_Shape;
+}
+
+void Avatar::DrawRectAvatar() const
 {
 	Color4f waitYellow{ 1.0f, 1.0f, 0.0f, 1.f };
 	Color4f moveRed{ 1.0f, 0.0f, 0.0f, 1.f };
@@ -62,50 +68,89 @@ void Avatar::Draw()
 		float side{ 5 };
 		FillRect(m_Shape.left + offset, m_Shape.bottom + offset + i * offset + i * side, side, side);
 	}
+
+
+	Point2f actorBottomCenter{ m_Shape.left + m_Shape.width / 2, m_Shape.bottom - 1 };
+	Point2f actorTopCenter{ m_Shape.left + m_Shape.width / 2, m_Shape.bottom + m_Shape.height };
+
+	SetColor(Color4f(0.0f, 1.0f, 0.0f, 1.0f));
+	DrawLine(actorBottomCenter, actorTopCenter, 4);
 }
 
-void Avatar::PowerUpHit()
-{
-	m_ActionState = ActionState::transforming;
-	++m_Power;
-}
 
-Rectf Avatar::GetShape()
+void Avatar::UpdateState(float elapsedSec, const Level* pLevel)
 {
-	return m_Shape;
+	bool onGround{ pLevel->IsOnGround(m_Shape) };
+	if (m_ActionState == ActionState::transforming)
+	{
+		Transform(elapsedSec);
+	}
+	if (onGround)
+	{
+		Move(elapsedSec);
+	}
+	else
+	{
+		m_Velocity += m_Acceleration * elapsedSec;
+	}
+	m_Shape.left += m_Velocity.x;
+	m_Shape.bottom += m_Velocity.y * elapsedSec;
+
+	UpdateFrames(elapsedSec);
 }
 
 void Avatar::Transform(float elapsedSec)
 {
 	m_AccuTransformSec += elapsedSec;
 	m_Velocity = Vector2f{ 0,0 };
-	std::cout << " transform  " << m_Shape.bottom << '\n';
 	if (m_AccuTransformSec >= m_MaxTransformSec)
 	{
 		m_AccuTransformSec = 0;
 		m_ActionState = ActionState::moving;
-		std::cout << " done transform" << '\n';
 	}
 }
 
 void Avatar::Move(float elapsedSec)
 {
 	m_Velocity = Vector2f{ 0,0 };
-	m_ActionState = ActionState::waiting;
+	m_ActionState = ActionState::moving;
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
-	if (pStates[SDL_SCANCODE_RIGHT])
+	if ((pStates[SDL_SCANCODE_RIGHT]) || (pStates[SDL_SCANCODE_D]))
 	{
 		m_ActionState = ActionState::moving;
 		m_Velocity.x = m_HorSpeed * elapsedSec;
 	}
-	if (pStates[SDL_SCANCODE_LEFT])
+	if ((pStates[SDL_SCANCODE_LEFT]) || (pStates[SDL_SCANCODE_A]))
 	{
 		m_ActionState = ActionState::moving;
 		m_Velocity.x = -m_HorSpeed * elapsedSec;
 	}
-	if (pStates[SDL_SCANCODE_UP])
+	if ((pStates[SDL_SCANCODE_UP]) || (pStates[SDL_SCANCODE_W]))
 	{
 		m_ActionState = ActionState::moving;
 		m_Velocity.y = m_JumpSpeed;
 	}
+}
+
+void Avatar::UpdateFrames(float elapsedSec)
+{
+	m_AnimTime += elapsedSec;
+	if (m_AnimTime >= 1.0f / m_NrOfFramesPerSec)
+	{
+		++m_AnimFrame %= m_NrOfFrames;
+		m_AnimTime = 0;
+	}
+	std::cout << m_AnimFrame << '\n';
+	std::cout << m_AnimTime << '\n';
+
+	m_Dest.left = m_ClipWidth * m_AnimFrame;
+	m_Dest.bottom = m_ClipHeight * (float(m_ActionState) + 1 + 3 * m_Power);
+
+	m_Dest.width = m_ClipWidth;
+	m_Dest.height = m_ClipHeight;
+}
+
+void Avatar::DrawAvatarTexture()
+{
+	m_pSpritesTexture->Draw(m_Shape, m_Dest);
 }
