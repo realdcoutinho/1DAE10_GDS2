@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Game Files">
+    <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
@@ -13,12 +9,16 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Game Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="utils.cpp">
+    <ClCompile Include="Core.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
     <ClCompile Include="Matrix2x3.cpp">
@@ -42,13 +42,16 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Framework Files</Filter>
+    </ClCompile>
     <ClCompile Include="Vector2f.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Diamond.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,15 +90,15 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Diamond.h">
-      <Filter>Framework Files</Filter>
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\DAE.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files</Filter>
     </Image>
     <Image Include="images\Diamond.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
 </Project>

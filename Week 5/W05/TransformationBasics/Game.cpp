@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include <iostream>
+//#include "Matrix2x3.h"
 using namespace utils;
 
 Game::Game(const Window& window)
@@ -18,8 +19,8 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	InitializeVertices();
+	InitializeTexture();
 	CalculateSpeed();
-	CalculateCenter();
 }
 
 void Game::Cleanup( )
@@ -29,13 +30,17 @@ void Game::Cleanup( )
 void Game::Update( float elapsedSec )
 {
 	RotateDiamond(elapsedSec);
+	ScaleDiamond(elapsedSec);
+	TranslateDiamond(elapsedSec);
+	Matrices();
 }
 
 void Game::Draw() const
 {
 	ClearBackground();
 
-	DrawDiamond();
+	DrawDiamondPoints();
+	DrawDiamondTexture();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -75,19 +80,13 @@ void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 {
-	//std::cout << "MOUSEBUTTONDOWN event: ";
-	//switch ( e.button )
-	//{
-	//case SDL_BUTTON_LEFT:
-	//	std::cout << " left button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_RIGHT:
-	//	std::cout << " right button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	std::cout << " middle button " << std::endl;
-	//	break;
-	//}
+	Point2f mouseposition{ (float)e.x, (float)e.y };
+	switch ( e.button )
+	{
+	case SDL_BUTTON_LEFT:
+		IsPointInDiamond(mouseposition);
+		break;
+	}
 }
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
@@ -124,21 +123,39 @@ void Game::InitializeVertices()
 	m_Vertices.push_back(p2);
 	m_Vertices.push_back(p3);
 	m_Vertices.push_back(p4);
-	Rectf rect{ 0, 0, 200, 100 };
-	m_Rect = rect;
 }
 
-void Game::DrawDiamond() const
+void Game::InitializeTexture()
 {
-	SetColor(Color4f(0.0f, 0.0f, 1.0f, 1.0f));
+	std::string filename{ "images/Diamond.png"};
+	m_pTextureDiamond = new Texture(filename);
+}
+
+void Game::DrawDiamondPoints() const
+{
+	std::vector<Point2f> inWorldVertices{ m_matWorld.Transform(m_Vertices) };
+
+	switch (m_State)
+	{
+	case(State::deselected):
+		SetColor(Color4f(0.0f, 0.0f, 1.0f, 1.0f));
+		break;
+	case(State::selected):
+		SetColor(Color4f(1.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	}
+	DrawPolygon(inWorldVertices, true, 2.5f);
+}
+
+void Game::DrawDiamondTexture() const
+{
 	glPushMatrix();
-	//glTranslated(-m_DisplacementVector.x, -m_DisplacementVector.y, 1);
-	//glTranslatef(-m_DisplacementVector.x, -m_DisplacementVector.y, 1);
+	glTranslatef(m_DisplacementVector.x, m_DisplacementVector.y, 0);
+	glTranslatef(m_centerPoint.x, m_centerPoint.y, 0);
 	glRotatef(m_RotationAngle, 0, 0, 1);
-	//glTranslatef(m_DisplacementVector.x, m_DisplacementVector.y, 1);
-	//glTranslated(m_DisplacementVector.x, m_DisplacementVector.y, 1);
-	//DrawRect(m_Rect);
-	DrawPolygon(m_Vertices, true, 2.5f);
+	glScalef(m_Scale, m_Scale, 0);
+	glTranslatef(-m_centerPoint.x, -m_centerPoint.y, 0);
+	m_pTextureDiamond->Draw();
 	glPopMatrix();
 }
 
@@ -147,16 +164,79 @@ void Game::RotateDiamond(float elapsedSec)
 	m_RotationAngle += m_RotationSpeed * elapsedSec * m_RotationDiretion;
 }
 
+void Game::ScaleDiamond(float elapsedSec)
+{
+	//Check keyboard state
+	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
+	if (pStates[SDL_SCANCODE_W])
+	{
+		m_Scale *= 1 + 3 * elapsedSec;
+		std::cout << "big" << '\n';
+	}
+	if (pStates[SDL_SCANCODE_S])
+	{
+		m_Scale /= 1 + 3 * elapsedSec;
+		std::cout << "small" << '\n';
+	}
+}
+
+void Game::TranslateDiamond(float elapsedSec)
+{
+	int directionX{ 0 };
+	int directionY{ 0 };
+	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
+	if (pStates[SDL_SCANCODE_UP])
+	{
+		directionY = 1;
+	}
+	if (pStates[SDL_SCANCODE_DOWN])
+	{
+		directionY = -1;
+	}
+	if (pStates[SDL_SCANCODE_RIGHT])
+	{
+		directionX = 1;
+	}
+	if (pStates[SDL_SCANCODE_LEFT])
+	{
+		directionX = -1;
+	}
+	m_DisplacementVector.x += directionX * 120 * elapsedSec;
+	m_DisplacementVector.y += directionY * 120 * elapsedSec;
+}
+
 void Game::CalculateSpeed()
 {
-	int speed{ rand() % 90 };
+	int speed{ rand() % 130 - 50};
 	m_RotationSpeed = float(speed);
 }
 
-void Game::CalculateCenter()
+void Game::Matrices()
 {
-	m_Center.x = m_Width / 2;
-	m_Center.y = m_Height / 2;
-	Vector2f center{ m_Center.x, m_Center.y };
-	m_DisplacementVector = center;
+	m_centerPoint = GetMiddle(m_Vertices[0], m_Vertices[2]);
+	Vector2f center{ m_centerPoint };
+
+	Matrix2x3 matTranslateToOrigin, matRotate, matScale, matTranslateToWorldSpace, matTranslateToStart;
+
+	matTranslateToOrigin.SetAsTranslate(-center); // move it to origin
+	matRotate.SetAsRotate(m_RotationAngle);
+	matScale.SetAsScale(m_Scale);
+	matTranslateToStart.SetAsTranslate(center); // move to starting position
+	matTranslateToWorldSpace.SetAsTranslate(m_DisplacementVector); // move it back to its world space
+
+	m_matWorld = matTranslateToWorldSpace * matTranslateToStart * matRotate * matScale  * matTranslateToOrigin;
+}
+
+void Game::IsPointInDiamond(Point2f mousePos)
+{
+	std::vector<Point2f> polygon{ m_matWorld.Transform(m_Vertices) };
+	
+	if (IsPointInPolygon(mousePos, polygon) && (m_State == State::selected))
+	{
+		m_State = State::deselected;
+	}
+	else if (IsPointInPolygon(mousePos, polygon) && (m_State == State::deselected))
+	{
+		m_State = State::selected;
+	}
 }
