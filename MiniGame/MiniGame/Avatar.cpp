@@ -106,7 +106,7 @@ void Avatar::Transform(float elapsedSec)
 	if (m_AccuTransformSec >= m_MaxTransformSec)
 	{
 		m_AccuTransformSec = 0;
-		m_ActionState = ActionState::moving;
+		m_ActionState = ActionState::waiting;
 	}
 }
 
@@ -135,19 +135,29 @@ void Avatar::Move(float elapsedSec)
 void Avatar::UpdateFrames(float elapsedSec)
 {
 	m_AnimTime += elapsedSec;
-	if (m_AnimTime >= 1.0f / m_NrOfFramesPerSec)
+	if (m_AnimTime >= (1.0f / m_NrOfFramesPerSec))
 	{
 		++m_AnimFrame %= m_NrOfFrames;
+		//++m_AnimFrame;
+		//if (m_AnimFrame >= 10)
+		//{
+		//	m_AnimFrame = 0;
+		//}
+		//
 		m_AnimTime = 0;
 	}
 	std::cout << m_AnimFrame << '\n';
-	std::cout << m_AnimTime << '\n';
+	//std::cout << m_AnimTime << '\n';
 
-	m_Dest.left = m_ClipWidth * m_AnimFrame;
-	m_Dest.bottom = m_ClipHeight * (float(m_ActionState) + 1 + 3 * m_Power);
+	//m_Dest.left = m_ClipWidth * m_AnimFrame;
+	//m_Dest.bottom = m_ClipHeight * (float(m_ActionState) + 1 + 3 * m_Power);
+
+	m_Dest.left = (m_AnimFrame * m_Shape.width);
+	m_Dest.bottom = m_Shape.height * (float(m_ActionState) + 1 + 3 * m_Power);
 
 	m_Dest.width = m_ClipWidth;
 	m_Dest.height = m_ClipHeight;
+
 }
 
 void Avatar::DrawAvatarTexture()
