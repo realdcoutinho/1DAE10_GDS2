@@ -46,7 +46,7 @@ void Game::Draw( ) const
 	ClearBackground( );
 	m_StatDaeTexture.Draw(Point2f{ 0.0f, 50.0f });
 	Point2f pos{ 400.0f, 50.0f };
-	DrawTexture(m_DaeTexture, pos, 3, 2, 5);
+	//DrawTexture(m_DaeTexture, pos, 3, 2, 5);
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
