@@ -42,3 +42,4 @@ private:
 	void AddPowerUps( );
 	void DoCollisionTests();
 };
+

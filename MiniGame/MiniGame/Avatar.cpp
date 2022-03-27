@@ -6,8 +6,22 @@ using namespace utils;
 
 Avatar::Avatar()
 	: m_pSpritesTexture{ new Texture{"./resources/Images/AvatarSheet.png"} }
+	, m_HorSpeed{ 200.0f }
+	, m_JumpSpeed{ 600.0f }
+	, m_AccuTransformSec{ 0.0f }
+	, m_MaxTransformSec{ 1.0f }
+	, m_ClipHeight{ 97.0f }
+	, m_ClipWidth{ 72.0f }
+	, m_Power{ 0 }
+	, m_Acceleration{ 0.0f, -981.0f }
+	, m_Velocity{ 0.0f, 0.0f }
+	, m_ActionState{ ActionState::moving }
+	, m_Shape{ 50.0f, 280.0f, 36.0f, 97.0f }
+	, m_NrOfFrames{ 10 }
+	, m_NrOfFramesPerSec{ 10 }
 {
-
+	if (!m_pSpritesTexture->IsCreationOk())
+		std::cout << "Error loading Avatar spritesheet.\n";
 }
 
 Avatar::~Avatar()
@@ -152,8 +166,8 @@ void Avatar::UpdateFrames(float elapsedSec)
 	//m_Dest.left = m_ClipWidth * m_AnimFrame;
 	//m_Dest.bottom = m_ClipHeight * (float(m_ActionState) + 1 + 3 * m_Power);
 
-	m_Dest.left = (m_AnimFrame * m_Shape.width);
-	m_Dest.bottom = m_Shape.height * (float(m_ActionState) + 1 + 3 * m_Power);
+	m_Dest.left = (m_AnimFrame * m_ClipWidth);
+	m_Dest.bottom = m_ClipHeight * (float(m_ActionState) + 1 + 3 * m_Power);
 
 	m_Dest.width = m_ClipWidth;
 	m_Dest.height = m_ClipHeight;
