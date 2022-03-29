@@ -5,6 +5,7 @@
 class PowerUpManager;
 class Level;
 class Avatar;
+class Camera;
 
 class Game final
 {
@@ -33,6 +34,7 @@ private:
 	Level *m_pLevel;
 	PowerUpManager* m_pPowerUpManager;
 	Avatar* m_pAvatar;
+	Camera* m_pCamera;
 
 	// FUNCTIONS
 	void Initialize( );
@@ -41,5 +43,7 @@ private:
 	void ShowTestMessage( ) const;
 	void AddPowerUps( );
 	void DoCollisionTests();
+
+	void CameraTrack();
 };
 

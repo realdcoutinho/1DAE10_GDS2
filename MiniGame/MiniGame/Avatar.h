@@ -17,9 +17,9 @@ public:
 	~Avatar();
 
 	void Update(float elapsedSec, const Level* level);
-	void Draw();
+	void Draw() const;
 	void PowerUpHit();
-	Rectf GetShape();
+	Rectf GetShape() const;
 
 private:
 	//given data memebrs
@@ -42,21 +42,31 @@ private:
 	Rectf m_Shape;
 	Vector2f m_Velocity;
 	ActionState m_ActionState;
-
-
-	//given functions
-	void Move(float elapsedSec);
-	void Transform(float elapsedSec);
-	void UpdateState(float elapsedSec, const Level* pLevel);
-	void DrawRectAvatar() const;
-	
-	//my data memebers
-
-
-
 	Rectf m_Dest;
 
-	//my functions
-	void DrawAvatarTexture();
+	void UpdateMovement(float elapsedSec, const Level* level);
 	void UpdateFrames(float elapsedSec);
+	void UpdateHorizontalVelocity(float elapsedSec, const Uint8* pKeysState);
+	void UpdateVerticalVelocity(float elapsedsec, const Level* level, const Uint8* pKeysState);
+	void MoveAvatar(float elapsedSec, const Level* level);
+	void Clamp(const Level* level);
+	void HandleTransformation(float elapsedSec);
+	void DrawPowerUpIndicators() const;
+	Rectf GetSourceRect() const;
+	Color4f GetColour() const;
+
+
+
+
+
+
+
+	////given functions
+	//void Move(float elapsedSec);
+	//void Transform(float elapsedSec);
+	//void UpdateState(float elapsedSec, const Level* pLevel);
+	//void DrawRectAvatar() const;
+	////my functions
+	//void DrawAvatarTexture();
+	//void UpdateFrames(float elapsedSec);
 };

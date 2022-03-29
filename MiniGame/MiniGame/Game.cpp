@@ -6,16 +6,25 @@
 #include "Level.h"
 #include "PowerUpManager.h"
 #include "Avatar.h"
+#include "Camera.h"
 
 Game::Game( const Window& window )
 	:m_Window{ window }
 	, m_pLevel{ new Level{} }
 	, m_pPowerUpManager{ new PowerUpManager{} }
 	, m_pAvatar{ new Avatar{} }
+	, m_pCamera{new Camera{window.width, window.height}}
 
 {	 
 	Initialize( );
 }
+
+void Game::CameraTrack()
+{
+	m_pCamera->SetLevelBounderies(m_pLevel->GetBoundaries());
+}
+
+
 
 Game::~Game( )
 {
@@ -52,18 +61,22 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	glPushMatrix();
+	{
+		m_pCamera->Transform(m_pAvatar->GetShape());
+		// Level's backGround
+		m_pLevel->DrawBackground();
 
-	// Level's backGround
-	m_pLevel->DrawBackground( );
+		// PowerUps
+		m_pPowerUpManager->Draw();
 
-	// PowerUps
-	m_pPowerUpManager->Draw( );
+		// Actor
+		m_pAvatar->Draw();
 
-	// Actor
-	m_pAvatar->Draw( );
-
-	// Level's foreground
-	m_pLevel->DrawForeground( );
+		// Level's foreground
+		m_pLevel->DrawForeground();
+	}
+	glPopMatrix();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
