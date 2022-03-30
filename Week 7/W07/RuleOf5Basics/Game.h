@@ -1,5 +1,7 @@
 #pragma once
+#include <vector>
 class Container;
+class Sprite;
 
 class Game final
 {
@@ -24,6 +26,8 @@ public:
 private:
 	// DATA MEMBERS
 	const Window m_Window;
+	std::vector<Sprite>m_Sprites;
+
 
 	// FUNCTIONS
 	void Initialize( );
@@ -32,4 +36,11 @@ private:
 
 	Container CreateContainer(int nrElements, int min, int max);
 	void TestContainer();
+	Sprite CreateSprite(const std::string& path, int cols, int rows, float frameSec);
+	void TestSprite();
+
+	void InitializeSpriteVector();
+	void DrawSpriteVector() const;
+	void UpdateSpriteVector(float elapsedSec);
+	void DeleteSpriteVector();
 };

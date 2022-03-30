@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Sprite.h"
-
+#include <iostream>
 #include "Texture.h"
 
 Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec )
@@ -16,8 +16,80 @@ Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec )
 
 Sprite::~Sprite( )
 {
-	delete m_pTexture;
+	 m_pTexture = nullptr;
+	 delete m_pTexture;
 }
+
+Sprite::Sprite(const Sprite& rhs) //copy constructor
+	: m_Cols(rhs.m_Cols)
+	, m_Rows(rhs.m_Rows)
+	, m_FrameSec(rhs.m_FrameSec)
+	, m_AccuSec{rhs.m_AccuSec}
+	, m_ActFrame{rhs.m_ActFrame}
+	, m_pTexture{ rhs.m_pTexture }
+{
+	std::cout << "Copy Constructor" << '\n';
+}
+
+Sprite& Sprite::operator=(const Sprite& rhs) //copy assignment operator
+{
+	if (&rhs != this)
+	{
+		m_Cols = rhs.m_Cols;
+		m_Rows = rhs.m_Rows;
+		m_FrameSec = rhs.m_FrameSec;
+		m_AccuSec = rhs.m_AccuSec;
+		m_ActFrame = rhs.m_ActFrame;
+		m_pTexture = nullptr;
+		m_pTexture = rhs.m_pTexture;
+	}
+	return *this;
+}
+
+Sprite::Sprite(Sprite&& rhs) noexcept // move constructor
+	: m_Cols(rhs.m_Cols)
+	, m_Rows(rhs.m_Rows)
+	, m_FrameSec(rhs.m_FrameSec)
+	, m_AccuSec{ rhs.m_AccuSec }
+	, m_ActFrame{ rhs.m_ActFrame }
+	, m_pTexture{ rhs.m_pTexture }
+{
+	rhs.m_Cols = 0;
+	rhs.m_Rows = 0;
+	rhs.m_FrameSec = 0;
+	rhs.m_AccuSec = 0;
+	rhs.m_ActFrame = 0;
+	//rhs.m_pTexture = nullptr;
+	rhs.m_pTexture = nullptr;
+	std::cout << "Move Constructor" << '\n';
+}
+
+Sprite& Sprite::operator=(Sprite&& rhs) noexcept //Move Assignment Operator
+{
+	if (&rhs != this)
+	{
+		m_Cols = rhs.m_Cols;
+		m_Rows = rhs.m_Rows;
+		m_FrameSec = rhs.m_FrameSec;
+		m_AccuSec = rhs.m_AccuSec;
+		m_ActFrame = rhs.m_ActFrame;
+		m_pTexture = nullptr;
+
+		m_pTexture = rhs.m_pTexture;
+		rhs.m_Cols = 0;
+		rhs.m_Rows = 0;
+		rhs.m_FrameSec = 0;
+		rhs.m_AccuSec = 0;
+		rhs.m_ActFrame = 0;
+		//rhs.m_pTexture = nullptr;
+		rhs.m_pTexture = nullptr;
+		std::cout << "Move Assignment Operator" << '\n';
+	}
+	return *this;
+
+}
+
+
 
 void Sprite::Update( float elapsedSec )
 {

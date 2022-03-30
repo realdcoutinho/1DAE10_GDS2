@@ -10,7 +10,7 @@ public:
 	Sprite(const Sprite& rhs); // copy constructor
 	Sprite& operator=(const Sprite& rhs); // assignment operator
 	Sprite(Sprite&& rhs) noexcept; // move constructor
-	Sprite&
+	Sprite& operator=(Sprite&& rhs) noexcept; //move assignment operator
 	~Sprite( );
 
 	void Update( float elapsedSec );

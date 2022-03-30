@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Game.h"
 #include "Container.h"
+#include "Sprite.h"
+#include <vector>
 #include <iostream>
 
 Game::Game( const Window& window ) 
@@ -12,19 +14,24 @@ Game::Game( const Window& window )
 Game::~Game( )
 {
 	Cleanup( );
+
 }
 
 void Game::Initialize( )
 {
 	TestContainer();
+	TestSprite();
+	InitializeSpriteVector();
 }
 
 void Game::Cleanup( )
 {
+	DeleteSpriteVector();
 }
 
 void Game::Update( float elapsedSec )
 {
+	UpdateSpriteVector(elapsedSec);
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	//if ( pStates[SDL_SCANCODE_RIGHT] )
@@ -40,6 +47,7 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	DrawSpriteVector();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -130,4 +138,57 @@ void Game::TestContainer()
 
 	std::cout << "--> Test that demonstrates the need of Move assignment operator" << '\n';
 	c1 = CreateContainer(10, 20, 30);
+}
+
+Sprite Game::CreateSprite(const std::string& path, int cols, int rows, float frameSec)
+{
+	Sprite s{ path, cols, rows, frameSec };
+	return s;
+}
+
+void Game::TestSprite()
+{
+	std::cout << "\n--> Sprite class: Test rule of 5 started\n";
+	Sprite sprite1{ "Resources/RunningKnight.png", 8, 1, 0.08f };
+	Sprite sprite2{ "Resources/RunningKnight.png", 8, 1, 0.08f };
+	Sprite sprite3{ sprite1 };
+	sprite2 = sprite1;
+	Sprite sprite4{ CreateSprite("Resources/Tibo.png", 5, 5, 1 / 10.f) };
+	sprite1 = CreateSprite("Resources/Tibo.png", 5, 5, 1 / 10.f);
+	std::cout << "std::move: ";
+	sprite2 = std::move(sprite1);
+	std::cout << "--> Sprite class: Test rule of 5 ended\n";
+}
+
+void Game::InitializeSpriteVector()
+{
+	for (int i{}; i < 1; ++i)
+	{
+		m_Sprites.push_back(Sprite{ "Resources/Tibo.png", 5, 5, float((rand() % (16 - 10 +1) + 10))});
+	}
+}
+
+void Game::DrawSpriteVector() const
+{
+	for (Sprite sprites : m_Sprites)
+	{
+		sprites.Draw(Point2f{ 0, 0 });
+	}
+}
+
+void Game::UpdateSpriteVector(float elapsedSec)
+{
+	for (Sprite sprites : m_Sprites)
+	{
+		sprites.Update(elapsedSec);
+		std::cout << "Is updating" << '\n';
+	}
+}
+
+void Game::DeleteSpriteVector()
+{
+	for (Sprite sprites : m_Sprites)
+	{
+		sprites.~Sprite();
+	}
 }
