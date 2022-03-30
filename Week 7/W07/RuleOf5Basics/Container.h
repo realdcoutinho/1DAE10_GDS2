@@ -6,7 +6,9 @@ public:
 	explicit Container( int capacity  = 10); 
 	Container(const Container& other); // copy constructor
 	Container& operator=(const Container& rhs); //assignment operator
-	~Container();
+	Container(Container&& rhs) noexcept; //move constructor
+	Container& operator=(Container&& rhs) noexcept; //move assignment operator
+	~Container( );
 
 	int Size( ) const;
 	int Capacity( ) const;
