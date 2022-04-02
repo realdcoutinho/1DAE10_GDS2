@@ -6,7 +6,7 @@ using namespace utils;
 Camera::Camera(float width, float height)
 	: m_Width{width}
 	, m_Height{height}
-	, m_LevelBoundaries{0,0, width, height}
+	, m_LevelBoundaries{}
 {
 	std::cout << "Camera Initialized" << '\n';
 	std::cout << "Camera Initialized" << '\n';
@@ -23,7 +23,7 @@ void Camera::SetLevelBounderies(const Rectf& levelBoundaries)
 void Camera::Transform(const Rectf& target)
 {
 	Point2f bottomLeftPos{ Track(target) };
-	//Clamp(bottomLeftPos);
+	Clamp(bottomLeftPos);
 	SetColor(Color4f{ 0, 0, 1, 1 });
 	glTranslatef(-bottomLeftPos.x, -bottomLeftPos.y, 0);
 	utils::DrawRect(bottomLeftPos, m_Width, m_Height);
@@ -39,6 +39,24 @@ Point2f Camera::Track(const Rectf& target)
 
 void Camera::Clamp(Point2f& bottomLeftPos)
 {
+	//if (bottomLeftPos.x < m_LevelBoundaries.left)
+	//{
+	//	bottomLeftPos.x = m_LevelBoundaries.left;
+	//}
+	//if (bottomLeftPos.x + m_Width > m_LevelBoundaries.left + m_LevelBoundaries.width)
+	//{
+	//	bottomLeftPos.x = m_LevelBoundaries.left + m_LevelBoundaries.width - m_Width;
+	//}
+	//if (bottomLeftPos.y < m_LevelBoundaries.bottom)
+	//{
+	//	bottomLeftPos.y = m_LevelBoundaries.bottom;
+	//}
+	//if (bottomLeftPos.y + m_Height > m_LevelBoundaries.bottom + m_LevelBoundaries.height)
+	//{
+	//	bottomLeftPos.y = m_LevelBoundaries.bottom + m_LevelBoundaries.height - m_Height;
+	//}
+
+
 	if (bottomLeftPos.x < m_LevelBoundaries.left)
 	{
 		bottomLeftPos.x = m_LevelBoundaries.left;

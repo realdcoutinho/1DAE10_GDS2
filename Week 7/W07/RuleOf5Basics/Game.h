@@ -27,7 +27,8 @@ private:
 	// DATA MEMBERS
 	const Window m_Window;
 	std::vector<Sprite>m_Sprites;
-
+	int m_NrRows{ 5 };
+	int m_NrColumns{ 5 };
 
 	// FUNCTIONS
 	void Initialize( );
@@ -42,5 +43,4 @@ private:
 	void InitializeSpriteVector();
 	void DrawSpriteVector() const;
 	void UpdateSpriteVector(float elapsedSec);
-	void DeleteSpriteVector();
 };

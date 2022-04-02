@@ -20,7 +20,7 @@ private:
 	Texture* m_pBackgroundTexture;
 	Texture* m_pForegroundTexture;
 	Point2f m_FenceBottomLeft;
-	const Rectf m_Boundaries;
+	Rectf m_Boundaries;
 
 	void AddVertices();
 };

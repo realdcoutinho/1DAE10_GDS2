@@ -26,7 +26,6 @@ void Game::Initialize( )
 
 void Game::Cleanup( )
 {
-	DeleteSpriteVector();
 }
 
 void Game::Update( float elapsedSec )
@@ -164,31 +163,23 @@ void Game::InitializeSpriteVector()
 {
 	for (int i{}; i < 1; ++i)
 	{
-		m_Sprites.push_back(Sprite{ "Resources/Tibo.png", 5, 5, float((rand() % (16 - 10 +1) + 10))});
+		m_Sprites.push_back(Sprite{ "Resources/Tibo.png", 5, 5, 1.0f /float((rand() % (16 - 10 +1) + 10))});
 	}
 }
 
 void Game::DrawSpriteVector() const
 {
-	for (Sprite sprites : m_Sprites)
+
+	for (int i{}; i < 1; ++i)
 	{
-		sprites.Draw(Point2f{ 0, 0 });
+		m_Sprites[i].Draw(Point2f{ 0, 0 });
 	}
 }
 
 void Game::UpdateSpriteVector(float elapsedSec)
 {
-	for (Sprite sprites : m_Sprites)
+	for (int i{}; i < 1; ++i)
 	{
-		sprites.Update(elapsedSec);
-		std::cout << "Is updating" << '\n';
-	}
-}
-
-void Game::DeleteSpriteVector()
-{
-	for (Sprite sprites : m_Sprites)
-	{
-		sprites.~Sprite();
+		m_Sprites[i].Update(elapsedSec);
 	}
 }

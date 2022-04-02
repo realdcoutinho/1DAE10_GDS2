@@ -10,13 +10,14 @@ Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec )
 	, m_AccuSec{}
 	, m_ActFrame{}
 	, m_pTexture{ new Texture( path ) }
+	, m_FilePath{path}
 {
 	//m_pTexture = new Texture( path );
 }
 
 Sprite::~Sprite( )
 {
-	 m_pTexture = nullptr;
+	 //m_pTexture = nullptr;
 	 delete m_pTexture;
 }
 
@@ -26,7 +27,7 @@ Sprite::Sprite(const Sprite& rhs) //copy constructor
 	, m_FrameSec(rhs.m_FrameSec)
 	, m_AccuSec{rhs.m_AccuSec}
 	, m_ActFrame{rhs.m_ActFrame}
-	, m_pTexture{ rhs.m_pTexture }
+	, m_pTexture{ new Texture{ rhs.m_FilePath } }
 {
 	std::cout << "Copy Constructor" << '\n';
 }
@@ -40,8 +41,9 @@ Sprite& Sprite::operator=(const Sprite& rhs) //copy assignment operator
 		m_FrameSec = rhs.m_FrameSec;
 		m_AccuSec = rhs.m_AccuSec;
 		m_ActFrame = rhs.m_ActFrame;
-		m_pTexture = nullptr;
-		m_pTexture = rhs.m_pTexture;
+		m_FilePath = rhs.m_FilePath;
+		delete m_pTexture;
+		m_pTexture =  new Texture{ rhs.m_FilePath };
 	}
 	return *this;
 }
@@ -73,7 +75,7 @@ Sprite& Sprite::operator=(Sprite&& rhs) noexcept //Move Assignment Operator
 		m_FrameSec = rhs.m_FrameSec;
 		m_AccuSec = rhs.m_AccuSec;
 		m_ActFrame = rhs.m_ActFrame;
-		m_pTexture = nullptr;
+		delete m_pTexture;
 
 		m_pTexture = rhs.m_pTexture;
 		rhs.m_Cols = 0;
@@ -109,7 +111,7 @@ void Sprite::Update( float elapsedSec )
 	}
 }
 
-void Sprite::Draw( const Point2f& pos, float scale )
+void Sprite::Draw( const Point2f& pos, float scale ) const
 {
 	// frame dimensions
 	const float frameWidth{  m_pTexture->GetWidth() / m_Cols };

@@ -14,7 +14,7 @@ public:
 	~Sprite( );
 
 	void Update( float elapsedSec );
-	void Draw( const Point2f& pos, float scale = 1.0f );
+	void Draw( const Point2f& pos, float scale = 1.0f ) const;
 
 	float GetFrameWidth( );
 	float GetFrameHeight( );
@@ -26,7 +26,7 @@ private:
 	float m_FrameSec;
 	float m_AccuSec;
 	int   m_ActFrame;
-
+	std::string m_FilePath;
 };
 
 

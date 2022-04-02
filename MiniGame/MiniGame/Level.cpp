@@ -8,10 +8,11 @@ using namespace utils;
 Level::Level() 
 	: m_pBackgroundTexture{new Texture{"./resources/Images/background.png" }}
 	, m_pForegroundTexture{ new Texture{"./resources/Images/fence.png" } }
-	, m_Boundaries{ 0.0f, 0.0f, m_pBackgroundTexture->GetWidth(), m_pBackgroundTexture->GetHeight() }
+	, m_Boundaries{}
 	, m_FenceBottomLeft{ 200.0f, 190.0f }
 
 {
+	m_Boundaries = Rectf{ 0.0f, 0.0f, m_pBackgroundTexture->GetWidth(), m_pBackgroundTexture->GetHeight() };
 	std::vector<std::vector<Point2f>> svgVertices{};
 	if (SVGParser::GetVerticesFromSvgFile("./resources/Images/level.svg", svgVertices))
 	{
