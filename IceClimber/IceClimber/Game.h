@@ -1,5 +1,9 @@
 #pragma once
+
+class Camera;
 class Level;
+class Player;
+
 class Game final
 {
 public:
@@ -21,17 +25,19 @@ public:
 	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e );
 
 private:
-	// DATA MEMBERS
-	const Window m_Window;
-
-	// FUNCTIONS
-	void Initialize( );
-	void Cleanup( );
-	void ClearBackground( ) const;
-
-	//my data memebrs
-	Level* m_pLevel;
-
-	//my functions
+	void Initialize();
+	void Cleanup();
+	void ClearBackground() const;
+	void SetScale();
 	void DrawBackground() const;
+	void InitializeCamera(const Window& window);
+
+
+	float m_Scale;
+	float time{};
+
+	const Window m_Window;
+	Camera* m_pCamera;
+	Player* m_pPlayer;
+	Level* m_pLevel;
 };

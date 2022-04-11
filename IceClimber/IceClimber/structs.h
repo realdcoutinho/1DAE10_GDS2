@@ -16,6 +16,7 @@ struct Point2f
 {
 	Point2f( );
 	explicit Point2f( float x, float y );
+	Point2f& operator*=(float scale);
 
 	float x;
 	float y;
@@ -23,16 +24,27 @@ struct Point2f
 
 
 
-struct Rectf
+struct Rectf //jesus code, thanks
 {
-	Rectf( );
-	explicit Rectf( float left, float bottom, float width, float height );
-	
+	Rectf();
+	explicit Rectf(float left, float bottom, float width, float height);
+
 	float left;
 	float bottom;
 	float width;
 	float height;
 
+	void Log();
+	void SetBottomLeft(const Point2f& point);
+	Point2f GetBottomLeft(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetBottomCenter(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetBottomRight(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetTopLeft(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetTopCenter(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetTopRight(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetCenterLeft(float offsetX = 0, float offsetY = 0) const;
+	Point2f GetCenter() const;
+	Point2f GetCenterRight(float offsetX = 0, float offsetY = 0) const;
 };
 
 

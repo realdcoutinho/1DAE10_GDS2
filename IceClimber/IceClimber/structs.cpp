@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "structs.h"
+#include <iostream>
 
 //-----------------------------------------------------------------
 // Window Constructors
@@ -24,6 +25,13 @@ Point2f::Point2f( float x, float y )
 {
 }
 
+Point2f& Point2f::operator*=(float scale) 
+{
+	x *= scale;
+	y *= scale;
+	return *this;
+}
+
 //-----------------------------------------------------------------
 // Rectf Constructors
 //-----------------------------------------------------------------
@@ -38,6 +46,95 @@ Rectf::Rectf( float left, float bottom, float width, float height )
 	,width{ width }
 	,height{ height }
 {
+}
+//-----------------------------------------------------------------
+// Rectf Helpers
+//-----------------------------------------------------------------
+void Rectf::Log()
+{
+    std::string logMessage{ "{ l: " + std::to_string(this->left) };
+    logMessage += ", b: " + std::to_string(this->bottom);
+    logMessage += ", w: " + std::to_string(this->width);
+    logMessage += ", h: " + std::to_string(this->height);
+    std::cout << logMessage << std::endl;
+}
+
+void Rectf::SetBottomLeft(const Point2f& point)
+{
+    left = point.x;
+    bottom = point.y;
+}
+
+Point2f Rectf::GetBottomLeft(float offsetX, float offsetY) const
+{
+    Point2f point{ left, bottom };
+    point.x += offsetX;
+    point.y += offsetY;
+    return point;
+}
+
+Point2f Rectf::GetBottomCenter(float offsetX, float offsetY) const
+{
+    Point2f point{ GetBottomLeft() };
+    point.x += (width / 2) + offsetX;
+    point.y += offsetY;
+    return point;
+}
+
+Point2f Rectf::GetBottomRight(float offsetX, float offsetY) const
+{
+    Point2f point{ GetBottomLeft() };
+    point.x += width + offsetX;
+    point.y += offsetY;
+    return point;
+}
+
+Point2f Rectf::GetTopLeft(float offsetX, float offsetY) const
+{
+    Point2f point{ GetBottomLeft() };
+    point.x += offsetX;
+    point.y += height + offsetY;
+    return point;
+}
+
+Point2f Rectf::GetTopCenter(float offsetX, float offsetY) const
+{
+    Point2f point{ GetTopLeft() };
+    point.x += (width / 2) + offsetX;
+    point.y += offsetY;
+    return point;
+}
+
+Point2f Rectf::GetTopRight(float offsetX, float offsetY) const
+{
+    Point2f point{ GetBottomRight() };
+    point.x += offsetX;
+    point.y += height + offsetY;
+    return point;
+}
+
+Point2f Rectf::GetCenterLeft(float offsetX, float offsetY) const
+{
+    Point2f point{ GetBottomLeft() };
+    point.x += offsetX;
+    point.y += (height / 2) + offsetY;
+    return point;
+}
+
+Point2f Rectf::GetCenter() const
+{
+    Point2f point{ GetBottomLeft() };
+    point.x += width / 2;
+    point.y += height / 2;
+    return point;
+}
+
+Point2f Rectf::GetCenterRight(float offsetX, float offsetY) const
+{
+    Point2f point{ GetBottomRight() };
+    point.x += offsetX;
+    point.y += (height / 2) + offsetY;
+    return point;
 }
 
 //-----------------------------------------------------------------

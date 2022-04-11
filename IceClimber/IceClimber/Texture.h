@@ -4,6 +4,7 @@ class Texture final
 {
 public:
 	explicit Texture( const std::string& imagePath );
+	explicit Texture(const std::string& imagePath, float scale);
 	explicit Texture( const std::string& text, TTF_Font *pFont, const Color4f& textColor );
 	explicit Texture( const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor );
 	Texture( const Texture& other ) = delete;
@@ -25,11 +26,14 @@ private:
 	float m_Width;
 	float m_Height;
 	bool m_CreationOk;
+	float m_Scale;
 
 	// FUNCTIONS
 	void CreateFromImage( const std::string& path );
+	void CreateFromImage(const std::string& path, float scale);
 	void CreateFromString( const std::string& text, TTF_Font *pFont, const Color4f& textColor );
 	void CreateFromString( const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor );
 	void CreateFromSurface( SDL_Surface *pSurface );
+	void CreateFromSurface(SDL_Surface* pSurface, float scale);
 	void DrawFilledRect(const Rectf& dstRect) const;
 };
