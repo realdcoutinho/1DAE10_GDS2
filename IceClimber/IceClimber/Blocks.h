@@ -14,7 +14,7 @@ public:
 	Blocks& operator=(Blocks&& other) = delete; // move assignment operator
 	~Blocks(); //destructor
 
-	virtual void Draw() const; // draws all a specific block type
+	void Draw() const; // draws all a specific block type
 	float GetWidth() const;  //return blocks width
 	float GetHeight() const; // returns block hieght
 

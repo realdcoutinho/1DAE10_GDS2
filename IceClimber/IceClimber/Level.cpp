@@ -18,6 +18,7 @@ Level::Level(float windowWidth, float windowHeight)
 	SetSvgVertices(m_LevelCollitionPath, m_LevelCollison);
 	InitializeBlocks();
 	InitializeClouds();
+	InitializeBonus();
 }
 
 Level::~Level()
@@ -121,11 +122,11 @@ void Level::InitializeBlocks()
 
 void Level::InitializeClouds()
 {
-	Point2f CloudOne{ 85, 100 };
+	Point2f cloudOne{ 85, 100 };
 	Point2f cloudTwo{ 170, 480 };
 	Point2f cloudThree{ 122, 603 };
 
-	m_pClouds.push_back(new Cloud(CloudOne, 3, int(CloudType::top), m_TextureWidth));
+	m_pClouds.push_back(new Cloud(cloudOne, 3, int(CloudType::top), m_TextureWidth));
 	m_pClouds.push_back(new Cloud(cloudTwo, 5, int(CloudType::bottom), m_TextureWidth));
 	m_pClouds.push_back(new Cloud(cloudThree, 4, int(CloudType::bottom), m_TextureWidth));
 
@@ -134,6 +135,21 @@ void Level::InitializeClouds()
 	{
 		m_CloudVelocity.push_back(Vector2f{ m_pClouds[i]->GetVelocity() });
 	}
+}
+
+void Level::InitializeBonus()
+{
+	Point2f bonusOne{31.f, 409.f};
+	Point2f bonusTwo{ 216.f, 409.f };
+	Point2f bonusThree{ 50.f, 537.f };
+	Point2f bonusFour{ 71.f, 665.f };
+
+	m_pBonus.push_back(new Bonus(bonusOne));
+	m_pBonus.push_back(new Bonus(bonusTwo));
+	m_pBonus.push_back(new Bonus(bonusThree));
+	m_pBonus.push_back(new Bonus(bonusFour));
+
+	m_NrOfBonus = int(m_pBonus.size());
 }
 
 void Level::Draw() const
@@ -149,6 +165,7 @@ void Level::Draw() const
 	DrawForeground();
 	DrawBlocks();
 	DrawClouds();
+	DrawBonus();
 }
 
 void Level::DrawBackground() const
@@ -177,6 +194,14 @@ void Level::DrawClouds() const
 	}
 }
 
+void Level::DrawBonus() const
+{
+	for (int i{}; i < m_NrOfBonus; ++i)
+	{
+		m_pBonus[i]->Draw();
+	}
+}
+
 void Level::Update(float elapsedSec)
 {
 	UpdateCloud(elapsedSec);
@@ -187,6 +212,14 @@ void Level::UpdateCloud(float elapsedSec)
 	for (int i{}; i < m_NrOfClouds; ++i)
 	{
 		m_pClouds[i]->Update(elapsedSec);
+	}
+}
+
+void Level::BonusCaught(const Rectf& actorShape)
+{
+	for (int i{}; i < m_NrOfBonus; ++i)
+	{
+		m_pBonus[i]->Overlap(actorShape);
 	}
 }
 
@@ -393,6 +426,7 @@ void Level::DeleteTextures()
 	delete m_pForeGround;
 	DeleteBlocks();
 	DeleteClouds();
+	DeleteBonus();
 }
 void Level::DeleteBlocks()
 {
@@ -410,6 +444,13 @@ void Level::DeleteClouds()
 	}
 }
 
+void Level::DeleteBonus()
+{
+	for (int i{}; i < m_NrOfBonus; ++i)
+	{
+		delete m_pBonus[i];
+	}
+}
 
 
 

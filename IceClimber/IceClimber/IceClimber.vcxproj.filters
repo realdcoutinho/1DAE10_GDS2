@@ -45,9 +45,6 @@
     <ClCompile Include="Vector2f.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
@@ -67,6 +64,18 @@
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="Platform.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Framework Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinningBird.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,8 +128,17 @@
     <ClInclude Include="Player.h">
       <Filter>Game Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
     <ClInclude Include="Platform.h">
-      <Filter>Framework Files</Filter>
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinningBird.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@ Cloud::Cloud(Point2f bottomLeft, int nrLenght, int type, float windowWidth)
 	SetSourceRect();
 	SetCollision(); 
 	SetVelocity();
+	++m_InstanceCounter;
 }
 
 Cloud::~Cloud()
@@ -72,10 +73,12 @@ void Cloud::SetVelocity()
 {
 	float velocityX = float(m_MinVelocityX + (std::rand() % (m_MaxVelocityX - m_MinVelocityX + 1))); //gets a random value betweeen 60 and 30
 
-	if (m_InstanceCounter % 2 == 0) //if the the cloud is even it will move to the right
-		m_Velocity = Vector2f{ velocityX , 0 };
-	if (m_InstanceCounter % 2 != 0) // if the cloud is odd it will move to the left
-		m_Velocity = Vector2f{ velocityX * -1, -0 };
+	if (m_InstanceCounter % 2 == 0)
+		m_Velocity = Vector2f{ velocityX , 0 }; //if the the cloud is even it will move to the right
+
+	if (m_InstanceCounter % 2 != 0)
+		m_Velocity = Vector2f{ velocityX * -1, -0 }; // if the cloud is odd it will move to the left
+
 }
 
 void Cloud::Update(float elapsedSec)

@@ -7,7 +7,6 @@ Player::Player(Point2f center, Point2f bottomLeft)
 	: m_HorSpeed{ 60.0f }
 	, m_JumpSpeed{ 185.0f }
 	, m_Velocity{ 0.0f, 0.0f }
-	//, m_Acceleration{ 0.0f, -981.0f }
 	, m_Acceleration{ 0.0f, -325 }
 	, m_Center{center}
 	, m_State{State::rest}
@@ -18,6 +17,7 @@ Player::Player(Point2f center, Point2f bottomLeft)
 	, m_NrOfFrames{4}
 	, m_NrOfFramesPerSec{ 10 }
 	, m_AnimFrame{ 0 }
+	//, m_NrOfBonus{0}
 {
 	SetMeasures();
 	SetSourceRect();
@@ -54,7 +54,7 @@ void Player::Draw() const
 	SetColor({ Color4f(0, 0, 1, 1) });
 	Point2f actorBottomCenter{ m_Shape.left + m_Shape.width / 2, m_Shape.bottom - 1 };
 	Point2f actorTopCenter{ m_Shape.left + m_Shape.width / 2, m_Shape.bottom + m_Shape.height };
-	//FillRect(m_Shape);
+	FillRect(m_Shape);
 	SetColor({ Color4f(1, 0, 1, 1) });
 	DrawLine(actorBottomCenter, actorTopCenter, 4);
 

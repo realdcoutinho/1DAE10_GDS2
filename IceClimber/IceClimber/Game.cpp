@@ -37,6 +37,7 @@ void Game::Update( float elapsedSec )
 	m_pPlayer->Update(elapsedSec, m_pLevel);
 	m_pLevel->Update(elapsedSec);
 	m_pLevel->SetCloudIndex(m_pPlayer->GetShape());
+	m_pLevel->BonusCaught(m_pPlayer->GetShape());
 	m_pCamera->Update(elapsedSec);
 	//std::cout << time << '\n';
 	// Check keyboard state

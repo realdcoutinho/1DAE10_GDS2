@@ -28,7 +28,6 @@ public:
 		roll = 0
 	};
 
-
 	Rectf GetShape() const;
 	Vector2f GetVelocity() const;
 	bool GetIsOnGround() const;
@@ -60,6 +59,7 @@ private:
 	float m_NrOfRows;
 	float m_ClipWidth;
 	float m_ClipHeight;
+	//int m_NrOfBonus; not yet implemented
 
 
 	bool m_FacingLeft{ true };
