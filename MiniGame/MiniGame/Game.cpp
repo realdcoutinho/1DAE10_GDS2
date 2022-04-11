@@ -7,6 +7,7 @@
 #include "PowerUpManager.h"
 #include "Avatar.h"
 #include "Camera.h"
+#include "HUD.h"
 
 Game::Game( const Window& window )
 	:m_Window{ window }
@@ -17,6 +18,7 @@ Game::Game( const Window& window )
 
 {	 
 	Initialize( );
+	
 }
 
 void Game::CameraTrack()
@@ -36,6 +38,9 @@ void Game::Initialize( )
 	CameraTrack();
 	ShowTestMessage( );
 	AddPowerUps( );
+
+	const float hudOffset{ 20.0f };
+	m_pHUD = new HUD(Point2f{ hudOffset, m_Window.height - hudOffset }, (int)m_pPowerUpManager->Size());
 }
 
 void Game::Cleanup()
@@ -43,6 +48,7 @@ void Game::Cleanup()
 	delete m_pLevel;
 	delete m_pPowerUpManager;
 	delete m_pAvatar;
+	delete m_pCamera;
 }
 
 void Game::Update( float elapsedSec )
@@ -53,7 +59,7 @@ void Game::Update( float elapsedSec )
 	// Update game objects
 	m_pPowerUpManager->Update(elapsedSec);
 	m_pAvatar->Update(elapsedSec, m_pLevel);
-
+	m_pLevel->HasReachedEnd(m_pAvatar->GetShape());
 	// Do collision
 	DoCollisionTests();
 
@@ -74,10 +80,17 @@ void Game::Draw( ) const
 		// Actor
 		m_pAvatar->Draw();
 
+		//hud
+	
+
 		// Level's foreground
 		m_pLevel->DrawForeground();
+		
 	}
 	glPopMatrix();
+
+	m_pHUD->Draw();
+	m_pLevel->DrawEnd();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -133,5 +146,6 @@ void Game::DoCollisionTests()
 	if (m_pPowerUpManager->HitItem(m_pAvatar->GetShape()))
 	{
 		m_pAvatar->PowerUpHit();
+		m_pHUD->PowerUpHit();
 	}
 }

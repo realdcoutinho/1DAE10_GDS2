@@ -6,6 +6,7 @@ class PowerUpManager;
 class Level;
 class Avatar;
 class Camera;
+class HUD;
 
 class Game final
 {
@@ -35,6 +36,7 @@ private:
 	PowerUpManager* m_pPowerUpManager;
 	Avatar* m_pAvatar;
 	Camera* m_pCamera;
+	HUD* m_pHUD;
 
 	// FUNCTIONS
 	void Initialize( );

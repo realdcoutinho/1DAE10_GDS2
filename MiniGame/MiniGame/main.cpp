@@ -11,7 +11,7 @@ int main( int argc, char *argv[] )
 
 	StartHeapControl();
 
-	Core* pCore{ new Core{ Window{ "Project name - Name, first name - 1DAEXX", 300.0f , 250.f } } };
+	Core* pCore{ new Core{ Window{ "Project name - Name, first name - 1DAEXX", 300.0f , 300.0f } } };
 	pCore->Run();
 	delete pCore;
 
