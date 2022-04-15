@@ -5,9 +5,14 @@
 #include "Blocks.h"
 #include "Cloud.h"
 #include "Bonus.h"
+#include "WinningBird.h"
+#include "Enemies.h"
+
+#include "TextureManager.h"
+
 #include <vector>
 
-class Level
+class Level final
 {
 public:
 	explicit Level(float windowWidth, float windowHeight); //constructor
@@ -19,17 +24,17 @@ public:
 
 	void Draw() const; // Draws all the Level Objects
 	void Update(float elapsedSec); //updates
-	void BonusCaught(const Rectf& actorShape);
+	void GetActorShape(const Rectf& actorShape); // hold the actor shape
 	void HandleCollision(Rectf& actorShape, Vector2f& actorVelocity) const; //handles collisons
 	bool IsOnGround(const Rectf& actorShape, Vector2f& actorVelocity) const; //returns a bool value in case the player in on ground
 	bool IsOnCloud(const Rectf& actorShape, Vector2f& actorVelocity) const; // is actor specifically on a cloud
 	float GetScale() const; // return the scale
+	void GetPlayerState(int state);
 	Rectf GetBoundaries() const; // return the level boundries aka texture size
-	void SetCloudIndex(const Rectf& actorShape); // in which is the actor on top of?
 	std::vector<Vector2f> GetCloudVelocityVector() const; //return cloud velocity vector
 	int GetCloudIndex() const; //returns cloud index
 	Rectf GetBackgroundRect(); //returns texture rect
-
+	bool IsWinning() const; 
 private:
 	void SetMeasures(); //sets measures variables inlcuding background rect
 	void SetScale(); //sets the scale needed for the camera
@@ -37,26 +42,29 @@ private:
 	void InitializeBlocks(); // initializes blocks
 	void InitializeClouds(); // initializes clouds
 	void InitializeBonus(); // initializes bonus
+	void InitializeEnemies(); // initializes Enemies
+	void InitializeWinningBird(); // initializes winning Bird
+
 
 	void DrawBackground() const; // draw multiple game objects
-	void DrawClouds() const; //draws clouds
-	void DrawBlocks() const; //draws blocks
-	void DrawBonus() const; //draws bonus
 	void DrawForeground() const; // draw mountains (enemies will be bahind) and time
-	void UpdateCloud(float elapsedSec); // updates clouds
+	void DrawGameObjects() const;
+	void DrawNPC() const; //draws bonus
+
+	void UpdateGameObjects(float elapsedSec); // updates clouds
+	void UpdateNPC(float elapsedSec); //updates the enemy
 
 	void HandleCollisionLevel(Rectf& actorShape, Vector2f& actorVelocity) const; //handles collision
-	void HandleCollisionBlocks(Rectf& actorShape, Vector2f& actorVelocity) const; //handles collision
-	void HandleCollisionCloud(Rectf& actorShape, Vector2f& actorVelocity) const; //handles collision
+	void HandleCollisionGameObjects(Rectf& actorShape, Vector2f& actorVelocity) const; //handles collision
 
 	bool IsOnGroundLevel(const Rectf& actorShape, Vector2f& actorVelocity) const; //returns a bool when player in on the level
-	bool IsOnGroundBlocks(const Rectf& actorShape, Vector2f& actorVelocity) const; //return a bool when player in on blocks
-	
-	void DeleteClouds(); //deletes cloud pointers
-	void DeleteBlocks(); //deletes blocks pointers
-	void DeleteBonus(); //deletes Bonus
-	void DeleteTextures(); //deletes textures
+	bool IsOnGroundGameObjects(const Rectf& actorShape, Vector2f& actorVelocity) const; //return a bool when player in on blocks
 
+	void GameObjectOverlap(const Rectf& actorShape);
+	void NPCOverlap(const Rectf& actorShape);
+
+	void SetCloudIndex(const Rectf& actorShape); // in which is the actor on top of?
+	void DeleteTextures(); //deletes textures
 
 	enum class BlockType //enum class of the various block types
 	{
@@ -78,20 +86,21 @@ private:
 	float m_WindowWidth; 
 	float m_WindowHeight;
 
-	int m_NrOfTypesBlocks; //hold the nr of types of blocks
-	int m_NrOfBlocks; //how many blocks are there in the lvel
-	int m_NrOfClouds; // how many clouds are there in the level
-	int m_NrOfBonus; // how many bonus are there in the level;
 	int m_CloudIndex; // which cloud is the player on
 
+	int m_PlayerState;
+
 	Rectf m_TextureRect; // game boundries
+	Rectf m_ActorShape; // actor shape
 
-	Texture* m_pBackground; //background texture
-	Texture* m_pForeGround; // mountains and time frame texture
+	int m_NrOfObjects;
+	std::vector<GameObject*> m_pGameObjects;
 
-	std::vector<Blocks*> m_pBlocks; //block pointers
-	std::vector<Cloud*> m_pClouds; //cloud pointers
-	std::vector<Bonus*> m_pBonus; // bonus pointers
+	int m_NrOfNPC;
+	std::vector<NPC*> m_pNPC;
+
+	TextureManager* m_pTextures;
+
 	std::vector<Vector2f> m_CloudVelocity; //holds velocity vectors
 	std::vector<std::vector<Point2f>> m_LevelCollison; // holds collison points
 	const std::string m_LevelCollitionPath{ "./Images/IC_Level_Colission.svg" }; //file name path

@@ -13,6 +13,30 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Game Files\GameObject">
+      <UniqueIdentifier>{b999d912-368b-44be-b524-5ce2d23723f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\GameObject\Bonus">
+      <UniqueIdentifier>{49157b0d-ce43-4c75-a1a3-ec8960e33303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\GameObject\Platforms">
+      <UniqueIdentifier>{b136eb48-591e-41fc-ab59-6420b25d7355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\GameObject\Damage">
+      <UniqueIdentifier>{7f3c76a6-a1cd-424a-adaf-39d6ce0051fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Character">
+      <UniqueIdentifier>{5b1b4edf-4a87-4e7e-a51b-d17abeb42929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Character\NPC">
+      <UniqueIdentifier>{aa87e84a-763b-468e-b9c5-b83c055d2bb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Character\NPC\Enemies">
+      <UniqueIdentifier>{4e631534-8b21-42d7-9309-4756407513a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Character\NPC\WinningBird">
+      <UniqueIdentifier>{d1fc1f00-73e2-4ee2-9b68-85c4a2814739}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -45,37 +69,55 @@
     <ClCompile Include="Vector2f.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Framework Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="Blocks.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cloud.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Platform.cpp">
-      <Filter>Game Files</Filter>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game Files\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Bonus.cpp">
-      <Filter>Game Files</Filter>
+      <Filter>Game Files\GameObject\Bonus</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Framework Files</Filter>
+    <ClCompile Include="Blocks.cpp">
+      <Filter>Game Files\GameObject\Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud.cpp">
+      <Filter>Game Files\GameObject\Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>Game Files\GameObject\Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="Damage.cpp">
+      <Filter>Game Files\GameObject\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stalagtites.cpp">
+      <Filter>Game Files\GameObject\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stalagmite.cpp">
+      <Filter>Game Files\GameObject\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game Files\Character</Filter>
     </ClCompile>
     <ClCompile Include="NPC.cpp">
-      <Filter>Game Files</Filter>
+      <Filter>Game Files\Character\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemies.cpp">
+      <Filter>Game Files\Character\NPC\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="WinningBird.cpp">
+      <Filter>Game Files\Character\NPC\WinningBird</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,34 +152,52 @@
     <ClInclude Include="Vector2f.h">
       <Filter>Framework Files</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Game Files</Filter>
     </ClInclude>
-    <ClInclude Include="Blocks.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cloud.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Game Files</Filter>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Bonus.h">
-      <Filter>Game Files</Filter>
+      <Filter>Game Files\GameObject\Bonus</Filter>
+    </ClInclude>
+    <ClInclude Include="Blocks.h">
+      <Filter>Game Files\GameObject\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud.h">
+      <Filter>Game Files\GameObject\Platforms</Filter>
     </ClInclude>
     <ClInclude Include="Platform.h">
-      <Filter>Game Files</Filter>
+      <Filter>Game Files\GameObject\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="Damage.h">
+      <Filter>Game Files\GameObject\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stalagmite.h">
+      <Filter>Game Files\GameObject\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stalagtites.h">
+      <Filter>Game Files\GameObject\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game Files\Character</Filter>
     </ClInclude>
     <ClInclude Include="NPC.h">
-      <Filter>Game Files</Filter>
+      <Filter>Game Files\Character\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies.h">
+      <Filter>Game Files\Character\NPC\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="WinningBird.h">
+      <Filter>Game Files\Character\NPC\WinningBird</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
       <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>

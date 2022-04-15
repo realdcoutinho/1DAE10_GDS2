@@ -7,19 +7,12 @@ int Cloud::m_InstanceCounter{ 0 };
 
 
 Cloud::Cloud(Point2f bottomLeft, int nrLenght, int type, float windowWidth)
-	:Platform{bottomLeft}
-	, m_NrLenght{ nrLenght}
-	, m_NrOfTypesBlocks{2}
+	:Platform{bottomLeft, 2, 3, type, nrLenght, windowWidth, true }
 	, m_MaxVelocityX{60}
 	, m_MinVelocityX{30}
-	, m_WindowWidth{ windowWidth }
-	, m_Type{CloudType(type)}
 	, m_pCloud{new Texture{"./Images/Clouds.png"}}
 {
 	SetMeasures();
-	SetSourceRect();
-	SetCollision(); 
-	SetVelocity();
 	++m_InstanceCounter;
 }
 
@@ -30,43 +23,29 @@ Cloud::~Cloud()
 
 void Cloud::SetMeasures()
 {
-	m_FullTextureWidth = m_pCloud->GetWidth();
-	m_TextureOneCloud = m_FullTextureWidth / m_NrOfTypesBlocks;
-	m_TextureCloudSnipet = m_TextureOneCloud / 3.0f; // 3 because the cloud is divided into three areas (left center and right)
+	m_TextureWidth = m_pCloud->GetWidth();
 	m_TextureHeight = m_pCloud->GetHeight();
-	m_TotalCouldWidth = m_TextureCloudSnipet * 2.0f + m_TextureCloudSnipet * m_NrLenght; // two because of the left and right snipet
+	m_TextureSnipetWidth = m_TextureWidth / m_NrColumns;
+	m_TextureSnipetHeight = m_TextureHeight / m_NrRows;
+	m_TotalWidth = m_TextureSnipetWidth * m_NrLenght;
+	//
+	m_DestRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureSnipetWidth, m_TextureSnipetHeight };
+	//
+	m_SourceRect.left = 0;
+	m_SourceRect.bottom = m_TextureSnipetHeight * -int(m_Type);
+	m_SourceRect.width = m_TextureSnipetWidth;
+	m_SourceRect.height = m_TextureSnipetHeight;
+	//
+	SetVelocity();
 }
 
-void Cloud::SetSourceRect()
+float Cloud::GetWidth() const
 {
-	if (m_Type == CloudType::bottom)
-	{
-		m_SourceRect.left = 0.0f;
-		m_SourceRect.bottom = -0.05f; //fixes offset
-		m_SourceRect.width = m_TextureCloudSnipet;
-		m_SourceRect.height = m_TextureHeight;
-	}
-	if (m_Type == CloudType::top)
-	{
-		m_SourceRect.left = m_FullTextureWidth / m_NrOfTypesBlocks;
-		m_SourceRect.bottom = -0.05f; //fixes offset
-		m_SourceRect.width = m_TextureCloudSnipet;
-		m_SourceRect.height = m_TextureHeight;
-	}
+	return m_TextureSnipetWidth;
 }
-
-void Cloud::SetCollision()
+float Cloud::GetHeight() const
 {
-	m_CloudCollision.clear(); // clears the std::vector before intruducing a point2fs
-	Point2f p1{ m_BottomLeft };
-	Point2f p2{ m_BottomLeft.x + (m_TextureCloudSnipet)+(m_TextureCloudSnipet * m_NrLenght) + m_TextureCloudSnipet, m_BottomLeft.y };
-	Point2f p3{ m_BottomLeft.x + (m_TextureCloudSnipet)+(m_TextureCloudSnipet * m_NrLenght) + m_TextureCloudSnipet, m_BottomLeft.y + m_TextureHeight };
-	Point2f p4{ m_BottomLeft.x, m_BottomLeft.y + m_TextureHeight };
-
-	m_CloudCollision.push_back(p1);
-	m_CloudCollision.push_back(p2);
-	m_CloudCollision.push_back(p3);
-	m_CloudCollision.push_back(p4);
+	return m_TextureSnipetHeight;
 }
 
 void Cloud::SetVelocity()
@@ -78,13 +57,6 @@ void Cloud::SetVelocity()
 
 	if (m_InstanceCounter % 2 != 0)
 		m_Velocity = Vector2f{ velocityX * -1, -0 }; // if the cloud is odd it will move to the left
-
-}
-
-void Cloud::Update(float elapsedSec)
-{
-	SetCollision();
-	UpdateCloudPosition(elapsedSec);
 }
 
 void Cloud::Draw() const
@@ -100,18 +72,6 @@ void Cloud::Draw() const
 	glPopMatrix();
 }
 
-void Cloud::UpdateCloudPosition(float elapsedSec)
-{
-	m_BottomLeft.x += m_Velocity.x * elapsedSec;
-
-	if (m_Velocity.x > 0)
-		if (m_BottomLeft.x > m_WindowWidth)
-			m_BottomLeft.x = -(m_TotalCouldWidth);
-	if (m_Velocity.x < 0)
-		if (m_BottomLeft.x + m_TotalCouldWidth < 0)
-			m_BottomLeft.x = m_WindowWidth;
-}
-
 Vector2f Cloud::GetVelocity() const
 {
 	return m_Velocity;
@@ -120,18 +80,18 @@ Vector2f Cloud::GetVelocity() const
 void Cloud::DrawLeftTexture(Point2f& bottomLeft, Rectf& sourceRect) const
 {
 	m_pCloud->Draw(m_BottomLeft, sourceRect);
-	bottomLeft.x += m_TextureCloudSnipet; //adds a texture snipet width to the position x
-	sourceRect.left += m_TextureCloudSnipet; //adds a texture snipet width to the position x
+	bottomLeft.x += m_TextureSnipetWidth; //adds a texture snipet width to the position x
+	sourceRect.left += m_TextureSnipetWidth; //adds a texture snipet width to the position x
 }
 
 void Cloud::DrawCenterTexture(Point2f& bottomLeft, Rectf& sourceRect) const
 {
-	for (int i{}; i < m_NrLenght; ++i)
+	for (int i{}; i < m_NrLenght - 2; ++i) //removes the first and the last texture -2
 	{
 		m_pCloud->Draw(bottomLeft, sourceRect);
-		bottomLeft.x += m_TextureCloudSnipet;//adds a texture snipet width to the position x
+		bottomLeft.x += m_TextureSnipetWidth;//adds a texture snipet width to the position x
 	}
-	sourceRect.left += m_TextureCloudSnipet; //adds a texture snipet width to the position x
+	sourceRect.left += m_TextureSnipetWidth; //adds a texture snipet width to the position x
 	//since it will be drawing the same area i times, then only update the source rect to the last bit at the end
 }
 
@@ -141,41 +101,6 @@ void Cloud::DrawRightTexture(Point2f& bottomLeft, Rectf& sourceRect) const
 }
 
 
-
-void Cloud::HandleCollision(Rectf& actorShape, Vector2f& actorVelocity)
-{
-	Point2f actorBottomCenter{ actorShape.GetBottomCenter(0, -1)};
-	Point2f actorTopCenter{ actorShape.GetTopCenter()};
-
-	HitInfo hitInfo{};
-	if (Raycast(m_CloudCollision, actorBottomCenter, actorTopCenter, hitInfo) && actorVelocity.y <= 0)
-	{
-		actorShape.bottom = hitInfo.intersectPoint.y;
-		actorVelocity.y = 0;
-	}
-	if (Raycast(m_CloudCollision, actorTopCenter, actorBottomCenter, hitInfo) && actorVelocity.y > 0)
-	{
-		actorVelocity.y = -actorVelocity.y;
-	}
-}
-
-bool Cloud::IsOnGround(const Rectf& actorShape, Vector2f& actorVelocity) const
-{
-	Point2f actorBottomCenter{ actorShape.GetBottomCenter(0, -1) };
-	Point2f actorTopCenter{ actorShape.GetTopCenter() };
-
-	HitInfo hitInfo{};
-	return (Raycast(m_CloudCollision, actorBottomCenter, actorTopCenter, hitInfo) && actorVelocity.y <= 0);
-}
-
-bool Cloud::IsOnGround(const Rectf& actorShape) const
-{
-	Point2f actorBottomCenter{ actorShape.GetBottomCenter(0, -1) };
-	Point2f actorTopCenter{ actorShape.GetTopCenter() };
-
-	HitInfo hitInfo{};
-	return (Raycast(m_CloudCollision, actorBottomCenter, actorTopCenter, hitInfo));
-}
 
 
 

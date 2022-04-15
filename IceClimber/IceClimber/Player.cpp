@@ -5,7 +5,7 @@ using namespace utils;
 
 Player::Player(Point2f center, Point2f bottomLeft)
 	: m_HorSpeed{ 60.0f }
-	, m_JumpSpeed{ 185.0f }
+	, m_JumpSpeed{ 190.0f }
 	, m_Velocity{ 0.0f, 0.0f }
 	, m_Acceleration{ 0.0f, -325 }
 	, m_Center{center}
@@ -18,12 +18,15 @@ Player::Player(Point2f center, Point2f bottomLeft)
 	, m_NrOfFramesPerSec{ 10 }
 	, m_AnimFrame{ 0 }
 	//, m_NrOfBonus{0}
+	, m_FacingLeft{true}
+	, m_IsOnGround{ true }
+	, m_IsWinning{false}
 {
 	SetMeasures();
 	SetSourceRect();
-	m_Shape=Rectf{ center.x - m_ClipWidth/2 + 4, center.y - m_ClipHeight/2, m_ClipWidth - 4, m_ClipHeight - 7 };
+	//m_Shape=Rectf{ center.x - m_ClipWidth/2 + 4, center.y - m_ClipHeight/2, m_ClipWidth - 4, m_ClipHeight - 7 };
+	m_Shape = Rectf{ bottomLeft.x, bottomLeft.y, m_ClipWidth -5, m_ClipHeight-8};
 	std::cout << "Player was created" << '\n';
-
 }
 
 Player::~Player()
@@ -52,11 +55,11 @@ void Player::SetHorizontalSpeed()
 void Player::Draw() const
 {
 	SetColor({ Color4f(0, 0, 1, 1) });
-	Point2f actorBottomCenter{ m_Shape.left + m_Shape.width / 2, m_Shape.bottom - 1 };
-	Point2f actorTopCenter{ m_Shape.left + m_Shape.width / 2, m_Shape.bottom + m_Shape.height };
-	FillRect(m_Shape);
+	Point2f actorBottomCenter{ m_Shape.GetBottomCenter(0, -1)};
+	Point2f actorTopCenter{ m_Shape.GetBottomCenter(0, m_Shape.height) };
+	//FillRect(m_Shape);
 	SetColor({ Color4f(1, 0, 1, 1) });
-	DrawLine(actorBottomCenter, actorTopCenter, 4);
+	//DrawLine(actorBottomCenter, actorTopCenter, 4);
 
 	Point2f textureBottomLeft{ m_BottomCenter.x - m_WidthTexture / 9 / 2, m_BottomCenter.y };
 	//m_pPlayerTexture->Draw(m_BottomCenter, m_SourceRect);
@@ -75,6 +78,12 @@ void Player::Draw() const
 	//	DrawLine(m_BottomCenter, m_BottomCenter, 4);
 	}
 	glPopMatrix();
+}
+
+
+int Player::GetPlayerState()
+{
+	return int(m_State);
 }
 
 void Player::SetState(int state)
@@ -126,12 +135,16 @@ Vector2f Player::GetVelocity() const
 
 void Player::Update(float elapsedSec, const Level* level)
 {
-	SetHorizontalSpeed();
-	UpdateFrames(elapsedSec);
-	const Uint8* pKeysState{ SDL_GetKeyboardState(nullptr) };
+	if (!m_IsWinning)
+	{
+		SetHorizontalSpeed();
+		UpdateFrames(elapsedSec);
+		const Uint8* pKeysState{ SDL_GetKeyboardState(nullptr) };
 		UpdateHorizontalVelocity(elapsedSec, level, pKeysState);
 		UpdateVerticalVelocity(elapsedSec, level, pKeysState);
 		MoveAvatar(elapsedSec, level);
+	}
+
 }
 
 void Player::UpdateHorizontalVelocity(float elapsedSec, const Level* level, const Uint8* pKeysState)
@@ -152,7 +165,7 @@ void Player::UpdateHorizontalVelocity(float elapsedSec, const Level* level, cons
 		}
 		if (pKeysState[SDL_SCANCODE_RIGHT] || pKeysState[SDL_SCANCODE_D])
 		{
-			m_Velocity.x = m_HorSpeed * 2;
+			m_Velocity.x = m_HorSpeed * 45; // needs to be multiplyed by cloud speed// fix later
 			if (m_IsOnGround) {
 				m_State = State::run;
 			}
@@ -189,6 +202,7 @@ void Player::UpdateVerticalVelocity(float elapsedsec, const Level* level, const 
 	if (pKeysState[SDL_SCANCODE_Z] && level->IsOnGround(m_Shape, m_Velocity))
 	{
 		m_State = State::kill;
+		std::cout << "Kill" << '\n';
 	}
 	m_IsOnGround = level->IsOnGround(m_Shape, m_Velocity);
 }
@@ -203,10 +217,12 @@ void Player::MoveAvatar(float elapsedSec, const Level* level)
 	if (m_Velocity.x == cloudVelocity.x && m_Velocity.y == 0 && level->IsOnCloud(m_Shape, m_Velocity))
 	{
 		m_State = State::rest;
+		std::cout << "rest" << '\n';
 	}
-	if (m_Velocity.x == 0 && m_Velocity.y == 0)
+	if (m_Velocity.x == 0 && m_Velocity.y == 0 && m_State != State::kill)
 	{
 		m_State = State::rest;
+		std::cout << "rest" << '\n';
 	}
 	if ((m_Velocity.y < 50) && (!level->IsOnGround(m_Shape, m_Velocity)))
 	{
@@ -214,9 +230,7 @@ void Player::MoveAvatar(float elapsedSec, const Level* level)
 	}
 	m_Velocity.y += m_Acceleration.y * elapsedSec ;
 	m_Shape.left += m_Velocity.x * elapsedSec;
-	//m_BottomCenter.x += m_Velocity.x * elapsedSec;
 	m_Shape.bottom += m_Velocity.y * elapsedSec;
-	//m_BottomCenter.y += m_Velocity.y * elapsedSec;
 	Clamp(level);
 }
 
@@ -232,4 +246,9 @@ void Player::Clamp(const Level* level)
 bool Player::GetIsOnGround() const
 {
 	return m_IsOnGround;
+}
+
+void Player::SetWinning(bool isWinning)
+{
+	m_IsWinning = isWinning;
 }

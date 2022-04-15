@@ -33,12 +33,14 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-
+	m_pLevel->GetPlayerState(m_pPlayer->GetPlayerState());
 	m_pPlayer->Update(elapsedSec, m_pLevel);
+	std::cout << "Hello";
 	m_pLevel->Update(elapsedSec);
-	m_pLevel->SetCloudIndex(m_pPlayer->GetShape());
-	m_pLevel->BonusCaught(m_pPlayer->GetShape());
+	m_pLevel->GetActorShape(m_pPlayer->GetShape());
+
 	m_pCamera->Update(elapsedSec);
+	m_pPlayer->SetWinning(m_pLevel->IsWinning());
 	//std::cout << time << '\n';
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
@@ -60,7 +62,7 @@ void Game::Draw( ) const
 	ClearBackground();
 	glPushMatrix();
 	{	
-		glScalef(3.125, 3.125, 1);
+		glScalef(m_Scale, m_Scale, 1);
 		m_pCamera->Transform(m_pPlayer->GetShape(), m_pPlayer->GetIsOnGround());
 		DrawBackground();
 		m_pPlayer->Draw();

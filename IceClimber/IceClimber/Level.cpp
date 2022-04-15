@@ -5,32 +5,39 @@
 using namespace utils;
 
 Level::Level(float windowWidth, float windowHeight)
-	: m_pBackground{new Texture("./Images/Background.png")}
-	, m_pForeGround{ new Texture("./Images/Foreground.png") }
+	: m_pTextures{ new TextureManager() }
 	, m_WindowWidth{ windowWidth }
 	, m_WindowHeight{ windowHeight }
-	, m_NrOfTypesBlocks{3}
 	, m_CloudIndex{0}
+	, m_ActorShape{}
 {
 	SetMeasures();
 	GetBackgroundRect();
 	SetScale();
 	SetSvgVertices(m_LevelCollitionPath, m_LevelCollison);
-	InitializeBlocks();
-	InitializeClouds();
-	InitializeBonus();
+	//
+	InitializeBonus(); //1
+	InitializeClouds();//2
+	InitializeBlocks();//3
+	m_NrOfObjects = int(m_pGameObjects.size());
+	InitializeWinningBird();
+	InitializeEnemies();
+	m_NrOfNPC = int(m_pNPC.size());
 }
 
 Level::~Level()
 {
 	DeleteTextures();
-
+	delete m_pTextures;
 }
 
 void Level::SetMeasures()
 {
-	m_TextureHeight = m_pBackground->GetHeight();
-	m_TextureWidth = m_pBackground->GetWidth();
+	//m_TextureHeight = m_pBackground->GetHeight();
+	//m_TextureWidth = m_pBackground->GetWidth();
+
+	m_TextureWidth = m_pTextures->GetTextureWidth(std::string{"Background"});
+	m_TextureHeight = m_pTextures->GetTextureHeight(std::string{ "Background" });
 
 	m_TextureRect.bottom = 0;
 	m_TextureRect.left = 0;
@@ -38,21 +45,6 @@ void Level::SetMeasures()
 	m_TextureRect.width = m_TextureWidth;
 }
 
-Rectf Level::GetBackgroundRect()
-{
-	return m_TextureRect;
-}
-
-void Level::SetScale()
-{
-	m_Scale = m_WindowWidth / m_TextureWidth; // by deviding the window width by the texture width I get a ration to use in my camera
-}
-
-void Level::SetSvgVertices(const std::string& svgPath, std::vector<std::vector<Point2f>>& svgVertices)
-{
-	if (SVGParser::GetVerticesFromSvgFile(svgPath, svgVertices)) {}
-	else { std::cout << "Level failed to load from svg" << std::endl; }
-}
 
 void Level::InitializeBlocks()
 {
@@ -67,167 +59,220 @@ void Level::InitializeBlocks()
 	int nrOfBrownBlocksRow{ 22 };
 	int nrOfBlueBlocksRow{ 20 };
 
-	m_NrOfBlocks = nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 3; //146 blocks
-	int currentBlockNumbers{};
-	m_NrOfBlocks = nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 3;
+	int NrOfBlocks = nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 3; //146 blocks
 
-	for (int i{}; i < m_NrOfBlocks; ++i)
+	for (int i{}; i < NrOfBlocks; ++i)
 	{
+		float width{8};
 		if (i < nrOfGreenBlocksRow)
 		{
-			m_pBlocks.push_back(new Blocks{ floorTwo, m_NrOfTypesBlocks, (int)BlockType::green });
-			floorTwo.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorTwo, (int)BlockType::green, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"} )});
+			floorTwo.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow)
 		{
-			m_pBlocks.push_back(new Blocks{ floorThree, m_NrOfTypesBlocks, (int)BlockType::brown });
-			floorThree.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorThree, (int)BlockType::brown, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			floorThree.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 2)
 		{
-			m_pBlocks.push_back(new Blocks{ floorFour, m_NrOfTypesBlocks, (int)BlockType::brown });
-			floorFour.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorFour, (int)BlockType::brown, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			floorFour.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 2 && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3)
 		{
-			m_pBlocks.push_back(new Blocks{ floorFive, m_NrOfTypesBlocks, (int)BlockType::brown });
-			floorFive.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorFive, (int)BlockType::brown, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			floorFive.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow)
 		{
-			m_pBlocks.push_back(new Blocks{ floorSix, m_NrOfTypesBlocks, (int)BlockType::blue });
-			floorSix.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorSix, (int)BlockType::blue, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			floorSix.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 2)
 		{
-			m_pBlocks.push_back(new Blocks{ floorSeven, m_NrOfTypesBlocks, (int)BlockType::blue });
-			floorSeven.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorSeven, (int)BlockType::blue, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			floorSeven.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 2 && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 3)
 		{
-			m_pBlocks.push_back(new Blocks{ floorEight, m_NrOfTypesBlocks, (int)BlockType::blue });
-			floorEight.x += m_pBlocks[0]->GetWidth();
-			++currentBlockNumbers;
+			m_pGameObjects.push_back(new Blocks{ floorEight, (int)BlockType::blue, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			floorEight.x += width;
 		}
 	}
-	int numbers = currentBlockNumbers;
-	m_NrOfBlocks = int(m_pBlocks.size());
+	m_NrOfObjects = int(m_pGameObjects.size());
 }
 
 void Level::InitializeClouds()
 {
 	Point2f cloudOne{ 85, 100 };
 	Point2f cloudTwo{ 170, 480 };
-	Point2f cloudThree{ 122, 603 };
+	Point2f cloudThree{ 122, 610 };
 
-	m_pClouds.push_back(new Cloud(cloudOne, 3, int(CloudType::top), m_TextureWidth));
-	m_pClouds.push_back(new Cloud(cloudTwo, 5, int(CloudType::bottom), m_TextureWidth));
-	m_pClouds.push_back(new Cloud(cloudThree, 4, int(CloudType::bottom), m_TextureWidth));
+	m_pGameObjects.push_back(new Cloud(cloudOne, 10, int(CloudType::top), m_TextureWidth));
+	m_pGameObjects.push_back(new Cloud(cloudTwo, 7, int(CloudType::bottom), m_TextureWidth));
+	m_pGameObjects.push_back(new Cloud(cloudThree, 6, int(CloudType::bottom), m_TextureWidth));
 
-	m_NrOfClouds = int(m_pClouds.size());
-	for (int i{ 0 }; i < m_NrOfClouds; ++i)
+	m_NrOfObjects = int(m_pGameObjects.size());
+
+	for (int i{ 0 }; i < m_NrOfObjects; ++i)
 	{
-		m_CloudVelocity.push_back(Vector2f{ m_pClouds[i]->GetVelocity() });
+		if (typeid(*m_pGameObjects[i]) == typeid(Cloud))
+		{
+			Cloud* pCloud{ static_cast<Cloud*>(m_pGameObjects[i])};
+			if (pCloud)
+				m_CloudVelocity.push_back(Vector2f{ pCloud->GetVelocity() });
+		}
 	}
 }
 
 void Level::InitializeBonus()
 {
-	Point2f bonusOne{31.f, 409.f};
+	Point2f bonusOne{ 31.f, 409.f };
 	Point2f bonusTwo{ 216.f, 409.f };
 	Point2f bonusThree{ 50.f, 537.f };
 	Point2f bonusFour{ 71.f, 665.f };
 
-	m_pBonus.push_back(new Bonus(bonusOne));
-	m_pBonus.push_back(new Bonus(bonusTwo));
-	m_pBonus.push_back(new Bonus(bonusThree));
-	m_pBonus.push_back(new Bonus(bonusFour));
+	m_pGameObjects.push_back(new Bonus(bonusOne, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	m_pGameObjects.push_back(new Bonus(bonusTwo, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	m_pGameObjects.push_back(new Bonus(bonusThree, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	m_pGameObjects.push_back(new Bonus(bonusFour, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	//m_pGameObjects.push_back(new Bonus(bonusOne));
+	//m_pGameObjects.push_back(new Bonus(bonusTwo));
+	//m_pGameObjects.push_back(new Bonus(bonusThree));
+	//m_pGameObjects.push_back(new Bonus(bonusFour));
 
-	m_NrOfBonus = int(m_pBonus.size());
+	m_NrOfObjects = int(m_pGameObjects.size());
+}
+
+void Level::UpdateGameObjects(float elapsedSec)
+{
+	for (int i{}; i < m_NrOfObjects; ++i)
+	{
+		m_pGameObjects[i]->Update(elapsedSec);
+	}
+}
+
+
+
+void Level::InitializeWinningBird()
+{
+	Point2f winningBird{ 66.f, 835.f };
+	m_pNPC.push_back(new WinningBird(winningBird, m_TextureWidth));
+	m_NrOfNPC = int(m_pNPC.size());
+}
+
+void Level::InitializeEnemies()
+{
+	Point2f enemyOne{ 32.f, 72.f };
+	Point2f enemyTwo{ 95.f, 120.f };
+	Point2f enemyThree{ 200.f, 168.f };
+	Point2f enemyFour{ 216.f, 216.f };
+	Point2f enemyFive{ 148.f, 264.f };
+	Point2f enemySix{ 232.f,312.f };
+	Point2f enemySeven{ 252.f, 360.f };
+
+	m_pNPC.push_back(new Enemies(enemyOne, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_pNPC.push_back(new Enemies(enemyTwo, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_pNPC.push_back(new Enemies(enemyThree, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_pNPC.push_back(new Enemies(enemyFour, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_pNPC.push_back(new Enemies(enemyFive, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_pNPC.push_back(new Enemies(enemySix, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_pNPC.push_back(new Enemies(enemySeven, m_TextureWidth, m_pTextures->GetTextureWidth(std::string{ "EnemyAlive" }), m_pTextures->GetTextureHeight(std::string{ "EnemyAlive" })));
+	m_NrOfNPC = int(m_pNPC.size());
 }
 
 void Level::Draw() const
 {
 	DrawBackground();
-	//SetColor(Color4f{ 1, 0, 0, 1 });
-	//for (int i{}; i < m_LevelCollison.size(); ++i)
-	//{
-	//	DrawPolygon(m_LevelCollison[i], true, 3);
-	//}
-
-	//enemies should be drawn here
+	DrawNPC();
 	DrawForeground();
-	DrawBlocks();
-	DrawClouds();
-	DrawBonus();
+	DrawGameObjects();
 }
 
 void Level::DrawBackground() const
 {
-	m_pBackground->Draw(Point2f{0,0});
+	m_pTextures->GetTexturePointer(std::string{ "Background" })->Draw(Point2f{ 0,0 });
 }
 
 void Level::DrawForeground() const
 {
-	m_pForeGround->Draw(Point2f{ 0,0 });
+	m_pTextures->GetTexturePointer(std::string{ "Foreground" })->Draw(Point2f{ 0,0 });
+	//m_pForeGround->Draw(Point2f{ 0,0 });
 }
 
-void Level::DrawBlocks() const
+void Level::DrawGameObjects() const
 {
-	for (int i{}; i < m_NrOfBlocks; ++i)
+	for (int i{}; i < m_NrOfObjects; ++i)
 	{
-		m_pBlocks[i]->Draw();
+		m_pGameObjects[i]->Draw();
+		if (typeid(*m_pGameObjects[i]) == typeid(Blocks))
+		{
+			Blocks* pBlocks{ dynamic_cast<Blocks*>(m_pGameObjects[i]) };
+			if (pBlocks)
+				pBlocks->Draw(m_pTextures->GetTexturePointer(std::string{ "Block" }));
+		}
+		if (typeid(*m_pGameObjects[i]) == typeid(Bonus))
+		{
+			Bonus* pBonus{ dynamic_cast<Bonus*>(m_pGameObjects[i]) };
+			if (pBonus)
+				pBonus->Draw(m_pTextures->GetTexturePointer(std::string{ "Bonus" }));
+		}
 	}
 }
 
-void Level::DrawClouds() const
+void Level::DrawNPC() const
 {
-	for (int i{ 0 }; i < m_NrOfClouds; ++i)
+	for (int i{}; i < m_NrOfNPC; ++i)
 	{
-		m_pClouds[i]->Draw();
-	}
-}
-
-void Level::DrawBonus() const
-{
-	for (int i{}; i < m_NrOfBonus; ++i)
-	{
-		m_pBonus[i]->Draw();
+		if (typeid(*m_pNPC[i]) == typeid(Enemies))
+		{
+			Enemies* pEnemies{ dynamic_cast<Enemies*>(m_pNPC[i]) };
+			if (pEnemies)
+				pEnemies->Draw(m_pTextures->GetTexturePointer(std::string{ "EnemyAlive" }), m_pTextures->GetTexturePointer(std::string{ "EnemyDead" }));
+		}
+		if (typeid(*m_pNPC[i]) == typeid(WinningBird))
+		{
+			WinningBird* pWinningBird{ dynamic_cast<WinningBird*>(m_pNPC[i]) };
+			if (pWinningBird)
+				pWinningBird->Draw(m_pTextures->GetTexturePointer(std::string{ "WinningBird" }));
+		}
 	}
 }
 
 void Level::Update(float elapsedSec)
 {
-	UpdateCloud(elapsedSec);
+	UpdateGameObjects(elapsedSec);
+	UpdateNPC(elapsedSec);
 }
 
-void Level::UpdateCloud(float elapsedSec)
+void Level::GetActorShape(const Rectf& actorShape)
 {
-	for (int i{}; i < m_NrOfClouds; ++i)
+	m_ActorShape = actorShape;
+	GameObjectOverlap(actorShape);
+	SetCloudIndex(actorShape);
+}
+
+void Level::UpdateNPC(float elapsedSec)
+{
+	for (int i{}; i < m_NrOfNPC; ++i)
 	{
-		m_pClouds[i]->Update(elapsedSec);
+		m_pNPC[i]->Update(elapsedSec);
+		if (typeid(*m_pNPC[i]) == typeid(Enemies))
+		{
+			Enemies* pEnemies{ dynamic_cast<Enemies*>(m_pNPC[i]) };
+			if (pEnemies)
+				pEnemies->SetEnemyState(m_PlayerState, m_ActorShape);
+		}
 	}
 }
 
-void Level::BonusCaught(const Rectf& actorShape)
-{
-	for (int i{}; i < m_NrOfBonus; ++i)
-	{
-		m_pBonus[i]->Overlap(actorShape);
-	}
-}
+
 
 void Level::HandleCollision(Rectf& actorShape, Vector2f& actorVelocity) const
 {
 	HandleCollisionLevel(actorShape, actorVelocity);
-	HandleCollisionBlocks(actorShape, actorVelocity);
-	HandleCollisionCloud(actorShape, actorVelocity);
+	HandleCollisionGameObjects(actorShape, actorVelocity);
 }
 
 void Level::HandleCollisionLevel(Rectf& actorShape, Vector2f& actorVelocity) const
@@ -324,19 +369,22 @@ void Level::HandleCollisionLevel(Rectf& actorShape, Vector2f& actorVelocity) con
 	}
 }
 
-void Level::HandleCollisionBlocks(Rectf& actorShape, Vector2f& actorVelocity) const
+void Level::HandleCollisionGameObjects(Rectf& actorShape, Vector2f& actorVelocity) const
 {
-	for (int i{ 0 }; i < m_NrOfBlocks; ++i)
+	for (int i{ 0 }; i < m_NrOfObjects; ++i)
 	{
-		m_pBlocks[i]->HandleCollision(actorShape, actorVelocity);
-	}
-}
-
-void Level::HandleCollisionCloud(Rectf& actorShape, Vector2f& actorVelocity) const
-{
-	for (int i{ 0 }; i < m_NrOfClouds; ++i)
-	{
-		m_pClouds[i]->HandleCollision(actorShape, actorVelocity);
+		if (typeid(*m_pGameObjects[i]) == typeid(Blocks))
+		{
+			Platform* pPlatform{ dynamic_cast<Platform*>(m_pGameObjects[i]) };
+			if (pPlatform)
+				pPlatform->HandleCollision(actorShape, actorVelocity);
+		}
+		if (typeid(*m_pGameObjects[i]) == typeid(Cloud))
+		{
+			Platform* pPlatform{ dynamic_cast<Platform*>(m_pGameObjects[i]) };
+			if (pPlatform)
+				pPlatform->HandleCollision(actorShape, actorVelocity);
+		}
 	}
 }
 
@@ -344,9 +392,7 @@ bool Level::IsOnGround(const Rectf& actorShape, Vector2f& actorVelocity) const
 {
 	if (IsOnGroundLevel(actorShape, actorVelocity))
 		return true;
-	if (IsOnGroundBlocks(actorShape, actorVelocity))
-		return true;
-	if (IsOnCloud(actorShape, actorVelocity))
+	if (IsOnGroundGameObjects(actorShape, actorVelocity))
 		return true;
 	else
 		return false;
@@ -369,23 +415,108 @@ bool Level::IsOnGroundLevel(const Rectf& actorShape, Vector2f& actorVelocity) co
 	return false;
 }
 
-bool Level::IsOnGroundBlocks(const Rectf& actorShape, Vector2f& actorVelocity) const
+bool Level::IsOnGroundGameObjects(const Rectf& actorShape, Vector2f& actorVelocity) const
 {
-	for (int i{ 0 }; i < m_NrOfBlocks; ++i)
+	for (int i{ 0 }; i < m_NrOfObjects; ++i)
 	{
-		if (m_pBlocks[i]->IsOnGround(actorShape, actorVelocity))
-			return true;
+		if (typeid(*m_pGameObjects[i]) == typeid(Blocks))
+		{
+			Platform* pPlatfrom{static_cast<Platform*>(m_pGameObjects[i])};
+			if (pPlatfrom)
+				if (pPlatfrom->IsOnGround(actorShape, actorVelocity))
+					return true;
+		}
+		if (typeid(*m_pGameObjects[i]) == typeid(Cloud))
+		{
+			Platform* pPlatfrom{ static_cast<Platform*>(m_pGameObjects[i]) };
+			if (pPlatfrom)
+				if (pPlatfrom->IsOnGround(actorShape, actorVelocity))
+					return true;
+		}
 	}
 	return false;
 }
 
 bool Level::IsOnCloud(const Rectf& actorShape, Vector2f& actorVelocity) const
 {
-
-	for (int i{ 0 }; i < m_NrOfClouds; ++i)
+	for (int i{ 0 }; i < m_NrOfObjects; ++i)
 	{
-		if (m_pClouds[i]->IsOnGround(actorShape, actorVelocity))
-			return true;
+		if (typeid(*m_pGameObjects[i]) == typeid(Cloud))
+		{
+			Cloud* pCloud{ static_cast<Cloud*>(m_pGameObjects[i]) };
+			if (pCloud)
+				if (pCloud->IsOnGround(actorShape, actorVelocity))
+					return true;
+		}
+	}
+	return false;
+}
+
+void Level::SetCloudIndex(const Rectf& actorShape)
+{
+	for (int i{ 0 }; i < m_NrOfObjects; ++i)
+	{
+		if (typeid(m_pGameObjects[i]) == typeid(Cloud))
+		{
+			m_CloudIndex = i;
+		}
+	}
+
+}
+
+void Level::GameObjectOverlap(const Rectf& actorShape)
+{
+	for (int i{}; i < m_NrOfObjects; ++i)
+	{
+		m_pGameObjects[i]->Overlap(actorShape);
+	}
+}
+
+void Level::NPCOverlap(const Rectf& actorShape)
+{
+	for (int i{}; i < m_NrOfNPC; ++i)
+	{
+		m_pNPC[i]->Overlap(actorShape);
+	}
+}
+
+void Level::DeleteTextures()
+{
+	for (int i{}; i < m_NrOfObjects; ++i)
+	{
+		delete m_pGameObjects[i];
+	}
+
+	for (int i{}; i < m_NrOfNPC; ++i)
+	{
+		delete m_pNPC[i];
+	}
+}
+
+
+
+
+
+
+
+
+
+int Level::GetCloudIndex() const
+{
+	return m_CloudIndex;
+}
+
+std::vector<Vector2f> Level::GetCloudVelocityVector() const
+{
+	return m_CloudVelocity;
+}
+
+bool Level::IsWinning() const
+{
+	for (int i{}; i < m_NrOfNPC; ++i)
+	{
+		if(typeid(*m_pNPC[i]) == typeid(WinningBird))
+			return m_pNPC[i]->Overlap(m_ActorShape);
 	}
 	return false;
 }
@@ -400,68 +531,26 @@ Rectf Level::GetBoundaries() const
 	return m_TextureRect;
 }
 
-void Level::SetCloudIndex(const Rectf& actorShape)
+void Level::SetSvgVertices(const std::string& svgPath, std::vector<std::vector<Point2f>>& svgVertices)
 {
-	for (int i{ 0 }; i < m_NrOfClouds; ++i)
-	{
-		if (m_pClouds[i]->IsOnGround(actorShape))
-			m_CloudIndex = int(i);
-	}
+	if (SVGParser::GetVerticesFromSvgFile(svgPath, svgVertices)) {}
+	else { std::cout << "Level failed to load from svg" << std::endl; }
 }
 
-int Level::GetCloudIndex() const
+Rectf Level::GetBackgroundRect()
 {
-	return m_CloudIndex;
+	return m_TextureRect;
 }
 
-std::vector<Vector2f> Level::GetCloudVelocityVector() const
+void Level::GetPlayerState(int state)
 {
-	return m_CloudVelocity;
+	m_PlayerState = state;
 }
 
-
-void Level::DeleteTextures()
+void Level::SetScale()
 {
-	delete m_pBackground;
-	delete m_pForeGround;
-	DeleteBlocks();
-	DeleteClouds();
-	DeleteBonus();
+	m_Scale = m_WindowWidth / m_pTextures->GetTextureWidth(std::string{"Background"}); // by deviding the window width by the texture width I get a ration to use in my camera
 }
-void Level::DeleteBlocks()
-{
-	for (int i{}; i < m_NrOfBlocks; ++i)
-	{
-		delete m_pBlocks[i];
-	}
-}
-
-void Level::DeleteClouds()
-{
-	for (int i{ 0 }; i < m_NrOfClouds; ++i)
-	{
-		delete m_pClouds[i];
-	}
-}
-
-void Level::DeleteBonus()
-{
-	for (int i{}; i < m_NrOfBonus; ++i)
-	{
-		delete m_pBonus[i];
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

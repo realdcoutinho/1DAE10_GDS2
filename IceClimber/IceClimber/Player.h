@@ -9,28 +9,13 @@ public:
 	Player(Point2f center, Point2f bottomLeft);
 	~Player();
 
-	void Update();
 	void Draw() const;
 	void Update(float elapsedSec, const Level* level);
-
-	enum class State
-	{
-		rest = 10,
-		run = 9,
-		slide = 8,
-		jump = 7,
-		fall = 6, 
-		kill = 5, 
-		restB = 4,
-		runB = 3,
-		jumpB = 2,
-		hit = 2, 
-		roll = 0
-	};
-
+	int GetPlayerState();
 	Rectf GetShape() const;
 	Vector2f GetVelocity() const;
 	bool GetIsOnGround() const;
+	void SetWinning(bool isWinning);
 
 private:
 
@@ -46,6 +31,20 @@ private:
 	void UpdateFrames(float elapsedSec);
 	void SetHorizontalSpeed();
 
+	enum class State
+	{
+		rest = 10,
+		run = 9,
+		slide = 8,
+		jump = 7,
+		fall = 6,
+		kill = 5,
+		restB = 4,
+		runB = 3,
+		jumpB = 2,
+		dead = 2,
+		roll = 0
+	};
 
 	Texture* m_pPlayerTexture;
 	float m_WidthTexture;
@@ -62,9 +61,9 @@ private:
 	//int m_NrOfBonus; not yet implemented
 
 
-	bool m_FacingLeft{ true };
-	bool m_IsOnGround{ true };
-
+	bool m_FacingLeft;
+	bool m_IsOnGround;
+	bool m_IsWinning;
 
 
 	Rectf m_DestRect;

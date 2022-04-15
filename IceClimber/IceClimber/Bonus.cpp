@@ -1,61 +1,53 @@
 #include "pch.h"
 #include "Bonus.h"
+#include <iostream>
 using namespace utils;
 
-Bonus::Bonus(Point2f bottomLeft)
-	: m_BottomLeft{bottomLeft}
+Bonus::Bonus(Point2f bottomLeft, float width, float height)
+	: GameObject(bottomLeft, 1, 20)
 	, m_NrOfBonus{20}
-	, m_IsCaught{false}
-	, m_pTextureBonus{new Texture("./Images/BonusVegetables.png")}
+	//, m_pTextureBonus{new Texture("./Images/BonusVegetables.png")}
+	, m_WidthTemp{width}
+	, m_HeightTemp{height}
 {
 	SetMeasures();
-	SetDestRect();
-	GetRandomBonus();
 	SetSourceRect();
 }
 
 Bonus::~Bonus()
 {
-	delete m_pTextureBonus;
+	//delete m_pTextureBonus;
 }
 
-void Bonus::Draw() const
+void Bonus::Draw(Texture* textureOne) const
 {
-	if (!m_IsCaught)
-		m_pTextureBonus->Draw(m_BottomLeft, m_SourceRect);
+	if (!m_IsOverlapping)
+		textureOne->Draw(m_BottomLeft, m_SourceRect);
+	std::cout << "Is Drawing" << '\n';
 }
 
 void Bonus::SetMeasures()
 {
-	m_TextureWidth = m_pTextureBonus->GetWidth();
-	m_TextureHeight = m_pTextureBonus->GetHeight();
-	m_TextureSnipetWidth = m_TextureWidth / m_NrOfBonus;
-}
+	//float textureWidth = m_pTextureBonus->GetWidth();
+	//float textureHeight = m_pTextureBonus->GetHeight();
 
-void Bonus::SetDestRect()
-{
-	m_DestRect.left = m_BottomLeft.x + m_TextureHeight / 4;
-	m_DestRect.bottom = m_BottomLeft.y + m_TextureHeight / 4;
-	m_DestRect.width = m_TextureSnipetWidth - m_TextureHeight / 2;
-	m_DestRect.height = m_TextureHeight - m_TextureHeight / 2;
-}
+	float textureWidth = m_WidthTemp;
+	float textureHeight = m_HeightTemp;
 
-int Bonus::GetRandomBonus()
-{
-	int bonus = std::rand() % 20;
-	return bonus;
+	float textureWidthSnipet = textureWidth / m_NrColumns;
+	float textureHeightSnipet = textureHeight / m_NrRows;
+	Rectf destRect;
+	destRect.left = m_BottomLeft.x + textureWidthSnipet / 4;
+	destRect.bottom = m_BottomLeft.y + textureWidthSnipet / 4;
+	destRect.width = textureWidthSnipet - textureWidthSnipet / 2;
+	destRect.height = textureHeightSnipet - textureHeightSnipet / 2;
+	GameObject::SetMeasures(textureWidth, textureHeight, textureWidthSnipet, textureHeightSnipet, destRect);
 }
 
 void Bonus::SetSourceRect()
 {
-	m_SourceRect.left = m_TextureSnipetWidth * float(GetRandomBonus());
+	m_SourceRect.left = m_TextureSnipetWidth * GetRandomNumber(0, m_NrOfBonus);
 	m_SourceRect.bottom = 0;
 	m_SourceRect.width = m_TextureSnipetWidth ;
-	m_SourceRect.height = m_TextureHeight;
-}
-
-void Bonus::Overlap(const Rectf& actorShape)
-{
-	if (IsOverlapping(actorShape, m_DestRect))
-		m_IsCaught = true;
+	m_SourceRect.height = m_TextureSnipetHeight;
 }

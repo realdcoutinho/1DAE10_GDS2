@@ -1,34 +1,29 @@
 #pragma once
 #include "Texture.h"
 #include "utils.h"
-class Bonus
+#include "GameObject.h"
+
+class Bonus final : public GameObject
 {
 public:
-	Bonus(Point2f bottomLeft);
+	explicit Bonus(Point2f bottomLeft, float width, float height);
 	Bonus(const Bonus& other) = delete; //copy constructor
 	Bonus& operator=(const Bonus& other) = delete; // assignment operator
 	Bonus(Bonus&& other) = delete; // move constructor
 	Bonus& operator=(Bonus&& other) = delete; // move assignment operator
-	~Bonus();
+	~Bonus() override;
 
-	void Draw() const;
-	void Overlap(const Rectf& actorShape);
+	void Draw(Texture* textureOne) const;
 
 private:
 	void SetMeasures();
-	int GetRandomBonus();
-	void SetDestRect();
 	void SetSourceRect();
 
-	bool m_IsCaught;
 	int m_NrOfBonus;
-	float m_TextureWidth;
-	float m_TextureHeight;
-	float m_TextureSnipetWidth;
+	float m_WidthTemp;
+	float m_HeightTemp;
 
-	Point2f m_BottomLeft;
-	Texture* m_pTextureBonus;
+	//Texture* m_pTextureBonus;
 	Rectf m_SourceRect;
-	Rectf m_DestRect;
 };
 
