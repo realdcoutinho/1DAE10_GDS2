@@ -4,17 +4,19 @@
 #include <vector>
 #include "Platform.h"
 
+class Level;
+class Texture;
 class Blocks final : public Platform
 {
 public:
-	explicit Blocks(Point2f bottomLeft, int type, float tempWidth, float tempHeight); //constructor
+	explicit Blocks(Level* level,Point2f bottomLeft, int type); //constructor
 	Blocks(const Blocks& other) = delete; //copy constructor
 	Blocks& operator=(const Blocks& other) = delete; // assignment operator
 	Blocks(Blocks&& other) = delete; // move constructor
 	Blocks& operator=(Blocks&& other) = delete; // move assignment operator
 	~Blocks(); //destructor
 
-	void Draw(Texture* textureOne) const; // draws all a specific block type
+	void Draw() const; // draws all a specific block type
 	float GetWidth() const;  //return blocks width
 	float GetHeight() const; // returns block hieght
 
@@ -23,6 +25,8 @@ private:
 
 	float m_TextureWidthTemp;
 	float m_TextureHeightTemp;
+
+	Level* m_pLevel;
 
 	Texture* m_pBlocks; //Pointer to the texture
 	std::vector<Point2f> m_BlockCollision; //holds collision points

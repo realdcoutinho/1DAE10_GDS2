@@ -3,7 +3,6 @@
 #include "Texture.h"
 #include "utils.h"
 #include "Stalagmite.h"
-#include <map>
 class Enemies final : public NPC
 {
 public:
@@ -47,7 +46,6 @@ private:
 	float m_TextureHeightTemp;
 
 	Stalagmite* m_pStalagmite;
-	std::map<std::string, Texture*> map;
 };
 
 

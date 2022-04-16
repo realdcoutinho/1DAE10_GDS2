@@ -81,12 +81,15 @@ void Enemies::SetEnemyType()
 {
 	int rand = std::rand() % 100;
 
-	if (rand <= 33)
+	if(rand % 2 == 0)
 		NPC::m_Type = NPC::Type(EnemyType::seal);
-	if (rand >= 33 && rand <= 66)
+	if (rand % 2 != 0)
 		NPC::m_Type = NPC::Type(EnemyType::bear);
-	if (rand >= 66 && rand <= 100)
-		NPC::m_Type = NPC::Type(EnemyType::bird);
+	//if (rand <= 33)
+	//
+	//if (rand >= 33 && rand <= 66)
+	//if (rand >= 66 && rand <= 100)
+	//	NPC::m_Type = NPC::Type(EnemyType::bird);
 }
 
 void Enemies::SetEnemyState(int& state, const Rectf& actorShape)

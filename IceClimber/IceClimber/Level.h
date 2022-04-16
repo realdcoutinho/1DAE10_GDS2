@@ -35,6 +35,9 @@ public:
 	int GetCloudIndex() const; //returns cloud index
 	Rectf GetBackgroundRect(); //returns texture rect
 	bool IsWinning() const; 
+
+	TextureManager* GetTextureManager() const;
+
 private:
 	void SetMeasures(); //sets measures variables inlcuding background rect
 	void SetScale(); //sets the scale needed for the camera

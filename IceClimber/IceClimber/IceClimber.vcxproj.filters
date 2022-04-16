@@ -120,6 +120,9 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBird.cpp">
+      <Filter>Game Files\Character\NPC\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBird.h">
+      <Filter>Game Files\Character\NPC\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

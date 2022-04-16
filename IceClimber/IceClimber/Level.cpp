@@ -31,6 +31,12 @@ Level::~Level()
 	delete m_pTextures;
 }
 
+TextureManager* Level::GetTextureManager() const
+{
+	return m_pTextures;
+}
+
+
 void Level::SetMeasures()
 {
 	//m_TextureHeight = m_pBackground->GetHeight();
@@ -66,37 +72,37 @@ void Level::InitializeBlocks()
 		float width{8};
 		if (i < nrOfGreenBlocksRow)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorTwo, (int)BlockType::green, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"} )});
+			m_pGameObjects.push_back(new Blocks{this, floorTwo, (int)BlockType::green});
 			floorTwo.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorThree, (int)BlockType::brown, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			m_pGameObjects.push_back(new Blocks{ this, floorThree, (int)BlockType::brown});
 			floorThree.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 2)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorFour, (int)BlockType::brown, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			m_pGameObjects.push_back(new Blocks{ this,  floorFour, static_cast<int>(BlockType::brown)});
 			floorFour.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 2 && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorFive, (int)BlockType::brown, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			m_pGameObjects.push_back(new Blocks{ this, floorFive, (int)BlockType::brown});
 			floorFive.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorSix, (int)BlockType::blue, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			m_pGameObjects.push_back(new Blocks{ this, floorSix, (int)BlockType::blue});
 			floorSix.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 2)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorSeven, (int)BlockType::blue, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			m_pGameObjects.push_back(new Blocks{ this, floorSeven, (int)BlockType::blue});
 			floorSeven.x += width;
 		}
 		if (i >= nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 2 && i < nrOfGreenBlocksRow + nrOfBrownBlocksRow * 3 + nrOfBlueBlocksRow * 3)
 		{
-			m_pGameObjects.push_back(new Blocks{ floorEight, (int)BlockType::blue, m_pTextures->GetTextureWidth(std::string{"Block"}), m_pTextures->GetTextureHeight(std::string{"Block"}) });
+			m_pGameObjects.push_back(new Blocks{ this,  floorEight, (int)BlockType::blue});
 			floorEight.x += width;
 		}
 	}
@@ -133,14 +139,20 @@ void Level::InitializeBonus()
 	Point2f bonusThree{ 50.f, 537.f };
 	Point2f bonusFour{ 71.f, 665.f };
 
-	m_pGameObjects.push_back(new Bonus(bonusOne, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
-	m_pGameObjects.push_back(new Bonus(bonusTwo, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
-	m_pGameObjects.push_back(new Bonus(bonusThree, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
-	m_pGameObjects.push_back(new Bonus(bonusFour, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
-	//m_pGameObjects.push_back(new Bonus(bonusOne));
-	//m_pGameObjects.push_back(new Bonus(bonusTwo));
-	//m_pGameObjects.push_back(new Bonus(bonusThree));
-	//m_pGameObjects.push_back(new Bonus(bonusFour));
+	//m_pGameObjects.push_back(new Bonus(bonusOne, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	//m_pGameObjects.push_back(new Bonus(bonusTwo, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	//m_pGameObjects.push_back(new Bonus(bonusThree, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	//m_pGameObjects.push_back(new Bonus(bonusFour, m_pTextures->GetTextureWidth(std::string{ "Bonus" }), m_pTextures->GetTextureHeight(std::string{ "Bonus" })));
+	
+	m_pGameObjects.push_back(new Bonus(this, bonusOne));
+	m_pGameObjects.push_back(new Bonus(this, bonusTwo));
+	m_pGameObjects.push_back(new Bonus(this, bonusThree));
+	m_pGameObjects.push_back(new Bonus(this, bonusFour));
+
+	//m_pGameObjects.push_back(new Bonus(bonusOne, this));
+	//m_pGameObjects.push_back(new Bonus(bonusTwo, this));
+	//m_pGameObjects.push_back(new Bonus(bonusThree, this));
+	//m_pGameObjects.push_back(new Bonus(bonusFour, this));
 
 	m_NrOfObjects = int(m_pGameObjects.size());
 }
@@ -210,13 +222,15 @@ void Level::DrawGameObjects() const
 		{
 			Blocks* pBlocks{ dynamic_cast<Blocks*>(m_pGameObjects[i]) };
 			if (pBlocks)
-				pBlocks->Draw(m_pTextures->GetTexturePointer(std::string{ "Block" }));
+				pBlocks->Draw();
 		}
 		if (typeid(*m_pGameObjects[i]) == typeid(Bonus))
 		{
-			Bonus* pBonus{ dynamic_cast<Bonus*>(m_pGameObjects[i]) };
-			if (pBonus)
-				pBonus->Draw(m_pTextures->GetTexturePointer(std::string{ "Bonus" }));
+			m_pGameObjects[i]->Draw();
+
+			//Bonus* pBonus{ dynamic_cast<Bonus*>(m_pGameObjects[i]) };
+			//if (pBonus)
+			//	pBonus->Draw(m_pTextures->GetTexturePointer(std::string{ "Bonus" }));
 		}
 	}
 }

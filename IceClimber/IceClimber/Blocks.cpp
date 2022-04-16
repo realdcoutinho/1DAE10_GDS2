@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "Blocks.h"
+#include "Level.h"
 #include <iostream>
 using namespace utils;
 
-Blocks::Blocks(Point2f bottomLeft, int type, float tempWidth, float tempHeight)
+Blocks::Blocks(Level* level, Point2f bottomLeft, int type)
 	: Platform{ bottomLeft, 3, 1, type }
-	, m_TextureWidthTemp{ tempWidth }
-	, m_TextureHeightTemp{ tempHeight }
-
+	, m_pLevel{level}
 {
+	m_pBlocks = m_pLevel->GetTextureManager()->GetTexturePointer("Block");
 	SetMeasures();
 	Platform::SetCollision();
 	
@@ -21,8 +21,8 @@ Blocks::~Blocks()
 
 void Blocks::SetMeasures()
 {
-	m_TextureWidth = m_TextureWidthTemp;
-	m_TextureHeight = m_TextureHeightTemp;
+	m_TextureWidth = m_pBlocks->GetWidth();
+	m_TextureHeight = m_pBlocks->GetHeight();
 	m_TextureSnipetWidth = m_TextureWidth / m_NrColumns;
 	m_TextureSnipetHeight = m_TextureHeight / m_NrRows;
 	m_TextureSnipetHeight =8;
@@ -38,10 +38,10 @@ void Blocks::SetMeasures()
 
 }
 
-void Blocks::Draw(Texture* textureOne) const
+void Blocks::Draw() const
 {
 	if (!m_IsDestroyed) //if no destroyed, fraw
-		textureOne->Draw(m_BottomLeft, m_SourceRect);
+		m_pBlocks->Draw(m_BottomLeft, m_SourceRect);
 }
 
 float Blocks::GetWidth() const
