@@ -3,12 +3,15 @@
 #include "Camera.h"
 #include "Level.h"
 #include "Player.h"
+#include "TextureManager.h"
 #include <iostream>
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
-	, m_pLevel{ new Level{window.width, window.height} }
-	, m_pPlayer{ new Player{Point2f{256 / 2, 24}, Point2f{256 / 2, 24} } }
+	, m_pTextures{ new TextureManager()}
+	, m_pPlayer{ new Player{this, Point2f{256 / 2, 24}, Point2f{256 / 2, 24} } }
+	, m_pLevel{ new Level{this, m_pPlayer, window.width, window.height} }
+
 {
 	SetScale();
 	InitializeCamera(window);
@@ -26,6 +29,7 @@ void Game::Initialize( )
 
 void Game::Cleanup( )
 {
+	delete m_pTextures;
 	delete m_pLevel;
 	delete m_pCamera;
 	delete m_pPlayer;
@@ -171,6 +175,11 @@ void Game::SetScale()
 
 void Game::InitializeCamera(const Window& window)
 {
-	m_pCamera = new Camera{ window.width / m_Scale, window.height / m_Scale };
+	m_pCamera = new Camera{ m_pPlayer, window.width / m_Scale, window.height / m_Scale };
 	m_pCamera->SetLevelBounderies(m_pLevel->GetBoundaries());
+}
+
+TextureManager* Game::GetTextureManager()
+{
+	return m_pTextures;
 }

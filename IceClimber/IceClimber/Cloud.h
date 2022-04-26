@@ -4,11 +4,12 @@
 #include "utils.h"
 #include "Platform.h"
 
+class Level;
 
 class Cloud final : public Platform
 {
 public:
-	explicit Cloud(Point2f bottomLeft, int nrLenght, int type, float windowWidth); //constructor
+	explicit Cloud(Level* level, Point2f bottomLeft, int nrLenght, int type, float windowWidth); //constructor
 	Cloud(const Cloud& other) = delete; //copy constructor
 	Cloud& operator=(const Cloud& other) = delete; // assignment operator
 	Cloud(Cloud&& other) = delete; // move constructor
@@ -33,6 +34,7 @@ private:
 	int m_MinVelocityX; //sets the minimum absolute X Velocity
 	
 	Texture* m_pCloud; //hold the pointer to the cloud Texture
+	
 	static int m_InstanceCounter; // keeps track of how many clouds are there in the map
 };
 

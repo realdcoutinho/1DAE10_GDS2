@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector2f.h"
-#include "utils.h"
+
 #include "Texture.h"
 #include "Blocks.h"
 #include "Cloud.h"
@@ -11,11 +11,14 @@
 #include "TextureManager.h"
 
 #include <vector>
+#include "utils.h"
 
+class Game;
+class PLayer;
 class Level final
 {
 public:
-	explicit Level(float windowWidth, float windowHeight); //constructor
+	explicit Level(Game* game, Player* player, float windowWidth, float windowHeight); //constructor
 	Level(const Level& other) = delete; //copy constructor
 	Level& operator=(const Level& other) = delete; // assignment operator
 	Level(Level&& other) = delete; // move constructor
@@ -31,8 +34,7 @@ public:
 	float GetScale() const; // return the scale
 	void GetPlayerState(int state);
 	Rectf GetBoundaries() const; // return the level boundries aka texture size
-	std::vector<Vector2f> GetCloudVelocityVector() const; //return cloud velocity vector
-	int GetCloudIndex() const; //returns cloud index
+	Vector2f GetCloudVelocityVector() const; //return cloud velocity vector
 	Rectf GetBackgroundRect(); //returns texture rect
 	bool IsWinning() const; 
 
@@ -66,7 +68,7 @@ private:
 	void GameObjectOverlap(const Rectf& actorShape);
 	void NPCOverlap(const Rectf& actorShape);
 
-	void SetCloudIndex(const Rectf& actorShape); // in which is the actor on top of?
+	void SetCloudVelocity(const Rectf& actorShape); // in which is the actor on top of?
 	void DeleteTextures(); //deletes textures
 
 	enum class BlockType //enum class of the various block types
@@ -89,9 +91,8 @@ private:
 	float m_WindowWidth; 
 	float m_WindowHeight;
 
-	int m_CloudIndex; // which cloud is the player on
-
 	int m_PlayerState;
+	
 
 	Rectf m_TextureRect; // game boundries
 	Rectf m_ActorShape; // actor shape
@@ -101,10 +102,16 @@ private:
 
 	int m_NrOfNPC;
 	std::vector<NPC*> m_pNPC;
+	
+	Player* m_pPlayer;
 
+	Game* m_pGame;
 	TextureManager* m_pTextures;
+	Texture* m_pBackground;
+	Texture* m_Foreground;
 
-	std::vector<Vector2f> m_CloudVelocity; //holds velocity vectors
+	Vector2f m_CloudVelocity;
+
 	std::vector<std::vector<Point2f>> m_LevelCollison; // holds collison points
 	const std::string m_LevelCollitionPath{ "./Images/IC_Level_Colission.svg" }; //file name path
 };

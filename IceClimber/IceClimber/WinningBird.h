@@ -1,21 +1,25 @@
 #pragma once
 #include "NPC.h"
 #include "Texture.h"
+#include "Animation.h"
 #include "utils.h"
+
+class Level;
 class WinningBird final : public NPC 
 {
 public:
-	explicit WinningBird(Point2f bottomLeft, float windowWidth);
+	explicit WinningBird(Level* level, Point2f bottomLeft, float windowWidth);
 	WinningBird(const WinningBird& other) = delete; //copy constructor
 	WinningBird& operator=(const WinningBird& other) = delete; // assignment operator
 	WinningBird(WinningBird&& other) = delete; // move constructor
 	WinningBird& operator=(WinningBird&& other) = delete; // move assignment operator
 	virtual ~WinningBird() override;
 
-	void Draw(Texture* textureOne) const;
+	void Draw() const;
 	virtual void Update(float elapsedSec) override;
 
 private:
+	void InitializeAnimation();
 	void SetMeasures();
 	void SetColorBird();
 
@@ -26,6 +30,7 @@ private:
 	};
 
 	float m_HorSpeed;
+	Animation* m_AnimationBird;
 	Texture* m_pTextureBird;
 };
 

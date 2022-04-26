@@ -23,9 +23,6 @@ public:
 private:
 	void SetMeasures(); //Sets block measures
 
-	float m_TextureWidthTemp;
-	float m_TextureHeightTemp;
-
 	Level* m_pLevel;
 
 	Texture* m_pBlocks; //Pointer to the texture

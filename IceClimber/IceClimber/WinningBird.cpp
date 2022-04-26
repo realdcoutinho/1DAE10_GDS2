@@ -1,25 +1,31 @@
 #include "pch.h"
 #include "WinningBird.h"
+#include "Level.h"
 #include <iostream>
 using namespace utils;
 
-WinningBird::WinningBird(Point2f bottomLeft, float windowWidth)
+WinningBird::WinningBird(Level* level, Point2f bottomLeft, float windowWidth)
 	: NPC(bottomLeft, windowWidth, 2, 4, 4, 0, 0, 8)
-	, m_pTextureBird{new Texture("./Images/WinningBird.png")}
+	, m_pTextureBird{level->GetTextureManager()->GetTexturePointer("WinningBird")}
 	, m_HorSpeed{50}
 {
-	std::cout << "Winning Bird Created" << '\n';
 	SetMeasures();
 	SetColorBird();
+	InitializeAnimation();
 	NPC::SetVelocity(m_HorSpeed);
 }
 
 WinningBird::~WinningBird()
 {
-	delete m_pTextureBird;
+	delete m_AnimationBird;
 }
 
-void WinningBird::Draw(Texture* textureOne) const
+void WinningBird::InitializeAnimation()
+{
+	m_AnimationBird = new Animation(m_pTextureBird, static_cast<int>(m_Type), 0, 4, 8, 4, 2);
+}
+
+void WinningBird::Draw() const
 {
 	glPushMatrix();
 	{
@@ -30,7 +36,7 @@ void WinningBird::Draw(Texture* textureOne) const
 			glTranslatef(-(m_BottomLeft.x), 0, 0);
 		}
 		//FillRect(m_BottomLeft, m_TextureWidthSnipet, m_TextureHeightSnipet);
-		textureOne->Draw(m_BottomLeft, NPC::GetSourceRect());
+		m_AnimationBird->Draw(m_BottomLeft);
 	}
 	glPopMatrix();
 }
@@ -39,7 +45,8 @@ void WinningBird::Update(float elapsedSec)
 {
 	if (!m_IsOverlapping)
 	{
-		NPC::UpdateFrames(elapsedSec);
+		m_AnimationBird->Update(elapsedSec);
+		//NPC::UpdateFrames(elapsedSec);
 		NPC::UpdatePosition(elapsedSec);
 	}
 }

@@ -2,11 +2,19 @@
 #include "utils.h"
 #include "Level.h"
 #include "Texture.h"
-
-class Player
+#include "Animation.h"
+#include <vector>
+#include <unordered_map>
+ 
+class Game;
+class Player final
 {
 public:
-	Player(Point2f center, Point2f bottomLeft);
+	explicit Player(Game* game, Point2f center, Point2f bottomLeft);
+	Player(const Player& other) = delete; //copy constructor
+	Player& operator=(const Player& other) = delete; // assignment operator
+	Player(Player&& other) = delete; // move constructor
+	Player& operator=(Player&& other) = delete; // move assignment operator
 	~Player();
 
 	void Draw() const;
@@ -16,20 +24,8 @@ public:
 	Vector2f GetVelocity() const;
 	bool GetIsOnGround() const;
 	void SetWinning(bool isWinning);
-
-private:
-
-	void UpdateHorizontalVelocity(float elapsedSec, const Level* level, const Uint8* pKeysState);
-	void UpdateVerticalVelocity(float elapsedsec, const Level* level, const Uint8* pKeysState);
-
-	void MoveAvatar(float elapsedSec, const Level* level);
-	void Clamp(const Level* level);
-	void SetMeasures();
-	void SetSourceRect();
 	void SetState(int state);
-	Rectf GetSourceRect() const;
-	void UpdateFrames(float elapsedSec);
-	void SetHorizontalSpeed();
+
 
 	enum class State
 	{
@@ -42,45 +38,60 @@ private:
 		restB = 4,
 		runB = 3,
 		jumpB = 2,
-		dead = 2,
-		roll = 0
+		dead = 1,
+		roll = 0 // 0?
 	};
+	State m_State;
+
+private:
+	void InitializeAnimations();
+
+	void UpdateAnimations(float elapsedSec);
+	void UpdateHorizontalVelocity(float elapsedSec, const Level* level, const Uint8* pKeysState);
+	void UpdateVerticalVelocity(float elapsedsec, const Level* level, const Uint8* pKeysState);
+
+	void UpdateDyingMovement(float elapsedSec);
+
+	void MoveAvatar(float elapsedSec, const Level* level);
+	void Clamp(const Level* level);
+	void SetMeasures();
+	
+	void SetHorizontalSpeed();
+
+	void UpdateTimeState(float elapsedSec);
 
 	Texture* m_pPlayerTexture;
 	float m_WidthTexture;
 	float m_HeightTexture;
 	
-	float m_AnimTime{};
-	int m_AnimFrame;
-	float m_NrOfFramesPerSec;
 	float m_NrOfColumns;
-	int m_NrOfFrames;
 	float m_NrOfRows;
 	float m_ClipWidth;
 	float m_ClipHeight;
-	//int m_NrOfBonus; not yet implemented
+	float m_Time;
+	float m_HorSpeed;
+	const float m_JumpSpeed;
 
+	//int m_NrOfBonus; not yet implemented
+	int m_NrAnimations;
+
+	Point2f m_Center;
+	Point2f m_BottomCenter;
 
 	bool m_FacingLeft;
 	bool m_IsOnGround;
 	bool m_IsWinning;
+	bool m_IsDead;
 
-
+	Rectf m_Shape;
+	Rectf m_ActorShape;
 	Rectf m_DestRect;
 	Rectf m_SourceRect;
 
-	State m_State;
-
-
-	const Vector2f m_Acceleration;
-	float m_HorSpeed;
-	const float m_JumpSpeed;
-	Point2f m_Center;
-	Rectf m_Shape;
 	Vector2f m_Velocity;
-
-
-	Point2f m_BottomCenter;
-
+	const Vector2f m_Acceleration;
+	std::vector<Animation*> m_Animations;
+	
+	Game* m_pGame;
 };
 

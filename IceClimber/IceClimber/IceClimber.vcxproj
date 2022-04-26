@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="WinningBird.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="Camera.h" />

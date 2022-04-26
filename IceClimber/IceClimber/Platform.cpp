@@ -61,7 +61,8 @@ void Platform::HandleCollision(Rectf& actorShape, Vector2f& actorVelocity)
 	}
 	if (Raycast(m_Collision, actorTopCenter, actorBottomCenter, hitInfo) && actorVelocity.y > 0) //if hit from bellow
 	{
-		actorVelocity.y = -actorVelocity.y; //IT JUST WORKS FOR THE ANIMATION, DONT TOUCH FFS; //IT JUST WORKS FOR THE ANIMATION, DONT TOUCH FFS
+		//actorVelocity.y = -actorVelocity.y; //IT JUST WORKS FOR THE ANIMATION, DONT TOUCH FFS; //IT JUST WORKS FOR THE ANIMATION, DONT TOUCH FFS
+		
 		if (!m_IsMovable)
 		{
 			actorVelocity.y = 5; //IT JUST WORKS FOR THE ANIMATION, DONT TOUCH FFS

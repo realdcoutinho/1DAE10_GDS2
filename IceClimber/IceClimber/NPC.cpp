@@ -23,7 +23,7 @@ NPC::~NPC()
 
 }
 
-void NPC::Draw(Texture* texture, Texture* textureTwo) const
+void NPC::Draw() const
 {
 
 }
@@ -53,26 +53,28 @@ void NPC::SetMeasures(float textureWidth, float textureHeight, float textureWidt
 	m_DestRect = destRect;
 }
 
-void NPC::UpdateFrames(float elapsedSec)
-{
-	const float maxFrameTime{ 1.0f / m_NrOfFramesPerSec };
-	m_AnimTime += elapsedSec;
-	if (maxFrameTime < m_AnimTime)
-	{
-		m_AnimFrame = (m_AnimFrame + 1) % m_NrOfFrames;
-		m_AnimTime -= maxFrameTime;
-	}
-}
-
 void NPC::UpdatePosition(float elapsedSec)
 {
 	m_BottomLeft.x += m_Velocity.x * elapsedSec;
 	if (m_Velocity.x > 0)
 		if (m_BottomLeft.x > m_WindowWidth)
+		{
 			m_BottomLeft.x = -m_TextureWidthSnipet;
+			if (!m_IsAlive)
+			{
+				m_IsAlive = true;
+			}
+		}
 	if (m_Velocity.x < 0)
 		if (m_BottomLeft.x + m_TextureWidthSnipet < 0)
+		{
 			m_BottomLeft.x = m_WindowWidth + m_TextureWidthSnipet;
+			if (!m_IsAlive)
+			{
+				m_IsAlive = true;
+			}
+		}
+
 	if ((!m_IsAlive) && m_Type == Type::typeThree)
 	{
 		m_BottomLeft.y += m_Velocity.y * elapsedSec;
@@ -91,14 +93,3 @@ void NPC::SetVelocity(float horSpeed)
 	if (rand % 2 != 0)
 		m_Velocity = Vector2f{ horSpeed * -1, -75 }; 
 }
-
-Rectf NPC::GetSourceRect() const
-{
-	Rectf source{};
-	source.left = m_TextureWidthSnipet * m_AnimFrame;
-	source.bottom = m_TextureHeightSnipet * -int(m_Type) - 0.05f; //0.05f to fix texture offset
-	source.width = m_TextureWidthSnipet;
-	source.height = m_TextureHeightSnipet;
-	return source;
-}
-

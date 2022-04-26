@@ -10,7 +10,7 @@ Damage::Damage(Point2f bottomLeft, int nrRows, int nrColumns, int nrFrames, int 
 	, m_AnimTime{ animTime }
 	, m_NrOfFramesPerSec{ nrFramesPerSec }
 {
-	std::cout << "Damage created" << '\n';
+
 }
 
 void Damage::Draw() const
@@ -22,19 +22,7 @@ void Damage::Update(float elapsedSec)
 {
 	if (!m_IsOverlapping)
 	{
-		UpdateFrames(elapsedSec);
 		UpdatePosition(elapsedSec);
-	}
-}
-
-void Damage::UpdateFrames(float elapsedSec)
-{
-	const float maxFrameTime{ 1.0f / m_NrOfFramesPerSec };
-	m_AnimTime += elapsedSec;
-	if (maxFrameTime < m_AnimTime)
-	{
-		m_AnimFrame = (m_AnimFrame + 1) % m_NrOfFrames;
-		m_AnimTime -= maxFrameTime;
 	}
 }
 

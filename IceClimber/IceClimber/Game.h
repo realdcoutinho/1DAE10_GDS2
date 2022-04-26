@@ -1,8 +1,11 @@
 #pragma once
 
+
 class Camera;
 class Level;
 class Player;
+class TextureManager;
+#include "TextureManager.h"
 
 class Game final
 {
@@ -16,6 +19,9 @@ public:
 
 	void Update( float elapsedSec );
 	void Draw( ) const;
+
+	TextureManager* GetTextureManager();
+
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -33,10 +39,14 @@ private:
 	void InitializeCamera(const Window& window);
 
 
+	
+
+
 	float m_Scale;
 	float time{};
 
 	const Window m_Window;
+	TextureManager* m_pTextures;
 	Camera* m_pCamera;
 	Player* m_pPlayer;
 	Level* m_pLevel;

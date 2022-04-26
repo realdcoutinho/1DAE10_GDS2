@@ -123,6 +123,9 @@
     <ClCompile Include="EnemyBird.cpp">
       <Filter>Game Files\Character\NPC\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="EnemyBird.h">
       <Filter>Game Files\Character\NPC\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

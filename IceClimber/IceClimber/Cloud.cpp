@@ -1,16 +1,18 @@
 #include "pch.h"
 #include "Cloud.h"
 #include <iostream>
+#include "Level.h"
 using namespace utils;
 
 int Cloud::m_InstanceCounter{ 0 };
 
 
-Cloud::Cloud(Point2f bottomLeft, int nrLenght, int type, float windowWidth)
+Cloud::Cloud(Level* level, Point2f bottomLeft, int nrLenght, int type, float windowWidth)
 	:Platform{bottomLeft, 2, 3, type, nrLenght, windowWidth, true }
 	, m_MaxVelocityX{60}
 	, m_MinVelocityX{30}
-	, m_pCloud{new Texture{"./Images/Clouds.png"}}
+	//, m_pCloud{new Texture{"./Images/Clouds.png"}}
+	, m_pCloud{ level->GetTextureManager()->GetTexturePointer("Cloud") }
 {
 	SetMeasures();
 	++m_InstanceCounter;
@@ -18,7 +20,6 @@ Cloud::Cloud(Point2f bottomLeft, int nrLenght, int type, float windowWidth)
 
 Cloud::~Cloud()
 {
-	delete m_pCloud;
 }
 
 void Cloud::SetMeasures()

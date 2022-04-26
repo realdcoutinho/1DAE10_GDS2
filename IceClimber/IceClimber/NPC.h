@@ -12,16 +12,13 @@ public:
 	NPC& operator=(NPC&& other) = delete; // move assignment operator
 	virtual ~NPC();
 
-	virtual void Draw(Texture* textureOne = 0, Texture* textureTwo = 0) const;
+	virtual void Draw() const;
 	virtual void Update(float elapsedSed);
 	bool Overlap(const Rectf& actorShape);
 
 protected:
-	void UpdateFrames(float elapsedSec);
 	void SetVelocity(float horSpeed);
 	void SetMeasures(float textureWidth, float textureHeight, float textureWidthSnipet, float textureHeightSnipet, Rectf destRect);
-	Rectf GetSourceRect() const;
-	
 	virtual void UpdatePosition(float elapsedSec);
 	
 	enum class Type

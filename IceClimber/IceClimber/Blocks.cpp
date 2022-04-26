@@ -25,7 +25,6 @@ void Blocks::SetMeasures()
 	m_TextureHeight = m_pBlocks->GetHeight();
 	m_TextureSnipetWidth = m_TextureWidth / m_NrColumns;
 	m_TextureSnipetHeight = m_TextureHeight / m_NrRows;
-	m_TextureSnipetHeight =8;
 	m_TotalWidth = m_TextureSnipetWidth * m_NrLenght;
 	//
 	m_DestRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureSnipetWidth, m_TextureSnipetHeight };
