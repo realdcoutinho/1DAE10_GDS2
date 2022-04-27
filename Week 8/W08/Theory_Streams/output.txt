@@ -1,0 +1,3 @@
+Hello world! 
+He said: 'Hi' 
+He said: "Hi!"

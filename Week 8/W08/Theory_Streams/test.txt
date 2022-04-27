@@ -1,0 +1,5 @@
+pos 10 20
+width 50
+height 80
+more text
+that's all folks

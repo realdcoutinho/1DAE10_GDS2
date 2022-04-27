@@ -3,19 +3,100 @@
 
 #include "pch.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+
+
+
+void ReadFile();
+void WriteFile();
+void CheckStream(std::ifstream& stream);
 
 int main()
 {
     std::cout << "Hello World!\n";
+    ReadFile();
+    WriteFile();
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void  ReadFile()
+{
+    {
+        std::ifstream inStream{ "test.txt" };
+        if (!inStream)
+            std::cout << "File not opened.\n";
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+        int posX{}, posY{}, width{}, height{};
+        std::string text;
+
+        inStream >> text >> posX >> posY;
+
+        if (!inStream)
+            CheckStream(inStream);
+        std::cout << text << ' ' << posX << ' ' << posY << '\n';
+
+
+        inStream >> text >> posX >> posY; // if the stream is in an error state, we have to clear the flags before reading smt and moving on. this was an example
+        if (!inStream)
+            CheckStream(inStream);
+        std::cout << text << ' ' << posX << ' ' << posY << '\n';
+
+
+        //inStream >> text >> width;
+        //if (!inStream)
+        //    CheckStream(inStream);
+        //std::cout << text << ' ' << width << '\n';
+
+
+        inStream >> text >> height;
+        if (!inStream)
+            CheckStream(inStream);
+        std::cout << text << ' ' << height << '\n';
+
+        inStream.get();
+        std::getline(inStream, text);
+        if (!inStream)
+            CheckStream(inStream);
+        std::cout << text << '\n';
+
+        while (inStream) {
+            std::getline(inStream, text, 'a');
+            std::cout << text << '\n';
+        }
+    }
+
+
+
+
+    {
+        std::cout << '\n' << '\n' << '\n';
+        std::string text;
+        std::ifstream inStream{ "test.txt" };
+        while (std::getline(inStream, text))
+        {
+            std::cout << text << '\n';
+        }
+    }
+}
+
+void CheckStream(std::ifstream& stream)
+{
+    std::cout << "Something went wrong while reading: ";
+    if (stream.eof())
+        std::cout << " End of file was reached." << '\n';
+    if (stream.fail())
+        std::cout << " Something failed." << '\n';
+    if (stream.bad())
+        std::cout << " This is really bad." << '\n';
+    
+    std::cout << '\n';
+    stream.clear();
+}
+
+void WriteFile()
+{
+    std::ofstream outStream{ "output.txt" };
+    outStream << "Hello world! \n";
+    outStream << "He said: 'Hi' \n";
+    outStream << R"(He said: "Hi!")" << '\n';
+}
