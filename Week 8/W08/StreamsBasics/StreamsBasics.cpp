@@ -14,6 +14,7 @@ void CheckStream(std::ifstream& stream);
 
 int main()
 {
+    //std::cout << "Hello World!\n";
     ReadFile();
 }
 
@@ -33,18 +34,19 @@ void CheckStream(std::ifstream& stream)
 
 void ReadFile()
 {
-    std::ifstream quotes{ "SoftwareQuotesInput.txt" };
-    if (!quotes)
-        CheckStream(quotes);
+    std::ifstream inStream{ "SoftwareQuotesInput.txt" };
+    if (!inStream)
+        CheckStream(inStream);
 
-    std::string textOne;
-    std::string textTwo;
-    std::string textThree;
-
-
-    while (std::getline(quotes, textOne, '\n'))
+    std::string text;
+    //std::string total;
+    while (std::getline(inStream, text, '\n'))
     {
-        std::cout << textOne << '\n';
-    }
+        std::cout << text << ' ';
+        while (std::getline(inStream, text, '\n'))
+        {
+            std::cout << text << ' ';
 
+        }
+    }
 }
