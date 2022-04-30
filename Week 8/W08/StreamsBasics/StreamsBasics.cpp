@@ -39,17 +39,14 @@ void ReadFile()
         CheckStream(inStream);
 
     std::string text;
-    std::string total;
+    //std::string total;
     while (std::getline(inStream, text, '\n'))
     {
         std::cout << text << ' ';
-        if(std::getline(inStream, text, '\n'))
+        while (std::getline(inStream, text, '\n'))
         {
-            std::cout << text << '\n';
-            if (std::getline(inStream, text, '.'))
-            {
-                std::cout << text << '\n';
-            }
+            std::cout << text << ' ';
+
         }
     }
 }
