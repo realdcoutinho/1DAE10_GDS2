@@ -1,21 +1,102 @@
-// Theory.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include "pch.h"
+
+#include "IntHolder.h"
+#include "DataHolder.h"
+#include <array>
+#include <vector>
+#include <string>
+#include <deque>
+#include <list>
 #include <iostream>
+
+
+
+template <typename T>
+void PrintVector(const std::vector<T>& v);
+
+void Templates();
+void Containers();
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	//Templates();
+	Containers();
+
+	std::cin.get();
+	return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+template <typename T>
+void PrintVector(const std::vector<T>& v)
+{
+	std::cout << "PrintVector: ";
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+	for (const T& value : v)
+	{
+		std::cout << value << ' ';
+	}
+	std::cout << '\n';
+}
+
+void Templates()
+{
+	std::vector<int>myIntVector{ 2, 3, 4 };
+	PrintVector(myIntVector);
+
+	std::vector<double>myDoubleVector{ 2.5, 3.5, 4.5 };
+	PrintVector(myDoubleVector);
+
+	std::vector<std::string>myStrings{ "Hello", "Mars", "here", "I", "come !" };
+	PrintVector(myStrings);
+
+	IntHolder *pIh{ new IntHolder{} };
+	pIh->SetData(15);
+	std::cout << pIh->GetData() << ' ';
+	pIh->Print();
+
+	DataHolder<int>* pDh1{ new DataHolder<int>{} };
+	pDh1->SetData(15);
+	std::cout << pDh1->GetData() << ' ';
+	pDh1->Print();
+
+	DataHolder<double>* pDh2{ new DataHolder<double>{} };
+	pDh2->SetData(3.1415926535);
+	std::cout << pDh2->GetData() << ' ';
+	pDh2->Print();
+
+	DataHolder<float>* pDh3{ new DataHolder<float>{} };
+	pDh3->SetData(3.1415f);
+	std::cout << pDh3->GetData() << ' ';
+	pDh3->Print();
+
+	DataHolder<std::string>* pDh4{ new DataHolder<std::string>{} };
+	pDh4->SetData("Templates");
+	std::cout << pDh4->GetData() << ' ';
+	pDh4->Print();
+}
+
+void Containers()
+{
+	std::vector<int>myIntVector{};
+	myIntVector.reserve(10);
+	int loopCount{};
+	while (loopCount++ < 20)
+	{
+		myIntVector.push_back(rand());
+		std::cout << "Size: " << myIntVector.size() << "   Capacity: " << myIntVector.capacity() << '\n';
+		//std::cin.get();
+	}
+
+	std::deque<int> myDeque{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	for (size_t i = 10; i < 20; i++)
+	{
+		myDeque.push_back(i);
+		myDeque.pop_front();
+		for (int number : myDeque)
+		{
+			std::cout << number << ' ';
+		}
+		std::cout << '\n';
+	}
+}

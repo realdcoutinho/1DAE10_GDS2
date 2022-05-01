@@ -156,6 +156,8 @@
     <ClCompile Include="Theory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataHolder.h" />
+    <ClInclude Include="IntHolder.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

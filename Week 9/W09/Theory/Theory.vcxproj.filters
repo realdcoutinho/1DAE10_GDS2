@@ -26,5 +26,11 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DataHolder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntHolder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
