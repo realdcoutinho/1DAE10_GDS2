@@ -7,7 +7,7 @@
 #include <iostream>
 #include "MaxFunctions.h"
 
-const Fraction& Max( const Fraction& a, const Fraction& b )
-{
-	return a < b ? b : a;
-}
+//const Fraction& Max( const Fraction& a, const Fraction& b )
+//{
+//	return a < b ? b : a;
+//}

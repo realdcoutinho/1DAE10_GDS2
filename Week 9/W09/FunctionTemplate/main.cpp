@@ -36,10 +36,10 @@ void TestMaxFunction( )
 	std::string string2{ "abdc" };
 	std::cout << "Max of " << string1 << " and " << string2 << " is " << Max( string1, string2 ) << "\n";
 
-	//// Max of 2 fractions
-	//Fraction f1{ 2,3 };
-	//Fraction f2{ 2,4 };
-	//std::cout << "Max of " << f1 << " and " << f2 << " is " << Max( f1, f2 ) << "\n";
+	// Max of 2 fractions
+	Fraction f1{ 2,3 };
+	Fraction f2{ 2,4 };
+	std::cout << "Max of " << f1 << " and " << f2 << " is " << Max( f1, f2 ) << "\n";
 
 }
 
