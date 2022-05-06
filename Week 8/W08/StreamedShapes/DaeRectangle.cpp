@@ -15,6 +15,8 @@ void DaeRectangle::Draw() const
 
 std::string DaeRectangle::ToString() const
 {
-	std::string string;
-	return DaeShape::PropertiesToString();
+	std::string string{ "<DaeRect \n" };
+	string += DaeShape::PropertiesToString();
+	string += "/>\n\n";
+	return string;
 }

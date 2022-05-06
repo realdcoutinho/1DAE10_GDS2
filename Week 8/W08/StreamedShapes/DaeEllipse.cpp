@@ -23,5 +23,9 @@ void DaeEllipse::Draw( ) const
 
 std::string DaeEllipse::ToString() const
 {
-	return DaeShape::PropertiesToString();
+	std::string string{ "<DaeEllipse \n" };
+	string += DaeShape::PropertiesToString();
+	string += "IsFilled=\"" + std::to_string(m_IsFilled) + "\n";;
+	string += "/>\n\n";
+	return string;
 }

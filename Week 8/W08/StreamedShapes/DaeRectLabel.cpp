@@ -29,11 +29,11 @@ void DaeRectLabel::Draw( ) const
 }
 std::string DaeRectLabel::ToString() const
 {
-	std::string string = "<DaeRectLabel \n";
+	std::string string{ "<DaeRectLabel \n" };
 	string += { DaeShape::PropertiesToString() };
 	string += "TextColor=\"" + std::to_string(m_ColorLabel.r) + ',' + std::to_string(m_ColorLabel.g) + ',' + std::to_string(m_ColorLabel.g) + ',' + std::to_string(m_ColorLabel.a) + ',' + "\"" + "\n";
 	string += "Label=\"" + m_Label + "\"" + "\n";
-	string += "/>\n";
+	string += "/>\n\n";
 	return string;
 }
 
