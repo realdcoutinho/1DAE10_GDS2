@@ -258,20 +258,22 @@ void Game::CreateShapesFromFile(const std::string& fileName)
 	// Call for each read DAE shape element the function CreateShape 
 
 	std::ifstream file{ fileName };
-
-	std::string shape{};
 	std::string text{};
-	std::string keyWord{ "Dae" };
-
-
-	while (std::getline(file, text))
-	{
-		size_t firstPos{ text.find(keyWord, 0) };
-		size_t secondPos{ text.find("\n", firstPos) };
-		size_t subLenght{ secondPos - firstPos - 1 };
-		shape = fileName.substr(firstPos, subLenght);
-		CreateShape(shape);
+	while(file)
+	{ 
+		if (std::getline(file, text, '>'))
+		{
+			if (text.empty() != true)
+			{
+				//size_t firstPos{ text.find(keyWord, 0) };
+				//size_t secondPos{ text.find("\n", firstPos) };
+				//size_t subLenght{ secondPos - firstPos - 1 };
+				//shape = fileName.substr(firstPos, subLenght);
+				CreateShape(text);
+			}
+		}
 	}
+
 
 
 }
@@ -281,6 +283,13 @@ void Game::SaveShapesToFile(const std::string & fileName) const
 	// TODO: 6. Complete the definition of SaveShapesToFile
 	// Save all the shapes that are in the vector m_pShapes to the given file
 	// in  the same XML format
+	std::ofstream SavedShapes{ fileName };
+
+	for (int i{}; i < m_pShapes.size(); ++i)
+	{
+		SavedShapes << m_pShapes[i]->ToString();
+	}
+
 
 }
 

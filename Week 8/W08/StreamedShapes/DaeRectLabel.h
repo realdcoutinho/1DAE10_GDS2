@@ -12,11 +12,16 @@ public:
 	DaeRectLabel( const Point2f& center, float width, float height, const Color4f& color, const std::string& label, const Color4f& textColor, TTF_Font* pFont );
 	~DaeRectLabel( );
 	void Draw( ) const;
+	
+	std::string ToString() const;
 
 private: 
 	Texture* m_pLabelText;
 	float m_MarginX;
 	float m_MarginY;
+
+	Color4f m_ColorLabel;
+	std::string m_Label{ "Hello" };
 };
 
  

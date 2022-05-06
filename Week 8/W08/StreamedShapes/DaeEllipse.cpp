@@ -20,3 +20,8 @@ void DaeEllipse::Draw( ) const
 		utils::DrawEllipse( m_Center, m_Width / 2, m_Height / 2 );
 	}
 }
+
+std::string DaeEllipse::ToString() const
+{
+	return DaeShape::PropertiesToString();
+}

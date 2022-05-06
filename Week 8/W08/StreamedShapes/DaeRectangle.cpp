@@ -12,3 +12,9 @@ void DaeRectangle::Draw() const
 	utils::SetColor(m_Color);
 	utils::FillRect(Point2f{ m_Center.x - m_Width / 2,m_Center.y - m_Height / 2 }, m_Width, m_Height);
 }
+
+std::string DaeRectangle::ToString() const
+{
+	std::string string;
+	return DaeShape::PropertiesToString();
+}

@@ -9,6 +9,7 @@ public:
 	DaeEllipse( const Point2f& center, float width, float height, const Color4f& color, bool isFilled );
 
 	void Draw( ) const;
+	std::string ToString() const;
 private: 
 	bool m_IsFilled;
 };

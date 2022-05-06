@@ -7,6 +7,8 @@ class DaeRectangle : public DaeShape
 public:
 	DaeRectangle(const Point2f& center, float width, float height, const Color4f& color);
 	void Draw() const;
+
+	std::string ToString() const;
 private:
 	//Color4f m_Color;
 };

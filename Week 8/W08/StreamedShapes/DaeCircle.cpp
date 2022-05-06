@@ -11,3 +11,7 @@ DaeCircle::DaeCircle( const Point2f &center, float diameter, const Color4f &colo
 }
 
 
+std::string DaeCircle::ToString() const
+{
+	return DaeShape::PropertiesToString();
+}
