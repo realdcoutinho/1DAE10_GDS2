@@ -86,7 +86,7 @@ void TrailingCircle::DrawDeque() const
 	for (int i{}; i < m_Positions.size(); ++i)
 	{
 		j += 1.f / static_cast<float>(m_NrTrails);
-		utils::SetColor(Color4f(m_Color.r, m_Color.g, m_Color.b, m_Color.a * j));
+		utils::SetColor(Color4f(m_Color.r, m_Color.g, m_Color.b, m_Color.a * (j /2)));
 		utils::FillEllipse(m_Positions[i], m_Radius *j, m_Radius*j);
 	}
 }

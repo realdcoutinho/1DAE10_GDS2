@@ -9,16 +9,24 @@
 
 
 
-void ReadFile();
-void CheckStream(std::ifstream& stream);
+void ReadFile(); //not in use
+void WriteFile(); // not in use
+void CheckStream(std::istream& stream);
+void ReadSentence(std::istream& istream, std::string& sentence);
 
 int main()
 {
-    //std::cout << "Hello World!\n";
-    ReadFile();
+    //ReadFile();
+    //WriteFile();
+    std::ifstream inStream{ "SoftwareQuotesInput.txt" };
+    std::ofstream outStream{ "SoftwareQuotesOutput.txt" };
+    std::string text;
+    ReadSentence(inStream, text);
+    std::cout << text;
+    outStream << text;
 }
 
-void CheckStream(std::ifstream& stream)
+void CheckStream(std::istream& stream)
 {
     std::cout << "Something went wrong while reading: ";
     if (stream.eof())
@@ -32,21 +40,96 @@ void CheckStream(std::ifstream& stream)
     stream.clear();
 }
 
+
+void ReadSentence(std::istream& istream, std::string& sentence)
+{
+    if (!istream)
+    {
+        CheckStream(istream);
+        return;
+    }
+
+    std::string text;
+    while (std::getline(istream, text))
+    {
+        if (text.size() > 0)
+        {
+            if (text.find('.') != std::string::npos)
+            {
+                text += '\n';
+            }
+            else
+            {
+                text += ' ';
+            }
+            sentence += text;
+            text.clear();
+        }
+    }
+}
+
+
 void ReadFile()
 {
     std::ifstream inStream{ "SoftwareQuotesInput.txt" };
     if (!inStream)
+    {
         CheckStream(inStream);
+        return;
+    }
 
     std::string text;
-    //std::string total;
-    while (std::getline(inStream, text, '\n'))
+    while (std::getline(inStream, text))
     {
-        std::cout << text << ' ';
-        while (std::getline(inStream, text, '\n'))
+        if(text.size() > 0)
         {
-            std::cout << text << ' ';
+            if (text.find('.') != std::string::npos)
+            {
+                text += '\n';
+            }
+            else
+            {
+                text += ' ';
+            }
+            std::cout << text;
+            
+            text.clear();
+        }
+    }
+}
+void WriteFile()
+{
+    std::ifstream inStream{ "SoftwareQuotesInput.txt" };
+    if (!inStream)
+    {
+        CheckStream(inStream);
+        return;
+    }
 
+    std::ofstream outStream{ "SoftwareQuotesOutput.txt" };
+    if (!outStream)
+    {
+        std::cout << "Something wrong";
+        return;
+    }
+
+    std::string text;
+    while (std::getline(inStream, text))
+    {
+        if (text.size() > 0)
+        {
+            if (text.find('.') != std::string::npos)
+            {
+                text += '\n';
+            }
+            else
+            {
+                text += ' ';
+                //outStream << text;
+            }
+            outStream << text;
+
+            text.clear();
         }
     }
 }
