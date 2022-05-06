@@ -241,14 +241,13 @@ std::string Game::GetAttributeValue(const std::string& attrName, const std::stri
 	// TODO: 4a. Complete GetAttributeValue function
 	// It looks for the value of the given attribute (attrName) 
 	// in the given element and returns it
-
 	std::string attribute;
 
-	size_t start{ element.find(attrName, 0) };
-	size_t firstQuote{ element.find('"', start + attrName.length()) };
-	size_t secondQuote{ element.find('"', firstQuote + 1) };
-	size_t subLenght{ secondQuote - firstQuote - 1 };
-	attribute = element.substr(firstQuote + 1, subLenght);
+		size_t start{ element.find(attrName, 0) };
+		size_t firstQuote{ element.find('"', start + attrName.length()) };
+		size_t secondQuote{ element.find('"', firstQuote + 1) };
+		size_t subLenght{ secondQuote - firstQuote - 1 };
+		attribute = element.substr(firstQuote + 1, subLenght);
 
 	return attribute;
 }
@@ -258,13 +257,22 @@ void Game::CreateShapesFromFile(const std::string& fileName)
 	// TODO: 5. Read the XML shape elements from the given file
 	// Call for each read DAE shape element the function CreateShape 
 
+	std::ifstream file{ fileName };
+
 	std::string shape{};
+	std::string text{};
 	std::string keyWord{ "Dae" };
-	size_t firstPos{ fileName.find(keyWord, 0) };
-	size_t secondPos{ fileName.find("\n", firstPos)};
-	size_t subLenght{ secondPos - firstPos - 1 };
-	shape = fileName.substr(firstPos, subLenght);
-	CreateShape(shape);
+
+
+	while (std::getline(file, text))
+	{
+		size_t firstPos{ text.find(keyWord, 0) };
+		size_t secondPos{ text.find("\n", firstPos) };
+		size_t subLenght{ secondPos - firstPos - 1 };
+		shape = fileName.substr(firstPos, subLenght);
+		CreateShape(shape);
+	}
+
 
 }
 
