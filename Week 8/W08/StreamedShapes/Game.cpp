@@ -170,6 +170,7 @@ Color4f Game::ToColor(const std::string& colorStr) const
 	std::getline(stringOne, text, ',');
 	color.a = std::stof(text);
 
+
 	//while (std::getline(stringOne, text, ','))
 	//{
 	//	switch (position)
