@@ -539,7 +539,7 @@ bool utils::Raycast(const std::vector<std::vector<Point2f>> vertices, const Poin
 {
 	for (size_t i{ 0 }; i < vertices.size(); ++i)
 	{
-		return Raycast(vertices[i].data(), vertices.size(), rayP1, rayP2, hitInfo);
+		return Raycast(vertices[i].data(), vertices[i].size(), rayP1, rayP2, hitInfo);
 	}
 	return false;
 }

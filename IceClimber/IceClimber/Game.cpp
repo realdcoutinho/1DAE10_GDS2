@@ -16,6 +16,22 @@ Game::Game( const Window& window )
 	SetScale();
 	InitializeCamera(window);
 	Initialize();
+	std::vector< Point2f > test;
+	test.push_back(Point2f(0.0f, 0.0f));
+
+	test.push_back(Point2f(0.0f, 1.0f));
+	test.push_back(Point2f(1.0f, 1.0f));
+	test.push_back(Point2f(1.0f, 0.0f));
+
+	std::vector< std::vector< Point2f > > vertices;
+	vertices.push_back(test);
+	Point2f a, b;
+	a = Point2f(0.5f, 0.5f);
+	b = Point2f(-0.5f, 0.5f);
+	utils::HitInfo hitinfo;
+
+	utils::Raycast(vertices, a, b, hitinfo);
+	utils::Raycast(vertices, b, a, hitinfo);
 }
 
 Game::~Game( )
