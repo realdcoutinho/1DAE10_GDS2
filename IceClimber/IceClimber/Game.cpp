@@ -28,10 +28,10 @@ Game::Game( const Window& window )
 	Point2f a, b;
 	a = Point2f(0.5f, 0.5f);
 	b = Point2f(-0.5f, 0.5f);
-	utils::HitInfo hitinfo;
+	//utils::HitInfo hitinfo;
 
-	utils::Raycast(vertices, a, b, hitinfo);
-	utils::Raycast(vertices, b, a, hitinfo);
+	/*utils::Raycast(vertices, a, b, hitinfo);
+	utils::Raycast(vertices, b, a, hitinfo);*/
 }
 
 Game::~Game( )
