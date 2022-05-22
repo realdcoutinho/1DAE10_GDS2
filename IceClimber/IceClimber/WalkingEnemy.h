@@ -7,17 +7,17 @@
 
 class Player;
 class Level;
-class Enemies final : public NPC
+class WalkingEnemy final : public NPC
 {
 public:
-	explicit Enemies(Player* player,Level* level, Point2f bottomLeft, float windowWidth);
-	Enemies(const Enemies& other) = delete; //copy constructor
-	Enemies& operator=(const Enemies& other) = delete; // assignment operator
-	Enemies(Enemies&& other) = delete; // move constructor
-	Enemies& operator=(Enemies&& other) = delete; // move assignment operator
-	virtual ~Enemies() override; // should it be included I dont remember
+	explicit WalkingEnemy(Player* player, Level* level, Point2f bottomLeft, float windowWidth);
+	WalkingEnemy(const WalkingEnemy& other) = delete; //copy constructor
+	WalkingEnemy& operator=(const WalkingEnemy& other) = delete; // assignment operator
+	WalkingEnemy(WalkingEnemy&& other) = delete; // move constructor
+	WalkingEnemy& operator=(WalkingEnemy&& other) = delete; // move assignment operator
+	virtual ~WalkingEnemy() override; // should it be included I dont remember
 
-	void Draw() const;
+	virtual void Draw() const override;
 	virtual void Update(float elapsedSec) override;
 	void SetEnemyState(int& state, const Rectf& actorShape);
 
@@ -40,7 +40,6 @@ private:
 	{
 		seal = 0,
 		bear = 1,
-		bird = 2
 	};
 
 	enum class State
@@ -48,6 +47,7 @@ private:
 		kill = 5,
 		other = 0
 	};
+
 	State m_ActorState;
 	float m_HorSpeed;
 

@@ -36,17 +36,19 @@ Player::~Player()
 
 void Player::InitializeAnimations()
 {
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::roll), 0, 4, 10, 4, 11)); //roll //[0]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::dead), 0, 4, 10, 4, 11)); //dead //[1]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::jumpB), 0, 4, 10, 4, 11)); //jumpB //[2]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::runB), 0, 4, 10, 4, 11)); //runB //[3]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::restB), 0, 4, 10, 4, 11)); //restB //[4]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::kill), 0, 4, 10, 4, 11)); //kill //[5]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::fall), 0, 4, 10, 4, 11)); //fall //[6]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::jump), 0, 4, 10, 4, 11)); //jump //[7]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::slide), 0, 4, 10, 4, 11)); //slide //[8]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::run), 0, 4, 10, 4, 11)); //run //[9]
-	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::rest), 0, 4, 10, 4, 11)); //rest //[10]
+	float framesPerSec{ 15.0f };
+
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::roll), 0, 4, framesPerSec, 4, 11)); //roll //[0]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::dead), 0, 4, framesPerSec, 4, 11)); //dead //[1]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::jumpB), 0, 4, framesPerSec, 4, 11)); //jumpB //[2]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::runB), 0, 4, framesPerSec, 4, 11)); //runB //[3]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::restB), 0, 4, framesPerSec, 4, 11)); //restB //[4]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::kill), 0, 4, framesPerSec, 4, 11)); //kill //[5]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::fall), 0, 4, framesPerSec, 4, 11)); //fall //[6]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::jump), 0, 4, framesPerSec, 4, 11)); //jump //[7]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::slide), 0, 4, framesPerSec, 4, 11)); //slide //[8]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::run), 0, 4, framesPerSec, 4, 11)); //run //[9]
+	m_Animations.push_back(new Animation(m_pPlayerTexture, int(State::rest), 0, 4, framesPerSec, 4, 11)); //rest //[10]
 	m_NrAnimations = static_cast<int>(m_Animations.size());
 }
 

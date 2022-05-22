@@ -6,7 +6,7 @@
 #include "Cloud.h"
 #include "Bonus.h"
 #include "WinningBird.h"
-#include "Enemies.h"
+#include "WalkingEnemy.h"
 
 #include "TextureManager.h"
 

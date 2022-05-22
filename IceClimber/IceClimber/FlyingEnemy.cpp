@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "EnemyBird.h"
+#include "FlyingEnemy.h"
 #include "Level.h"
 #include <iostream>
 using namespace utils;
 
 
-EnemyBird::EnemyBird(Level* level, Point2f bottomLeft, float windowWidth)
+FlyingEnemy::FlyingEnemy(Level* level, Point2f bottomLeft, float windowWidth)
 	: NPC(bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
 	, m_pEnemiesAlive{level->GetTextureManager()->GetTexturePointer("EnemyAlive")}
 	, m_pEnemiesDead{level->GetTextureManager()->GetTexturePointer("EnemyDead")}
@@ -17,17 +17,17 @@ EnemyBird::EnemyBird(Level* level, Point2f bottomLeft, float windowWidth)
 	InitializeAnimation();
 }
 
-void EnemyBird::InitializeAnimation()
+void FlyingEnemy::InitializeAnimation()
 {
 	m_pAnimationAlive = new Animation(m_pEnemiesAlive, static_cast<int>(m_Type), 0, 4, 8, 4, 3);
 	m_pAnimationDead = new Animation(m_pEnemiesDead, static_cast<int>(m_Type), 0, 4, 8, 4, 3);
 }
 
-EnemyBird::~EnemyBird()
+FlyingEnemy::~FlyingEnemy()
 {
 }
 
-void EnemyBird::Update(float elapsedSec)
+void FlyingEnemy::Update(float elapsedSec)
 {
 	if (!m_IsOverlapping)
 	{
@@ -36,13 +36,13 @@ void EnemyBird::Update(float elapsedSec)
 	}
 }
 
-void EnemyBird::UpdateAnimations(float elapsedSec)
+void FlyingEnemy::UpdateAnimations(float elapsedSec)
 {
 	m_pAnimationAlive->Update(elapsedSec);
 	m_pAnimationDead->Update(elapsedSec);
 }
 
-void EnemyBird::Draw() const
+void FlyingEnemy::Draw() const
 {
 	glPushMatrix();
 	{
@@ -61,7 +61,7 @@ void EnemyBird::Draw() const
 	glPopMatrix();
 }
 
-void EnemyBird::SetMeasures()
+void FlyingEnemy::SetMeasures()
 {
 	float textureWidth = m_pEnemiesAlive->GetWidth();
 	float textureHeight = m_pEnemiesAlive->GetHeight();
@@ -77,12 +77,12 @@ void EnemyBird::SetMeasures()
 	NPC::SetMeasures(textureWidth, textureHeight, textureWidthSnipet, textureHeightSnipet, birdRectf);
 }
 
-void EnemyBird::SetEnemyType()
+void FlyingEnemy::SetEnemyType()
 {
 	NPC::m_Type = NPC::Type(EnemyType::bird);	
 }
 
-void EnemyBird::SetEnemyState(int& state, const Rectf& actorShape)
+void FlyingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 {
 	m_ActorShape = actorShape;
 	m_ActorState = State(state);

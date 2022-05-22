@@ -23,6 +23,7 @@ public:
 
 protected: 
 	void SetCollision(); //sets collisons from type block bottomleft onwards
+	void SetLines();
 	void UpdatePosition(float elapsedSec);
 	virtual void SetVelocity();
 
@@ -46,6 +47,9 @@ protected:
 	Rectf m_SourceRect;
 	Vector2f m_Velocity;
 	std::vector<Point2f> m_Collision;
+
+	std::vector<Point2f> m_TopLine;
+	std::vector<Point2f> m_BottomLine;
 };
 
 

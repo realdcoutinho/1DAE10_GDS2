@@ -167,13 +167,13 @@ void Level::InitializeEnemies()
 	Point2f enemySix{ 232.f,312.f };
 	Point2f enemySeven{ 252.f, 360.f };
 
-	m_pNPC.push_back(new Enemies(m_pPlayer, this,  enemyOne, m_TextureWidth));
-	m_pNPC.push_back(new Enemies(m_pPlayer, this, enemyTwo, m_TextureWidth));
-	m_pNPC.push_back(new Enemies(m_pPlayer, this, enemyThree, m_TextureWidth));
-	m_pNPC.push_back(new Enemies(m_pPlayer, this, enemyFour, m_TextureWidth));
-	m_pNPC.push_back(new Enemies(m_pPlayer, this, enemyFive, m_TextureWidth));
-	m_pNPC.push_back(new Enemies(m_pPlayer, this, enemySix, m_TextureWidth));
-	m_pNPC.push_back(new Enemies(m_pPlayer,this, enemySeven, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this,  enemyOne, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this, enemyTwo, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this, enemyThree, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this, enemyFour, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this, enemyFive, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this, enemySix, m_TextureWidth));
+	m_pNPC.push_back(new WalkingEnemy(m_pPlayer,this, enemySeven, m_TextureWidth));
 	m_NrOfNPC = int(m_pNPC.size());
 }
 
@@ -222,9 +222,9 @@ void Level::DrawNPC() const
 {
 	for (int i{}; i < m_NrOfNPC; ++i)
 	{
-		if (typeid(*m_pNPC[i]) == typeid(Enemies))
+		if (typeid(*m_pNPC[i]) == typeid(WalkingEnemy))
 		{
-			Enemies* pEnemies{ dynamic_cast<Enemies*>(m_pNPC[i]) };
+			WalkingEnemy* pEnemies{ dynamic_cast<WalkingEnemy*>(m_pNPC[i]) };
 			if (pEnemies)
 				pEnemies->Draw();
 		}
@@ -255,9 +255,9 @@ void Level::UpdateNPC(float elapsedSec)
 	for (int i{}; i < m_NrOfNPC; ++i)
 	{
 		m_pNPC[i]->Update(elapsedSec);
-		if (typeid(*m_pNPC[i]) == typeid(Enemies))
+		if (typeid(*m_pNPC[i]) == typeid(WalkingEnemy))
 		{
-			Enemies* pEnemies{ dynamic_cast<Enemies*>(m_pNPC[i]) };
+			WalkingEnemy* pEnemies{ dynamic_cast<WalkingEnemy*>(m_pNPC[i]) };
 			if (pEnemies)
 				pEnemies->SetEnemyState(m_PlayerState, m_ActorShape);
 		}

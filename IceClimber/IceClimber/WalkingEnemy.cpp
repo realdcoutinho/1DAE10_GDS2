@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "Enemies.h"
+#include "WalkingEnemy.h"
 #include "Level.h"
 #include "Player.h"
 #include <iostream>
 using namespace utils;
 
-Enemies::Enemies(Player* player,Level* level, Point2f bottomLeft, float windowWidth)
+WalkingEnemy::WalkingEnemy(Player* player,Level* level, Point2f bottomLeft, float windowWidth)
 	: NPC(bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
 	, m_pEnemiesAlive{level->GetTextureManager()->GetTexturePointer("EnemyAlive")}
 	, m_pEnemiesDead{level->GetTextureManager()->GetTexturePointer("EnemyDead")}
@@ -21,21 +21,21 @@ Enemies::Enemies(Player* player,Level* level, Point2f bottomLeft, float windowWi
 	SetVelocity();
 }
 
-Enemies::~Enemies()
+WalkingEnemy::~WalkingEnemy()
 {
 	delete m_pStalagmite;
 	delete m_pAnimationAlive;
 	delete m_pAnimationDead;
 }
 
-void Enemies::InitializeAnimations()
+void WalkingEnemy::InitializeAnimations()
 {
 	m_pAnimationAlive = new Animation(m_pEnemiesAlive, static_cast<int>(m_Type), 0, 4, 10, 4, 3);
 	m_pAnimationDead = new Animation(m_pEnemiesDead, static_cast<int>(m_Type), 0, 4, 10, 4, 3);
 }
 
 
-void Enemies::Update(float elapsedSec)
+void WalkingEnemy::Update(float elapsedSec)
 {
 	m_ActorShape = m_pPlayer->GetShape();
 	m_ActorState = State(m_pPlayer->GetPlayerState());
@@ -48,7 +48,7 @@ void Enemies::Update(float elapsedSec)
 }
 
 
-void Enemies::Draw() const
+void WalkingEnemy::Draw() const
 {
 	DrawStalagmites();
 	glPushMatrix();
@@ -71,7 +71,7 @@ void Enemies::Draw() const
 	
 }
 
-void Enemies::SetMeasures()
+void WalkingEnemy::SetMeasures()
 {
 	float textureWidth = m_pEnemiesAlive->GetWidth();
 	float textureHeight = m_pEnemiesAlive->GetHeight();
@@ -87,7 +87,7 @@ void Enemies::SetMeasures()
 	NPC::SetMeasures(textureWidth, textureHeight, textureWidthSnipet, textureHeightSnipet, birdRectf);
 }
 
-void Enemies::SetEnemyType()
+void WalkingEnemy::SetEnemyType()
 {
 	int rand = std::rand() % 100;
 
@@ -97,7 +97,7 @@ void Enemies::SetEnemyType()
 		NPC::m_Type = NPC::Type(EnemyType::bear);
 }
 
-void Enemies::SetEnemyState(int& state, const Rectf& actorShape)
+void WalkingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 {
 	if (IsOverlapping(m_DestRect, actorShape) && (m_pPlayer->GetPlayerState() != int(State::kill)))
 		if(m_IsAlive)
@@ -106,7 +106,7 @@ void Enemies::SetEnemyState(int& state, const Rectf& actorShape)
 		m_IsAlive = false;
 }
 
-void Enemies::InitializeStalagmites()
+void WalkingEnemy::InitializeStalagmites()
 {
 	Point2f bottomLeft{};
 	if (m_Velocity.x > 0)
@@ -122,25 +122,25 @@ void Enemies::InitializeStalagmites()
 	m_pStalagmite->SetWindowWidth(m_WindowWidth);
 }
 
-void Enemies::DrawStalagmites() const
+void WalkingEnemy::DrawStalagmites() const
 {
 	m_pStalagmite->Draw(m_BottomLeft);
 }
 
-void Enemies::UpdateStalagmites(float elapsedSec)
+void WalkingEnemy::UpdateStalagmites(float elapsedSec)
 {
 	m_pStalagmite->Update(elapsedSec);
 	m_pStalagmite->Overlap(m_ActorShape);
 	m_pStalagmite->SetActorState(int(m_ActorState));
 }
 
-void Enemies::UpdateAnimations(float elapsedSec)
+void WalkingEnemy::UpdateAnimations(float elapsedSec)
 {
 	m_pAnimationAlive->Update(elapsedSec);
 	m_pAnimationDead->Update(elapsedSec);
 }
 
-void Enemies::SetVelocity()
+void WalkingEnemy::SetVelocity()
 {
 	m_pStalagmite->SetVelocity(m_Velocity);
 }

@@ -152,14 +152,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Damage.cpp" />
-    <ClCompile Include="Enemies.cpp" />
-    <ClCompile Include="EnemyBird.cpp" />
+    <ClCompile Include="WalkingEnemy.cpp" />
+    <ClCompile Include="FlyingEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -188,14 +189,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="BaseEnemy.h" />
+    <ClInclude Include="WalkingEnemy.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Damage.h" />
-    <ClInclude Include="Enemies.h" />
-    <ClInclude Include="EnemyBird.h" />
+    <ClInclude Include="FlyingEnemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Level.h" />

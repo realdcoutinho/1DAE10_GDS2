@@ -6,15 +6,15 @@
 #include "utils.h"
 
 
-class EnemyBird final : public NPC
+class FlyingEnemy final : public NPC
 {
 public:
-	explicit EnemyBird(Level* level, Point2f bottomLeft, float windowWidth);
-	EnemyBird(const EnemyBird& other) = delete; //copy constructor
-	EnemyBird& operator=(const EnemyBird& other) = delete; // assignment operator
-	EnemyBird(EnemyBird&& other) = delete; // move constructor
-	EnemyBird& operator=(EnemyBird&& other) = delete; // move assignment operator
-	virtual ~EnemyBird() override; // should it be included I dont remember
+	explicit FlyingEnemy(Level* level, Point2f bottomLeft, float windowWidth);
+	FlyingEnemy(const FlyingEnemy& other) = delete; //copy constructor
+	FlyingEnemy& operator=(const FlyingEnemy& other) = delete; // assignment operator
+	FlyingEnemy(FlyingEnemy&& other) = delete; // move constructor
+	FlyingEnemy& operator=(FlyingEnemy&& other) = delete; // move assignment operator
+	virtual ~FlyingEnemy() override; // should it be included I dont remember
 
 	void Draw() const;
 	virtual void Update(float elapsedSec) override;
@@ -29,8 +29,6 @@ private:
 
 	enum class EnemyType
 	{
-		seal = 0,
-		bear = 1,
 		bird = 2
 	};
 
