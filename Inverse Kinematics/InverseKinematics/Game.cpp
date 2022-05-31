@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -10,11 +11,12 @@ Game::Game( const Window& window )
 Game::~Game( )
 {
 	Cleanup( );
+
 }
 
 void Game::Initialize( )
 {
-	
+	std::cout << "Hello World" << '\n';
 }
 
 void Game::Cleanup( )
