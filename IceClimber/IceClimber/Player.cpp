@@ -81,13 +81,13 @@ void Player::Draw() const
 	Point2f actorBottomCenter{ m_Shape.GetBottomCenter(0, -1) };
 	Point2f actorTopCenter{ m_Shape.GetBottomCenter(0, m_Shape.height) };
 	SetColor({ Color4f(0, 0, 1, 1) });
-	//FillRect(m_Shape);
+	FillRect(m_Shape);
 
 	SetColor({ Color4f(0, 1, 1, 1) });
-	//FillRect(m_ActorShape);
+	FillRect(m_ActorShape);
 
 	SetColor({ Color4f(1, 0, 1, 1) });
-	//DrawLine(actorBottomCenter, actorTopCenter, 4);
+	DrawLine(actorBottomCenter, actorTopCenter, 4);
 
 	glPushMatrix();
 	{

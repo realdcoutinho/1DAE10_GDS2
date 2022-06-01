@@ -33,6 +33,20 @@ Point2f& Point2f::operator*=(float scale)
 }
 
 //-----------------------------------------------------------------
+// Line2f Constructors
+//-----------------------------------------------------------------
+Line2f::Line2f()
+    :Line2f{ Point2f{ 0.0f, 0.0f } , Point2f{ 0.0f, 0.0f } }
+{
+}
+
+Line2f::Line2f(const Point2f& pointLhs, const Point2f& pointRhs)
+    : point1{ pointLhs }
+    , point2{ pointRhs }
+{
+}
+
+//-----------------------------------------------------------------
 // Rectf Constructors
 //-----------------------------------------------------------------
 Rectf::Rectf( )

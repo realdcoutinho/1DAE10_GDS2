@@ -86,7 +86,7 @@ void FlyingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 {
 	m_ActorShape = actorShape;
 	m_ActorState = State(state);
-	if (IsOverlapping(m_DestRect, actorShape) && (m_IsAlive) && (state == int(State::kill)))
+	if (IsOverlapping(m_CollisionRect, actorShape) && (m_IsAlive) && (state == int(State::kill)))
 	{
 		if (m_Type != Type::typeThree)
 		{
@@ -99,7 +99,7 @@ void FlyingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 			m_IsAlive = false;
 		}
 	}
-	if (IsOverlapping(m_DestRect, actorShape) && (m_IsAlive) && (state != int(State::other)))
+	if (IsOverlapping(m_CollisionRect, actorShape) && (m_IsAlive) && (state != int(State::other)))
 	{
 		state = 2;
 	}

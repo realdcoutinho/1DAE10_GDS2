@@ -16,6 +16,7 @@ namespace utils
 
 	void DrawLine( float x1, float y1, float x2, float y2, float lineWidth = 1.0f );
 	void DrawLine( const Point2f& p1, const Point2f& p2, float lineWidth = 1.0f );
+	void DrawLine(const Line2f& line, float lineWidth = 1.0f);
 
 	void DrawTriangle(const Point2f& p1, const Point2f& p2, const Point2f& p3, float lineWidth = 1);
 	void FillTriangle(const Point2f& p1, const Point2f& p2, const Point2f& p3);
@@ -62,6 +63,7 @@ namespace utils
 	float GetDistance(const Point2f& p1, const Point2f& p2);
 
 	bool IsPointInRect(const Point2f& p, const Rectf& r);
+
 	bool IsPointInCircle(const Point2f& p, const Circlef& c);
 	bool IsPointInPolygon( const Point2f& p, const std::vector<Point2f>& vertices );
 	bool IsPointInPolygon( const Point2f& p, const Point2f* vertices, size_t nrVertices );

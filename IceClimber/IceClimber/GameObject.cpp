@@ -15,7 +15,6 @@ GameObject::GameObject(Point2f bottomLeft, int nrRows, int nrColumns)
 	, m_SourceRect{} // it will be redefined later on
 	, m_DestRect{} // it will be redefined later on
 {
-	std::cout << "Game Object created" << '\n';
 }
 
 GameObject::~GameObject()

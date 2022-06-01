@@ -17,7 +17,6 @@ Animation::Animation(Texture* texture, int animationType, int animFrame, int nrO
 	, m_LoopOnce{ loopOnce }
 {
 	SetMeasures();
-	std::cout << "ANIMATION WAS CREATED" << '\n';
 }
 
 //Animation::Animation(Level* level, std::string& string, int animationType, int animFrame, int nrOfFrames, float nrFramesPerSec, float nrColumns, float nrRows)

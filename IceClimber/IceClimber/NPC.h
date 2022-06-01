@@ -50,6 +50,8 @@ protected:
 	Type m_Type;
 	Vector2f m_Velocity;
 	Point2f m_BottomLeft;
-	Rectf m_DestRect;
+
+	Vector2f m_VectorCollisonDetection;
+	Rectf m_CollisionRect;
 };
 

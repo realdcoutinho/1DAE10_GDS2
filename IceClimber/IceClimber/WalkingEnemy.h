@@ -23,6 +23,7 @@ public:
 
 
 private:
+
 	void SetMeasures();
 	void SetEnemyType();
 	void SetVelocity();
@@ -32,6 +33,7 @@ private:
 	void DrawStalagmites() const;
 
 	void UpdateAnimations(float elapsedSec);
+	void UpdateCollisionTools();
 	void UpdateStalagmites(float elapsedSec);
 
 	//void SetPlayerState();

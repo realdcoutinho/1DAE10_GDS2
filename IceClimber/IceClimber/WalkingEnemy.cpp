@@ -45,6 +45,7 @@ void WalkingEnemy::Update(float elapsedSec)
 		NPC::UpdatePosition(elapsedSec);
 	}
 	UpdateStalagmites(elapsedSec);
+	UpdateCollisionTools();
 }
 
 
@@ -61,13 +62,21 @@ void WalkingEnemy::Draw() const
 		}
 		//FillRect(m_BottomLeft, m_TextureWidthSnipet, m_TextureHeightSnipet);
 		//FillRect(m_DestRect);
-		//FillRect(m_pPlayer->GetShape());
+		//
 		if (m_IsAlive)
 			m_pAnimationAlive->Draw(m_BottomLeft);
 		if(!m_IsAlive)
 			m_pAnimationDead->Draw(m_BottomLeft);
 	}
 	glPopMatrix();
+	FillRect(m_pPlayer->GetShape());
+	FillRect(m_pPlayer->GetShape());
+	//FillRect(m_DestRect);
+	SetColor(Color4f(1, 0, 0, 1));
+	DrawVector(m_VectorCollisonDetection, m_CollisionRect.GetCenter());
+	
+	//DrawLine();
+
 	
 }
 
@@ -99,10 +108,12 @@ void WalkingEnemy::SetEnemyType()
 
 void WalkingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 {
-	if (IsOverlapping(m_DestRect, actorShape) && (m_pPlayer->GetPlayerState() != int(State::kill)))
-		if(m_IsAlive)
+	if (IsOverlapping(m_CollisionRect, m_pPlayer->GetShape()) && (m_pPlayer->GetPlayerState() != int(State::kill)))
+		if (m_IsAlive)
 			m_pPlayer->SetState(1);
-	if (IsOverlapping(m_DestRect, actorShape) && (m_pPlayer->GetPlayerState() == int(State::kill)))
+	if (IsOverlapping(m_CollisionRect, actorShape) && (m_pPlayer->GetPlayerState() == int(State::kill)))
+		m_IsAlive = false;
+	if (IsOverlapping(m_CollisionRect, actorShape) && (m_pPlayer->GetPlayerState() == int(State::kill)))
 		m_IsAlive = false;
 }
 
@@ -143,4 +154,23 @@ void WalkingEnemy::UpdateAnimations(float elapsedSec)
 void WalkingEnemy::SetVelocity()
 {
 	m_pStalagmite->SetVelocity(m_Velocity);
+}
+
+void WalkingEnemy::UpdateCollisionTools()
+{
+	if (m_Velocity.x > 0)
+	{
+		m_CollisionRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
+		Point2f center{ m_CollisionRect.GetCenter() };
+		Point2f dot{ m_CollisionRect.GetCenter().x, m_CollisionRect.GetCenter().y - m_TextureHeightSnipet - 10 };
+		m_VectorCollisonDetection = Vector2f{ center, dot };
+	}
+	if (m_Velocity.x < 0)
+	{
+		m_CollisionRect = Rectf{ m_BottomLeft.x - m_TextureWidthSnipet, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
+		Point2f center{ m_CollisionRect.GetCenter() };
+		Point2f dot{ m_CollisionRect.GetCenter().x, m_CollisionRect.GetCenter().y - m_TextureHeightSnipet - 10};
+		m_VectorCollisonDetection = Vector2f{ center, dot };
+	}
+
 }

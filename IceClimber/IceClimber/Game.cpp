@@ -55,7 +55,6 @@ void Game::Update( float elapsedSec )
 {
 	m_pLevel->GetPlayerState(m_pPlayer->GetPlayerState());
 	m_pPlayer->Update(elapsedSec, m_pLevel);
-	std::cout << "Hello";
 	m_pLevel->Update(elapsedSec);
 	m_pLevel->GetActorShape(m_pPlayer->GetShape());
 

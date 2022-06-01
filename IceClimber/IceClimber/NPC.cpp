@@ -15,7 +15,7 @@ NPC::NPC(Point2f bottomLeft, float windowWidth, int nrRows, int nrColumns, int n
 	, m_IsOverlapping{false}
 	, m_IsAlive{true}
 {
-	std::cout << "NPC was created" << '\n';
+
 }
 
 NPC::~NPC()
@@ -35,7 +35,7 @@ void NPC::Update(float elapsedSed)
 
 bool NPC::Overlap(const Rectf& actorShape)
 {
-	if (IsOverlapping(actorShape, m_DestRect))
+	if (IsOverlapping(actorShape, m_CollisionRect))
 	{
 		m_IsOverlapping = true;
 		return true;
@@ -50,7 +50,7 @@ void NPC::SetMeasures(float textureWidth, float textureHeight, float textureWidt
 	m_TextureHeight = textureHeight;
 	m_TextureWidthSnipet = textureWidthSnipet;
 	m_TextureHeightSnipet = textureHeightSnipet;
-	m_DestRect = destRect;
+	m_CollisionRect = destRect;
 }
 
 void NPC::UpdatePosition(float elapsedSec)
@@ -80,7 +80,7 @@ void NPC::UpdatePosition(float elapsedSec)
 		m_BottomLeft.y += m_Velocity.y * elapsedSec;
 	}
 
-	m_DestRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
+	m_CollisionRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
 }
 
 void NPC::SetVelocity(float horSpeed)

@@ -22,6 +22,15 @@ struct Point2f
 	float y;
 };
 
+struct Line2f
+{
+	Line2f();
+	explicit Line2f(const Point2f& point1, const Point2f& point2);
+
+	Point2f point1;
+	Point2f point2;
+};
+
 
 
 struct Rectf //jesus code, thanks

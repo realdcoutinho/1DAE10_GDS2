@@ -56,6 +56,11 @@ void utils::DrawLine( const Point2f& p1, const Point2f& p2, float lineWidth )
 	DrawLine( p1.x, p1.y, p2.x, p2.y, lineWidth );
 }
 
+void utils::DrawLine(const Line2f& line, float lineWidth = 1.0f)
+{
+	DrawLine(line.point1.x, line.point1.y, line.point2.x, line.point2.y, lineWidth);
+}
+
 void utils::DrawTriangle(const Point2f& p1, const Point2f& p2, const Point2f& p3, float lineWidth)
 {
 	glLineWidth(lineWidth);
@@ -295,6 +300,9 @@ bool utils::IsPointInRect( const Point2f& p, const Rectf& r )
 		p.y >= r.bottom &&
 		p.y <= r.bottom + r.height );
 }
+
+
+
 
 bool utils::IsPointInCircle( const Point2f& p, const Circlef& c )
 {
@@ -751,9 +759,9 @@ bool utils::AreEqual(Vector2f& vectorA, Vector2f& vectorB)
 void  utils::DrawVector(const Vector2f& vector, const Point2f& startingPoint)
 {
 
-	const float triangleLength{ 10.0f };
+	const float triangleLength{ 5.0f };
 	const float triangleAngle{ 30.0f + 180.0f };
-	const float lineThickness{ 2.0f };
+	const float lineThickness{ 1.0f };
 
 	Point2f endPoint{ startingPoint.x + vector.x, startingPoint.y + vector.y };
 	float vectorLength{ Length(vector) };

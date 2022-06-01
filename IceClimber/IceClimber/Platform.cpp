@@ -12,7 +12,6 @@ Platform::Platform(Point2f bottomLeft, int nrOfRows, int nrOfColumns, int type, 
 	, m_IsDestroyed{false}
 	, m_TotalWidth{0} // it will be redefined later on
 {
-	std::cout << "Platform was created" << '\n';
 }
 
 Platform::~Platform()

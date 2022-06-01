@@ -25,7 +25,6 @@ void Bonus::Draw() const
 {
 	if (!m_IsOverlapping)
 		m_pTextureBonus->Draw(m_BottomLeft, m_SourceRect);
-	std::cout << "Is Drawing" << '\n';
 }
 
 void Bonus::SetMeasures()
