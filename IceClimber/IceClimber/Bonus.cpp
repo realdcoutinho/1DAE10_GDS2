@@ -9,11 +9,10 @@ Bonus::Bonus(Level* level, Point2f bottomLeft)
 	: GameObject(bottomLeft, 1, 20)
 	, m_NrOfBonus{20}
 	, m_pLevel{ level }
+	, m_pTextureBonus { level->GetTextureManager()->GetTexturePointer("Bonus") }
 {
-	m_pTextureBonus = m_pLevel->GetTextureManager()->GetTexturePointer("Bonus");
 	SetMeasures();
 	SetSourceRect();
-
 }
 
 Bonus::~Bonus()
@@ -24,6 +23,18 @@ void Bonus::Draw() const
 {
 	if (!m_IsOverlapping)
 		m_pTextureBonus->Draw(m_BottomLeft, m_SourceRect);
+}
+
+void Bonus::Overlap(const Rectf& actorShape)
+{
+	if (IsOverlapping(actorShape, m_DestRect))
+	{
+		if (!m_IsOverlapping)
+		{
+			m_pLevel->GetSoundManager()->GetSoundEffectPointer("PickUp")->Play(0);
+		}
+		m_IsOverlapping = true;
+	}
 }
 
 void Bonus::SetMeasures()
@@ -47,3 +58,5 @@ void Bonus::SetSourceRect()
 	m_SourceRect.width = m_TextureSnipetWidth ;
 	m_SourceRect.height = m_TextureSnipetHeight;
 }
+
+

@@ -17,16 +17,16 @@ public:
 
 	void Draw(Point2f bottomLeft) const;
 	virtual void Update(float elapsedSec) override;
-	bool GetOverlap() const;
-	bool GetDestroyed() const;
 	void SetNewBottomLeft(Point2f bottomLeft);
 
+	bool GetOverlap() const;
+	bool GetDestroyed() const;
+
 private:
+	void FixMapBlock();
+	void UpdateState(float elapsedSec);
 	void SetMeasures();
 	void InitializeAnimations();
-	void UpdateState(float elapsedSec);
-	void FixMapBlock();
-
 
 	enum class State
 	{
@@ -35,21 +35,17 @@ private:
 		used = 2
 	};
 
-
-	float m_OffSet;
-	float m_Time;
-	bool m_IsDestroyed;
-	float m_PositionOffSet;
 	State m_State;
-
-
-	bool m_IExist{};
-
 
 	Animation* m_pAnimationStalagmiteForm;
 	Animation* m_pAnimationStalagmiteDestroyed;
 	Texture* m_pTextureStalagmite;
 	Level* m_pLevel;
 	Rectf m_SourceRect;
+
+	bool m_IsDestroyed;
+	float m_OffSet;
+	float m_Time;
+	float m_PositionOffSet;
 };
 

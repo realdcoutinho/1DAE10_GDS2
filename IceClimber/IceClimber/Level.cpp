@@ -17,6 +17,7 @@ Level::Level(Game* game, Player* player, float windowWidth, float windowHeight)
 	, m_pBackground	{ game->GetTextureManager()->GetTexturePointer("Background")}
 	, m_Foreground	{ game->GetTextureManager()->GetTexturePointer("Foreground") }
 	, m_pTextures	{ game->GetTextureManager() }
+	, m_pSoundManager {game->GetSoundManagerPointer()}
 {
 	
 	SetMeasures();
@@ -154,19 +155,20 @@ void Level::UpdateGameObjects(float elapsedSec)
 void Level::InitializeWinningBird()
 {
 	Point2f winningBird{ 66.f, 835.f };
+	//Point2f winningBird{ m_OffSet, 100.f }; // debbug point coordinate
 	m_pNPC.push_back(new WinningBird(m_pPlayer, this, winningBird, m_TextureWidth));
 	m_NrOfNPC = int(m_pNPC.size());
 }
 
 void Level::InitializeEnemies()
 {
-	Point2f enemyOne{ m_OffSet + 150.f, 72.f };
-	Point2f enemyTwo{ m_OffSet + 95.f, 120.f };
-	Point2f enemyThree{ m_OffSet + 200.f, 168.f };
-	Point2f enemyFour{ m_OffSet + 216.f, 216.f };
-	Point2f enemyFive{ m_OffSet + 148.f, 264.f };
-	Point2f enemySix{ m_OffSet + 232.f,312.f };
-	Point2f enemySeven{ m_OffSet + 252.f, 360.f };
+	Point2f enemyOne{ m_OffSet, 72.f };
+	Point2f enemyTwo{ m_OffSet + m_TextureWidth, 120.f };
+	Point2f enemyThree{ m_OffSet, 168.f };
+	Point2f enemyFour{ m_OffSet + m_TextureWidth, 216.f };
+	Point2f enemyFive{ m_OffSet, 264.f };
+	Point2f enemySix{ m_OffSet + m_TextureWidth,312.f };
+	Point2f enemySeven{ m_OffSet, 360.f };
 
 	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this,  enemyOne, m_TextureWidth));
 	m_pNPC.push_back(new WalkingEnemy(m_pPlayer, this, enemyTwo, m_TextureWidth));
@@ -182,13 +184,13 @@ void Level::Draw() const
 {
 	DrawBackground();
 	DrawNPC();
-	//DrawForeground();
+	DrawForeground();
 	DrawGameObjects();
 	
-	for (int i{}; i < m_LevelCollison.size(); ++i)
-	{
-		DrawPolygon(m_LevelCollison[i]);
-	}
+	//for (int i{}; i < m_LevelCollison.size(); ++i)
+	//{
+	//	DrawPolygon(m_LevelCollison[i]);
+	//}
 
 }
 
@@ -601,7 +603,7 @@ int Level::GetBlockIndex(Rectf& actorShape, Vector2f& actorVelocity)
 			Platform* pPlatfrom{ static_cast<Platform*>(m_pGameObjects[i]) };
 			if (pPlatfrom)
 			{
-				if (!(pPlatfrom->IsOnGround(actorShape, actorVelocity)) && pPlatfrom->m_IsDestroyed && pPlatfrom->IsOnGroundStalgmite(actorShape))
+				if (!(pPlatfrom->IsOnGround(actorShape, actorVelocity)) && pPlatfrom->GetIsDestroyed() && pPlatfrom->IsOnGroundStalgmite(actorShape))
 				{
 					return i;
 				}
@@ -621,3 +623,7 @@ void Level::SetBlockFixed(int index)
 	}
 }
 
+SoundManager* Level::GetSoundManager() const
+{
+	return m_pSoundManager;
+}

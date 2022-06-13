@@ -26,7 +26,7 @@ public:
 
 private:
 	void SetMeasures(); //Sets block measures
-	void SetStalagmite();
+	void SetStalagtite(); //if it has a stalgtite it will create a stalgtite
 
 	enum class State
 	{
@@ -35,14 +35,12 @@ private:
 	};
 	State m_State;
 
-
 	bool m_HasStalagtites;
 	
 	Level* m_pLevel;
-	//Player* m_pPlayer;
+	Texture* m_pBlocks; //Pointer to the texture
 	Stalagtites* m_pStalagtites;
 
-	Texture* m_pBlocks; //Pointer to the texture
 	std::vector<Point2f> m_BlockCollision; //holds collision points
 };
 

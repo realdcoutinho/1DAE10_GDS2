@@ -2,6 +2,7 @@
 #include "Player.h"
 #include <iostream>
 #include "Game.h"
+#include "SoundManager.h"
 using namespace utils;
 
 Player::Player(Game* game, Point2f center, Point2f bottomLeft)
@@ -13,6 +14,7 @@ Player::Player(Game* game, Point2f center, Point2f bottomLeft)
 	, m_Center			{center}
 	, m_State			{State::rest}
 	, m_pPlayerTexture	{ game->GetTextureManager()->GetTexturePointer("Player")}
+	, m_pSoundManager	{ game->GetSoundManagerPointer()}
 	, m_BottomCenter	{ bottomLeft }
 	, m_NrOfColumns		{ 4.f }
 	, m_NrOfRows		{11.f}
@@ -21,9 +23,12 @@ Player::Player(Game* game, Point2f center, Point2f bottomLeft)
 	, m_IsWinning		{false}
 	, m_Time			{0}
 	, m_IsDead			{false}
+	, m_DoOnce			{false}
+	, m_NrOfLifes		{3}
 {
 	SetMeasures();
 	InitializeAnimations();
+
 }
 
 Player::~Player()
@@ -66,12 +71,12 @@ void Player::SetHorizontalSpeed()
 	case(State::run):
 		m_HorSpeed = 60.f;
 		break;
-	//case(State::dead):
-	//	m_HorSpeed = 0;
-	//	break;
-	//case(State::roll):
-	//	m_HorSpeed = 0;
-	//	break;
+	case(State::dead):
+		m_HorSpeed = 0;
+		break;
+	case(State::roll):
+		m_HorSpeed = 0;
+		break;
 	}
 }
 
@@ -80,14 +85,6 @@ void Player::Draw() const
 {
 	Point2f actorBottomCenter{ m_Shape.GetBottomCenter(0, -1) };
 	Point2f actorTopCenter{ m_Shape.GetBottomCenter(0, m_Shape.height) };
-	SetColor({ Color4f(0, 0, 1, 1) });
-	FillRect(m_Shape);
-
-	SetColor({ Color4f(0, 1, 1, 1) });
-	FillRect(m_ActorShape);
-
-	SetColor({ Color4f(1, 0, 1, 1) });
-	DrawLine(actorBottomCenter, actorTopCenter, 4);
 
 	glPushMatrix();
 	{
@@ -140,7 +137,7 @@ void Player::Draw() const
 
 void Player::UpdateTimeState(float elapsedSec)
 {
-	if (m_State == State::dead || m_IsDead)
+	if (m_State == State::dead)
 	{
 		m_IsDead = true;
 		m_Time += elapsedSec;
@@ -148,19 +145,20 @@ void Player::UpdateTimeState(float elapsedSec)
 		{
 			m_State = State::roll;
 		}
-		//if (m_Time > 3.0f)
-		//{
-		//	m_State = State::jump;
-		//	m_Time = 0;
-		//}
+		if (m_Time > 3.0f)
+		{
+			//m_State = State::kill;
+			m_IsDead = false;
+			m_Time = 0;
+			//m_BottomCenter = Point2f{ 228, 24 };
+		}
 	}
 }
 
-void Player::UpdateDyingMovement(float elapsedSec)
-{
-
-}
-
+//void Player::UpdateDyingMovement(float elapsedSec)
+//{
+//
+//}
 
 int Player::GetPlayerState()
 {
@@ -196,11 +194,10 @@ void Player::Update(float elapsedSec, const Level* level)
 {
 	if (!m_IsWinning)
 	{
-		UpdateDyingMovement(elapsedSec);
+		//UpdateDyingMovement(elapsedSec);
 		UpdateAnimations(elapsedSec);
 		UpdateTimeState(elapsedSec);
 		SetHorizontalSpeed();
-
 		const Uint8* pKeysState{ SDL_GetKeyboardState(nullptr) };
 		UpdateHorizontalVelocity(elapsedSec, level, pKeysState);
 		UpdateVerticalVelocity(elapsedSec, level, pKeysState);
@@ -208,7 +205,17 @@ void Player::Update(float elapsedSec, const Level* level)
 		if ((m_State != State::dead) && (m_State != State::roll))
 		{
 			MoveAvatar(elapsedSec, level);
+			m_IsDead = false;
 		}
+	}
+}
+
+void Player::LostLife()
+{
+	--m_NrOfLifes;
+	if (m_NrOfLifes <= 0)
+	{
+		std::cout << "You Lost" << '\n';
 	}
 }
 
@@ -231,7 +238,6 @@ void Player::UpdateHorizontalVelocity(float elapsedSec, const Level* level, cons
 					m_State = State::run;
 				if (cloudVelocity.x > 0)
 					m_Velocity.x += cloudVelocity.x;
-
 				m_FacingLeft = true;
 			}
 			if (pKeysState[SDL_SCANCODE_RIGHT] || pKeysState[SDL_SCANCODE_D])
@@ -269,6 +275,7 @@ void Player::UpdateVerticalVelocity(float elapsedsec, const Level* level, const 
 	{
 		m_Velocity.y += m_JumpSpeed;
 		m_State = State::jump;
+		m_pSoundManager->GetSoundEffectPointer("Jump")->Play(0);
 	}
 	if (pKeysState[SDL_SCANCODE_Z] && level->IsOnGround(m_Shape, m_Velocity))
 	{
@@ -330,4 +337,14 @@ void Player::UpdateAnimations(float elapsedSec)
 	{
 		m_Animations[i]->Update(elapsedSec);
 	}
+}
+
+bool Player::IsPlayerHit()
+{
+	return m_IsDead;
+}
+
+bool Player::GetIsWinning() const
+{
+	return m_IsWinning;
 }

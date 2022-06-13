@@ -15,7 +15,7 @@ public:
 	virtual ~NPC();
 
 	virtual void Draw() const;
-	virtual void Update(float elapsedSed);
+	virtual void Update(float elapsedSec);
 	bool Overlap(const Rectf& actorShape);
 
 protected:

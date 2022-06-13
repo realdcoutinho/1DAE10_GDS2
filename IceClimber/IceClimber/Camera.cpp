@@ -8,14 +8,7 @@ Camera::Camera(Player* player, float width, float height)
 	: m_Width{ width }
 	, m_Height{ height }
 	, m_LevelBoundaries{}
-	, m_FloorHeight{47}
-	, m_GroundFloorHeight{24}
-	, m_Floor{floor(0)}
-	, m_CameraVelocity{ 0.f, 10.f }
-	, m_CameraInterval{47}
-	, m_CameraIntervalBonus{165}
 	, m_pPlayer{player}
-	, m_OffSet{}
 {
 
 }
@@ -36,34 +29,9 @@ void Camera::Transform(const Rectf& target, bool isGround)
 	Clamp(bottomLeft);
 	SetColor(Color4f{ 0, 0, 1, 1 });
 
-	//if (m_pPlayer->GetShape().bottom > 164.f && m_pPlayer->GetShape().bottom < 216)
-	//{
-	//	bottomLeft.y = float(24 * sin(((M_PI / 2) * m_ElapsedSec) - (M_PI / 2)) + 24);
-	//}
-
 	glTranslatef(-bottomLeft.x, -bottomLeft.y, 0);
 	utils::DrawRect(m_BottomLeft.x, m_BottomLeft.y, m_Width, m_Height);
 }
-
-
-
-void Camera::MoveCamera(Point2f& bottomLeftPos, const Rectf& target)
-{
-}
-
-void Camera::Update(float elapsedSec)
-{
-	//if (m_pPlayer->GetShape().bottom > 164.f && m_pPlayer->GetShape().bottom < 216)
-	//{
-	//	
-	//	if(48 != float(24 * sin(((M_PI / 2) * m_ElapsedSec) - (M_PI / 2)) + 24))
-	//	{
-	//		m_ElapsedSec += elapsedSec;
-	//	}
-	//}
-}
-
-
 
 
 Point2f Camera::Track(const Rectf& target)

@@ -7,16 +7,14 @@
 #include "Bonus.h"
 #include "WinningBird.h"
 #include "WalkingEnemy.h"
-
 #include "TextureManager.h"
+#include "SoundManager.h"
 
 #include <vector>
 #include "utils.h"
 
 #include "Stalagmite.h"
 #include "Stalagtites.h"
-
-
 
 class Game;
 class PLayer;
@@ -45,6 +43,8 @@ public:
 	bool IsWinning() const; 
 
 	TextureManager* GetTextureManager() const;
+	SoundManager* GetSoundManager() const;
+
 	std::vector<GameObject*> m_pGameObjects;
 	Player* GetPlayerPointer();
 
@@ -84,6 +84,10 @@ private:
 
 
 
+	Player* m_pPlayer;
+	Game* m_pGame;
+	TextureManager* m_pTextures;
+	SoundManager* m_pSoundManager;
 
 	enum class BlockType //enum class of the various block types
 	{
@@ -118,10 +122,8 @@ private:
 	int m_NrOfNPC;
 	std::vector<NPC*> m_pNPC;
 	
-	Player* m_pPlayer;
 
-	Game* m_pGame;
-	TextureManager* m_pTextures;
+
 	Texture* m_pBackground;
 	Texture* m_Foreground;
 

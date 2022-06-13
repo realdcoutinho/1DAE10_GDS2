@@ -11,6 +11,7 @@ Platform::Platform(Point2f bottomLeft, int nrOfRows, int nrOfColumns, int type, 
 	, m_IsMovable{isMovable}
 	, m_IsDestroyed{false}
 	, m_TotalWidth{0} // it will be redefined later on
+	, m_Offset{100.0f}
 {
 }
 
@@ -18,12 +19,6 @@ Platform::~Platform()
 {
 
 }
-
-void Platform::Draw() const
-{
-}
-
-
 
 void Platform::Update(float elapsedSec)
 {
@@ -39,20 +34,17 @@ void Platform::UpdatePosition(float elapsedSec)
 	m_BottomLeft.x += m_Velocity.x * elapsedSec;
 
 	if (m_Velocity.x > 0)
-		if (m_BottomLeft.x > m_WindowWidth)
-			m_BottomLeft.x = -(m_TotalWidth);
+		if (m_BottomLeft.x > m_WindowWidth + m_Offset)
+			m_BottomLeft.x = -(m_TotalWidth) +m_Offset;
 	if (m_Velocity.x < 0)
-		if (m_BottomLeft.x + m_TotalWidth < 0)
-			m_BottomLeft.x = m_WindowWidth;
+		if (m_BottomLeft.x + m_TotalWidth < m_Offset)
+			m_BottomLeft.x = m_WindowWidth + m_Offset;
 }
 
 void Platform::HandleCollision(Rectf& actorShape, Vector2f& actorVelocity)
 {
 	Point2f actorBottomCenter{ actorShape.GetBottomCenter(0, -1) };
 	Point2f actorTopCenter{ actorShape.GetTopCenter() };
-
-
-
 
 	HitInfo hitInfo{};
 	if (Raycast(m_TopLine, actorBottomCenter, actorTopCenter, hitInfo) && actorVelocity.y <= 0 && hitInfo.lambda < 0.5f) //if hit from the top
@@ -126,9 +118,7 @@ void Platform::SetLines()
 	m_TopLine.push_back(Point2f{ m_BottomLeft.x + (m_TextureSnipetWidth * m_NrLenght), m_BottomLeft.y + m_TextureSnipetHeight });
 }
 
-
-
-void Platform::SetVelocity()
+bool Platform::GetIsDestroyed() const
 {
-
+	return m_IsDestroyed;
 }

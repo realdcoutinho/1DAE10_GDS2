@@ -13,11 +13,9 @@ public:
 	virtual ~GameObject();
 
 
-	//virtual void Draw() const = 0;
-	virtual void Draw() const ;
-	//void Draw(Texture* textureOne) const;
+	virtual void Draw() const = 0;
 	virtual void Update(float elapsedSec);
-	void Overlap(const Rectf& actorShape);
+	virtual void Overlap(const Rectf& actorShape);
 
 	
 

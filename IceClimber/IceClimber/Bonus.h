@@ -2,7 +2,6 @@
 #include "utils.h"
 #include "GameObject.h"
 
-
 class Texture;
 class Level;
 class Bonus final : public GameObject
@@ -16,6 +15,7 @@ public:
 	~Bonus() override;
 
 	void Draw() const;
+	virtual void Overlap(const Rectf& actorShape) override;
 
 private:
 	void SetMeasures();
@@ -24,12 +24,9 @@ private:
 	Level* m_pLevel;
 	Texture* m_pTextureBonus;
 
-
-
 	int m_NrOfBonus;
 	float m_WidthTemp;
 	float m_HeightTemp;
-
 
 	Rectf m_SourceRect;
 };

@@ -42,7 +42,7 @@ private:
 
 	void FlipXVelocity();
 
-
+	static int m_NrOfEnemy;
 	//void SetPlayerState();
 
 	enum class EnemyType

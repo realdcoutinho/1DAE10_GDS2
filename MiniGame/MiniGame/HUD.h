@@ -22,7 +22,5 @@ private:
 
 	Point2f m_PowerUpBottomLeft{};
 	Point2f m_RightTextureBottomLeft{};
-
-
 };
 

@@ -22,44 +22,6 @@ Cloud::~Cloud()
 {
 }
 
-void Cloud::SetMeasures()
-{
-	m_TextureWidth = m_pCloud->GetWidth();
-	m_TextureHeight = m_pCloud->GetHeight();
-	m_TextureSnipetWidth = m_TextureWidth / m_NrColumns;
-	m_TextureSnipetHeight = m_TextureHeight / m_NrRows;
-	m_TotalWidth = m_TextureSnipetWidth * m_NrLenght;
-	//
-	m_DestRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureSnipetWidth, m_TextureSnipetHeight };
-	//
-	m_SourceRect.left = 0;
-	m_SourceRect.bottom = m_TextureSnipetHeight * -int(m_Type);
-	m_SourceRect.width = m_TextureSnipetWidth;
-	m_SourceRect.height = m_TextureSnipetHeight;
-	//
-	SetVelocity();
-}
-
-float Cloud::GetWidth() const
-{
-	return m_TextureSnipetWidth;
-}
-float Cloud::GetHeight() const
-{
-	return m_TextureSnipetHeight;
-}
-
-void Cloud::SetVelocity()
-{
-	float velocityX = float(m_MinVelocityX + (std::rand() % (m_MaxVelocityX - m_MinVelocityX + 1))); //gets a random value betweeen 60 and 30
-
-	if (m_InstanceCounter % 2 == 0)
-		m_Velocity = Vector2f{ velocityX , 0 }; //if the the cloud is even it will move to the right
-
-	if (m_InstanceCounter % 2 != 0)
-		m_Velocity = Vector2f{ velocityX * -1, -0 }; // if the cloud is odd it will move to the left
-}
-
 void Cloud::Draw() const
 {
 	Rectf sourceRect{ m_SourceRect }; //this method assures that the m variables is never altered
@@ -71,11 +33,6 @@ void Cloud::Draw() const
 		DrawRightTexture(bottomLeft, sourceRect); //draws right
 	}
 	glPopMatrix();
-}
-
-Vector2f Cloud::GetVelocity() const
-{
-	return m_Velocity;
 }
 
 void Cloud::DrawLeftTexture(Point2f& bottomLeft, Rectf& sourceRect) const
@@ -101,8 +58,48 @@ void Cloud::DrawRightTexture(Point2f& bottomLeft, Rectf& sourceRect) const
 	m_pCloud->Draw(bottomLeft, sourceRect);
 }
 
+void Cloud::SetVelocity()
+{
+	float velocityX = float(m_MinVelocityX + (std::rand() % (m_MaxVelocityX - m_MinVelocityX + 1))); //gets a random value betweeen 60 and 30
 
+	if (m_InstanceCounter % 2 == 0)
+		m_Velocity = Vector2f{ velocityX , 0 }; //if the the cloud is even it will move to the right
 
+	if (m_InstanceCounter % 2 != 0)
+		m_Velocity = Vector2f{ velocityX * -1, -0 }; // if the cloud is odd it will move to the left
+}
+
+void Cloud::SetMeasures()
+{
+	m_TextureWidth = m_pCloud->GetWidth();
+	m_TextureHeight = m_pCloud->GetHeight();
+	m_TextureSnipetWidth = m_TextureWidth / m_NrColumns;
+	m_TextureSnipetHeight = m_TextureHeight / m_NrRows;
+	m_TotalWidth = m_TextureSnipetWidth * m_NrLenght;
+	//
+	m_DestRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureSnipetWidth, m_TextureSnipetHeight };
+	//
+	m_SourceRect.left = 0;
+	m_SourceRect.bottom = m_TextureSnipetHeight * -int(m_Type);
+	m_SourceRect.width = m_TextureSnipetWidth;
+	m_SourceRect.height = m_TextureSnipetHeight;
+	SetVelocity();
+}
+
+Vector2f Cloud::GetVelocity() const
+{
+	return m_Velocity;
+}
+
+float Cloud::GetWidth() const
+{
+	return m_TextureSnipetWidth;
+}
+
+float Cloud::GetHeight() const
+{
+	return m_TextureSnipetHeight;
+}
 
 
 

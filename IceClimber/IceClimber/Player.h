@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
  
+class SoundManager;
 class Game;
 class Player final
 {
@@ -23,9 +24,10 @@ public:
 	Rectf GetShape() const;
 	Vector2f GetVelocity() const;
 	bool GetIsOnGround() const;
+	bool GetIsWinning() const;
 	void SetWinning(bool isWinning);
 	void SetState(int state);
-
+	bool IsPlayerHit();
 
 	enum class State
 	{
@@ -44,26 +46,27 @@ public:
 	State m_State;
 
 private:
+	void SetMeasures();
+	void SetHorizontalSpeed();
 	void InitializeAnimations();
 
 	void UpdateAnimations(float elapsedSec);
 	void UpdateHorizontalVelocity(float elapsedSec, const Level* level, const Uint8* pKeysState);
 	void UpdateVerticalVelocity(float elapsedsec, const Level* level, const Uint8* pKeysState);
-
-	void UpdateDyingMovement(float elapsedSec);
+	//void UpdateDyingMovement(float elapsedSec);
+	void UpdateTimeState(float elapsedSec);
 
 	void MoveAvatar(float elapsedSec, const Level* level);
 	void Clamp(const Level* level);
-	void SetMeasures();
+	void LostLife();
 	
-	void SetHorizontalSpeed();
-
-	void UpdateTimeState(float elapsedSec);
-
+	Game* m_pGame;
 	Texture* m_pPlayerTexture;
+	SoundManager* m_pSoundManager;
+
 	float m_WidthTexture;
 	float m_HeightTexture;
-	
+	float m_NrOfLifes;
 	float m_NrOfColumns;
 	float m_NrOfRows;
 	float m_ClipWidth;
@@ -72,16 +75,17 @@ private:
 	float m_HorSpeed;
 	const float m_JumpSpeed;
 
+	bool m_FacingLeft;
+	bool m_IsOnGround;
+	bool m_IsWinning;
+	bool m_IsDead;
+	bool m_DoOnce;
+
 	//int m_NrOfBonus; not yet implemented
 	int m_NrAnimations;
 
 	Point2f m_Center;
 	Point2f m_BottomCenter;
-
-	bool m_FacingLeft;
-	bool m_IsOnGround;
-	bool m_IsWinning;
-	bool m_IsDead;
 
 	Rectf m_Shape;
 	Rectf m_ActorShape;
@@ -92,6 +96,4 @@ private:
 	const Vector2f m_Acceleration;
 	std::vector<Animation*> m_Animations;
 	
-	Game* m_pGame;
 };
-

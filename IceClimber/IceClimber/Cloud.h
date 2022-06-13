@@ -16,7 +16,7 @@ public:
 	Cloud& operator=(Cloud&& other) = delete; // move assignment operator
 	~Cloud(); //destructor
 
-	void Draw() const; // draws all parts of the cloud
+	virtual void Draw() const override; // draws all parts of the cloud
 	Vector2f GetVelocity() const; // return the cloud's velocity
 	virtual float GetWidth() const;  //will never be called
 	virtual float GetHeight() const; //will never be called

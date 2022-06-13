@@ -2,6 +2,7 @@
 #include "Damage.h"
 #include "Texture.h"
 #include "Animation.h"
+#include "Level.h"
 #include "utils.h"
 
 class Level;
@@ -40,6 +41,7 @@ private:
 
 	Point2f m_OriginalBL;
 
+	Level* m_pLevel;
 	Texture* m_pTextureStalatites;
 	Animation* m_pAnimationStalateiteForming;
 	Animation* m_pAnimationStalagmiteFalling;

@@ -31,6 +31,7 @@ void TextureManager::AssignTextures()
 	m_TextureMap["Bonus"]		= new Texture("./Images/BonusVegetables.png");
 	m_TextureMap["Stalagmite"]	= new Texture("./Images/Stalagmite.png");
 	m_TextureMap["Stalagtites"]	= new Texture("./Images/Stalagtite.png");
+	m_TextureMap["Life_HUD"]	= new Texture("./Images/Life_HUD.png");
 }
 
 Texture* TextureManager::GetTexturePointer(const std::string& name) const

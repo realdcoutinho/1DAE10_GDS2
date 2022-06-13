@@ -23,25 +23,24 @@ private:
 	Rectf GetSourceRect() const;
 
 
+	Texture* m_pTexture;
 
+	bool m_LoopOnce;
 	bool m_IsCalled;
 
+	float m_NrOfFramesPerSec;
+	float m_NrOfColumns;
+	float m_AnimTime{};
+	float m_NrOfRows;
 	float m_WidthTexture;
 	float m_HeightTexture;
 	float m_ClipWidth;
 	float m_ClipHeight;
 
-	int m_AnitmationType; // aka position in the sprite sheet
-
+	int m_AnitmationType; 
 	int m_AnimFrame;
 	int m_NrOfFrames;
-	float m_NrOfFramesPerSec;
-	float m_NrOfColumns;
-	float m_AnimTime{};
-	float m_NrOfRows;
 
-	bool m_LoopOnce;
 
-	Texture* m_pTexture;
 };
 

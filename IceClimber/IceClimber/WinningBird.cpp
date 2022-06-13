@@ -8,6 +8,7 @@ WinningBird::WinningBird(Player* player, Level* level, Point2f bottomLeft, float
 	: NPC(player, level,bottomLeft, windowWidth, 2, 4, 4, 0, 0, 8)
 	, m_pTextureBird{level->GetTextureManager()->GetTexturePointer("WinningBird")}
 	, m_HorSpeed{50}
+	, m_IsOffScreen{false}
 {
 	SetMeasures();
 	SetColorBird();
@@ -35,10 +36,10 @@ void WinningBird::Draw() const
 			glScalef(-1, 1, 1);
 			glTranslatef(-(m_BottomLeft.x), 0, 0);
 		}
-		//FillRect(m_BottomLeft, m_TextureWidthSnipet, m_TextureHeightSnipet);
 		m_AnimationBird->Draw(m_BottomLeft);
 	}
 	glPopMatrix();
+
 }
 
 void WinningBird::Update(float elapsedSec)
@@ -46,8 +47,7 @@ void WinningBird::Update(float elapsedSec)
 	if (!m_IsOverlapping)
 	{
 		m_AnimationBird->Update(elapsedSec);
-		//NPC::UpdateFrames(elapsedSec);
-		//NPC::UpdatePosition(elapsedSec);
+		NPC::Update(elapsedSec);
 	}
 }
 

@@ -15,20 +15,15 @@ GameObject::GameObject(Point2f bottomLeft, int nrRows, int nrColumns)
 	, m_SourceRect{} // it will be redefined later on
 	, m_DestRect{} // it will be redefined later on
 	, m_CollisonRect{}
+	, m_WindowWidth{}
 {
 }
 
 GameObject::~GameObject()
 {
-
 }
 
 void GameObject::Update(float elapsedSec)
-{
-
-}
-
-void GameObject::Draw() const
 {
 
 }

@@ -152,13 +152,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Damage.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="WalkingEnemy.cpp" />
     <ClCompile Include="FlyingEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -189,7 +190,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="BaseEnemy.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="WalkingEnemy.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Bonus.h" />

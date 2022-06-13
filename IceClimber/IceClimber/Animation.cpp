@@ -20,18 +20,6 @@ Animation::Animation(Texture* texture, int animationType, int animFrame, int nrO
 	SetMeasures();
 }
 
-//Animation::Animation(Level* level, std::string& string, int animationType, int animFrame, int nrOfFrames, float nrFramesPerSec, float nrColumns, float nrRows)
-//	: Animation{ string, animationType, animFrame, nrOfFrames, nrFramesPerSec, nrColumns, nrRows}
-//{
-//	m_pTexture = level->GetTextureManager()->GetTexturePointer(string);
-//}
-
-//Animation::Animation(Game* game, std::string& string, int animationType, int animFrame, int nrOfFrames, float nrFramesPerSec, float nrColumns, float nrRows)
-//	: Animation{ string, animationType, animFrame, nrOfFrames, nrFramesPerSec, nrColumns, nrRows }
-//{
-//	m_pTexture = game->GetTextureManager()->GetTexturePointer(string);
-//}
-
 Animation::~Animation()
 {
 
@@ -62,12 +50,6 @@ void Animation::Draw(Point2f bottomLeft)
 	m_pTexture->Draw(bottomLeft, GetSourceRect());
 }
 
-
-Rectf Animation::GetSourceRect() const
-{
-	return Rectf{ m_ClipWidth * m_AnimFrame, m_ClipHeight * -(m_AnitmationType), m_ClipWidth, m_ClipHeight};
-}
-
 void Animation::SetMeasures()
 {
 	m_WidthTexture = m_pTexture->GetWidth();
@@ -75,4 +57,11 @@ void Animation::SetMeasures()
 	m_ClipWidth = m_WidthTexture / m_NrOfColumns;
 	m_ClipHeight = m_HeightTexture / m_NrOfRows;
 }
+
+Rectf Animation::GetSourceRect() const
+{
+	return Rectf{ m_ClipWidth * m_AnimFrame, m_ClipHeight * -(m_AnitmationType), m_ClipWidth, m_ClipHeight};
+}
+
+
 

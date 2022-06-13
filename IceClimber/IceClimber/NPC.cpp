@@ -33,10 +33,28 @@ void NPC::Draw() const
 
 }
 
-void NPC::Update(float elapsedSed)
+void NPC::Update(float elapsedSec)
 {
+	m_BottomLeft.x += m_Velocity.x * elapsedSec;
+	if (m_Velocity.x > 0)
+	{
+		if (m_BottomLeft.x > m_WindowBoundries.left + m_WindowBoundries.width)
+		{
+			m_BottomLeft.x = m_WindowBoundries.left - m_TextureWidthSnipet;
+		}
+		m_CollisionRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
+	}
+	if (m_Velocity.x < 0)
+	{
+		if (m_BottomLeft.x < m_WindowBoundries.left)
+		{
+			m_BottomLeft.x = m_WindowBoundries.left + m_WindowBoundries.width + m_TextureWidthSnipet;
 
+		}
+		m_CollisionRect = Rectf{ m_BottomLeft.x - m_TextureWidthSnipet, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
+	}
 }
+
 
 bool NPC::Overlap(const Rectf& actorShape)
 {

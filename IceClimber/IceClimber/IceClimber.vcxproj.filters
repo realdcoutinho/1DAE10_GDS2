@@ -37,6 +37,9 @@
     <Filter Include="Game Files\Character\NPC\WinningBird">
       <UniqueIdentifier>{d1fc1f00-73e2-4ee2-9b68-85c4a2814739}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Files\Functionality">
+      <UniqueIdentifier>{423730c7-3085-4503-8bf9-1601efbc05d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -71,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Framework Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game Files</Filter>
@@ -117,17 +117,23 @@
     <ClCompile Include="WinningBird.cpp">
       <Filter>Game Files\Character\NPC\WinningBird</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
     <ClCompile Include="FlyingEnemy.cpp">
       <Filter>Game Files\Character\NPC\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Game Files</Filter>
+      <Filter>Game Files\Functionality</Filter>
     </ClCompile>
-    <ClCompile Include="BaseEnemy.cpp">
-      <Filter>Game Files\Character\NPC\Enemies</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game Files\Functionality</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Game Files\Functionality</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Game Files\Functionality</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Game Files\Functionality</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="Vector2f.h">
       <Filter>Framework Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game Files</Filter>
@@ -203,20 +206,26 @@
     <ClInclude Include="WinningBird.h">
       <Filter>Game Files\Character\NPC\WinningBird</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
     <ClInclude Include="FlyingEnemy.h">
       <Filter>Game Files\Character\NPC\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="WalkingEnemy.h">
       <Filter>Game Files\Character\NPC\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="BaseEnemy.h">
-      <Filter>Game Files\Character\NPC\Enemies</Filter>
+    <ClInclude Include="Animation.h">
+      <Filter>Game Files\Functionality</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game Files\Functionality</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Game Files\Functionality</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Game Files\Functionality</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Game Files\Functionality</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

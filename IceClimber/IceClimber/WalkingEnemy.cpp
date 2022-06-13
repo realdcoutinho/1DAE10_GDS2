@@ -5,6 +5,9 @@
 #include <iostream>
 using namespace utils;
 
+
+int WalkingEnemy::m_NrOfEnemy{ 0 };
+
 WalkingEnemy::WalkingEnemy(Player* player, Level* level, Point2f bottomLeft, float windowWidth)
 	: NPC(player, level, bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
 	, m_pEnemiesAlive{level->GetTextureManager()->GetTexturePointer("EnemyAlive")}
@@ -20,11 +23,12 @@ WalkingEnemy::WalkingEnemy(Player* player, Level* level, Point2f bottomLeft, flo
 	, m_TimeToDestroy{}
 	, m_VelocityXFlipped{}
 {
+	++m_NrOfEnemy;
 	SetMeasures();
 	SetEnemyType();
 	InitializeAnimations();
-	NPC::SetVelocity(m_HorSpeed);
 	SetVelocity();
+
 }
 
 void WalkingEnemy::Update(float elapsedSec)
@@ -100,7 +104,7 @@ void WalkingEnemy::UpdatePosition(float elapsedSec)
 	}
 	else 
 	{
-		m_BottomLeft.x += m_Velocity.x * elapsedSec;
+		m_BottomLeft.x += m_Velocity.x/4 * elapsedSec;
 		m_BottomLeft.y += m_Velocity.y * elapsedSec;
 	}
 }
@@ -132,21 +136,12 @@ void WalkingEnemy::Draw() const
 			glScalef(-1, 1, 1);
 			glTranslatef(-(m_BottomLeft.x), 0, 0);
 		}
-		//FillRect(m_BottomLeft, m_TextureWidthSnipet, m_TextureHeightSnipet);
-		//FillRect(m_DestRect);
 		if (m_IsAlive)
 			m_pAnimationAlive->Draw(m_BottomLeft);
 		if(!m_IsAlive)
 			m_pAnimationDead->Draw(m_BottomLeft);
 	}
 	glPopMatrix();
-	FillRect(m_pPlayer->GetShape());
-	FillRect(m_pPlayer->GetShape());
-	//FillRect(m_DestRect);
-	SetColor(Color4f(1, 0, 0, 1));
-	DrawLine(m_LineCollisonDetection);
-
-	
 }
 
 void WalkingEnemy::SetMeasures()
@@ -181,15 +176,20 @@ void WalkingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 		if (m_IsAlive)
 			m_pPlayer->SetState(1);
 	if (IsOverlapping(m_CollisionRect, actorShape) && (m_pPlayer->GetPlayerState() == int(State::kill)))
+	{
+		if (m_IsAlive)
+		{
+			m_pGameLevel->GetSoundManager()->GetSoundEffectPointer("EnemyDead")->Play(0);
+		}
 		m_IsAlive = false;
+	}
+
 	if(m_StalagmiteCreated)
 		if (m_pStalagmite->GetOverlap() && (m_pPlayer->GetPlayerState() != int(State::kill)) && (!m_pStalagmite->GetDestroyed()))
 			m_pPlayer->SetState(1);
 	
 	if (m_VelocityXFlipped && !(m_pGameLevel->IsOnGround(m_CollisionRect, m_Velocity)))
 		m_IsAlive = false;
-	//if (IsOverlapping(m_LineCollisonDetection, actorShape))
-	//	std::cout << "TEST" << '\n';
 }
 
 void WalkingEnemy::InitializeStalagmites()
@@ -222,6 +222,11 @@ void WalkingEnemy::DrawStalagmites() const
 
 void WalkingEnemy::UpdateStalagmites(float elapsedSec)
 {
+	//if (!m_IsAlive)
+	//{
+	//	//m_HasStalagmite = false;
+	//	m_NeedsStalagmite = false;
+	//}
 	if (m_NeedsStalagmite && !m_StalagmiteCreated)
 	{
 		if (!m_VelocityXFlipped)
@@ -290,6 +295,10 @@ void WalkingEnemy::UpdateAnimations(float elapsedSec)
 
 void WalkingEnemy::SetVelocity()
 {
+	if (m_NrOfEnemy % 2 == 0)
+		m_Velocity = Vector2f{ m_HorSpeed , -75 };
+	if (m_NrOfEnemy % 2 != 0)
+		m_Velocity = Vector2f{ m_HorSpeed * -1, -75 };
 	if (m_HasStalagmite)
 		m_pStalagmite->SetVelocity(m_Velocity);
 }

@@ -30,6 +30,7 @@ private:
 		blue = 1
 	};
 
+	bool m_IsOffScreen;
 	float m_HorSpeed;
 	Animation* m_AnimationBird;
 	Texture* m_pTextureBird;
