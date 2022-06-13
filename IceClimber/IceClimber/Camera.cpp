@@ -15,6 +15,7 @@ Camera::Camera(Player* player, float width, float height)
 	, m_CameraInterval{47}
 	, m_CameraIntervalBonus{165}
 	, m_pPlayer{player}
+	, m_OffSet{}
 {
 
 }
@@ -41,7 +42,7 @@ void Camera::Transform(const Rectf& target, bool isGround)
 	//}
 
 	glTranslatef(-bottomLeft.x, -bottomLeft.y, 0);
-	utils::DrawRect(m_BottomLeft, m_Width, m_Height);
+	utils::DrawRect(m_BottomLeft.x, m_BottomLeft.y, m_Width, m_Height);
 }
 
 
@@ -67,7 +68,7 @@ void Camera::Update(float elapsedSec)
 
 Point2f Camera::Track(const Rectf& target)
 {
-	Point2f bottomLeftPos{ target.left + target.width / 2, target.bottom + target.height / 2 };
+	Point2f bottomLeftPos{ target.left + target.width / 2 , target.bottom + target.height / 2 };
 	bottomLeftPos.x -= m_Width / 2;
 	bottomLeftPos.y -= m_Height / 2;
 	return bottomLeftPos;

@@ -5,8 +5,8 @@
 using namespace utils;
 
 
-FlyingEnemy::FlyingEnemy(Level* level, Point2f bottomLeft, float windowWidth)
-	: NPC(bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
+FlyingEnemy::FlyingEnemy(Player* player, Level* level, Point2f bottomLeft, float windowWidth)
+	: NPC(player, level, bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
 	, m_pEnemiesAlive{level->GetTextureManager()->GetTexturePointer("EnemyAlive")}
 	, m_pEnemiesDead{level->GetTextureManager()->GetTexturePointer("EnemyDead")}
 	, m_HorSpeed{ 25 }
@@ -32,7 +32,7 @@ void FlyingEnemy::Update(float elapsedSec)
 	if (!m_IsOverlapping)
 	{
 		UpdateAnimations(elapsedSec);
-		NPC::UpdatePosition(elapsedSec);
+		//NPC::UpdatePosition(elapsedSec);
 	}
 }
 

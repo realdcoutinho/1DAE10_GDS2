@@ -23,6 +23,10 @@ public:
 
 
 private:
+	void UpdateVerticalVelocity(float elapsedSec);
+	void UpdateHorizontalVelocity(float elapsedSec);
+	void UpdatePosition(float elapsedSec);
+
 
 	void SetMeasures();
 	void SetEnemyType();
@@ -35,6 +39,9 @@ private:
 	void UpdateAnimations(float elapsedSec);
 	void UpdateCollisionTools();
 	void UpdateStalagmites(float elapsedSec);
+
+	void FlipXVelocity();
+
 
 	//void SetPlayerState();
 
@@ -50,11 +57,26 @@ private:
 		other = 0
 	};
 
-	State m_ActorState;
-	float m_HorSpeed;
+	bool m_NeedsStalagmite;
+	bool m_HasStalagmite;
+	bool m_StalagmiteCreated;
+	bool m_StalgamiteDestroyed;
+	int m_BlockIndexPassDown;
+	bool m_VelocityXFlipped;
 
-	Player* m_pPlayer;
-	Level* m_pGameLevel;
+	bool m_IsOffScreen;
+
+	bool m_IsOnGround;
+	const float m_InitialHeight;
+	const float m_HorSpeed;
+
+
+	const Vector2f m_Acceleration;
+	State m_ActorState;
+
+	float m_TimeToDestroy;
+
+
 	Texture* m_pEnemiesAlive;
 	Texture* m_pEnemiesDead;
 	Animation* m_pAnimationAlive;

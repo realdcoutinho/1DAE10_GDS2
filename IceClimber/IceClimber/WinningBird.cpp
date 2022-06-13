@@ -4,8 +4,8 @@
 #include <iostream>
 using namespace utils;
 
-WinningBird::WinningBird(Level* level, Point2f bottomLeft, float windowWidth)
-	: NPC(bottomLeft, windowWidth, 2, 4, 4, 0, 0, 8)
+WinningBird::WinningBird(Player* player, Level* level, Point2f bottomLeft, float windowWidth)
+	: NPC(player, level,bottomLeft, windowWidth, 2, 4, 4, 0, 0, 8)
 	, m_pTextureBird{level->GetTextureManager()->GetTexturePointer("WinningBird")}
 	, m_HorSpeed{50}
 {
@@ -47,7 +47,7 @@ void WinningBird::Update(float elapsedSec)
 	{
 		m_AnimationBird->Update(elapsedSec);
 		//NPC::UpdateFrames(elapsedSec);
-		NPC::UpdatePosition(elapsedSec);
+		//NPC::UpdatePosition(elapsedSec);
 	}
 }
 

@@ -62,6 +62,8 @@ private:
 	Point2f Track(const Rectf& target);
 	void Clamp(Point2f& bottomLeftPos);
 
+	float m_OffSet;
+
 	Player* m_pPlayer;
 };
 

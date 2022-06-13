@@ -18,7 +18,6 @@ Bonus::Bonus(Level* level, Point2f bottomLeft)
 
 Bonus::~Bonus()
 {
-	//delete m_pTextureBonus;
 }
 
 void Bonus::Draw() const

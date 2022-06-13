@@ -15,6 +15,7 @@ Animation::Animation(Texture* texture, int animationType, int animFrame, int nrO
 	, m_AnimTime{0}
 	, m_NrOfRows{ nrRows }
 	, m_LoopOnce{ loopOnce }
+	, m_IsCalled{false}
 {
 	SetMeasures();
 }
@@ -39,16 +40,25 @@ Animation::~Animation()
 void Animation::Update(float elapsedSec)
 {
 	const float maxFrameTime{ 1.0f / m_NrOfFramesPerSec };
-	m_AnimTime += elapsedSec;
-	if (maxFrameTime < m_AnimTime)
+	if (m_IsCalled)
 	{
-		m_AnimFrame = (m_AnimFrame + 1) % m_NrOfFrames;
-		m_AnimTime -= maxFrameTime;
+		m_AnimTime += elapsedSec;
+		if (maxFrameTime < m_AnimTime)
+		{
+			m_AnimFrame = (m_AnimFrame + 1) % m_NrOfFrames;
+			m_AnimTime -= maxFrameTime;
+			m_IsCalled = false;
+		}
 	}
 }
 
 void Animation::Draw(Point2f bottomLeft)
 {
+	if (m_IsCalled == false)
+	{
+		m_IsCalled = true;
+	}
+	//Not sure if it is cheating. makes sure that start drawing from the first frame independent of the date of the update
 	m_pTexture->Draw(bottomLeft, GetSourceRect());
 }
 

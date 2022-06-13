@@ -21,6 +21,10 @@ public:
 	virtual float GetWidth() const = 0;  //return blocks width
 	virtual float GetHeight() const = 0; // returns block hieght
 
+	bool IsOnGroundStalgmite(const Rectf& actorShape) const;
+
+	bool m_IsDestroyed;
+
 protected: 
 	void SetCollision(); //sets collisons from type block bottomleft onwards
 	void SetLines();
@@ -29,12 +33,13 @@ protected:
 
 	enum class Type //The type will influence later on
 	{
-		typeOne = 0,
-		typeTwo = 1,
-		typeThree = 2
+		typeOne = 0, //start or green
+		typeTwo = 1,	//middle or brown
+		typeThree = 2		//end or ice
 	};
+	Type m_Type;
 
-	bool m_IsDestroyed;
+
 	bool m_IsMovable;
 
 	int m_NrLenght;
@@ -42,7 +47,7 @@ protected:
 	float m_WindowWidth;
 	float m_TotalWidth;
 
-	Type m_Type;
+
 	Rectf m_DestRect;
 	Rectf m_SourceRect;
 	Vector2f m_Velocity;

@@ -5,25 +5,112 @@
 #include <iostream>
 using namespace utils;
 
-WalkingEnemy::WalkingEnemy(Player* player,Level* level, Point2f bottomLeft, float windowWidth)
-	: NPC(bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
+WalkingEnemy::WalkingEnemy(Player* player, Level* level, Point2f bottomLeft, float windowWidth)
+	: NPC(player, level, bottomLeft, windowWidth, 3, 4, 4, 0, 0, 10)
 	, m_pEnemiesAlive{level->GetTextureManager()->GetTexturePointer("EnemyAlive")}
 	, m_pEnemiesDead{level->GetTextureManager()->GetTexturePointer("EnemyDead")}
-	, m_pPlayer{ player }
-	, m_HorSpeed{ 25 }
-	, m_pGameLevel{level}
+	, m_IsOnGround{}
+	, m_HorSpeed{ 25.0f }
+	, m_Acceleration{ 0.0f, -200 }
+	, m_InitialHeight{ bottomLeft.y}
+	, m_NeedsStalagmite{false}
+	, m_IsOffScreen{false}
+	, m_HasStalagmite{false}
+	, m_StalagmiteCreated{ false }
+	, m_TimeToDestroy{}
+	, m_VelocityXFlipped{}
 {
 	SetMeasures();
 	SetEnemyType();
 	InitializeAnimations();
 	NPC::SetVelocity(m_HorSpeed);
-	InitializeStalagmites();
 	SetVelocity();
+}
+
+void WalkingEnemy::Update(float elapsedSec)
+{
+	UpdateStalagmites(elapsedSec);
+	m_ActorShape = m_pPlayer->GetShape();
+	m_ActorState = State(m_pPlayer->GetPlayerState());
+	m_IsOnGround = m_pGameLevel->IsOnGround(m_CollisionRect, m_Velocity);
+	if (!m_IsOverlapping)
+	{
+		UpdateVerticalVelocity(elapsedSec);
+		UpdateHorizontalVelocity(elapsedSec);
+		UpdateAnimations(elapsedSec);
+		UpdatePosition(elapsedSec);
+	}
+	UpdateCollisionTools();
+}
+
+void WalkingEnemy::UpdateVerticalVelocity(float elapsedSec)
+{
+	m_pGameLevel->HandleCollision(m_CollisionRect, m_Velocity);
+	if (!(m_pGameLevel->IsOnGround(m_CollisionRect, m_Velocity)))
+	{
+		m_NeedsStalagmite = true;
+	}
+	m_IsOnGround = m_pGameLevel->IsOnGround(m_CollisionRect, m_Velocity);
+	if (!m_IsOnGround)
+		m_Velocity.y += m_Acceleration.y * elapsedSec;
+}
+
+void WalkingEnemy::UpdateHorizontalVelocity(float elapsedSec)
+{
+
+}
+
+void WalkingEnemy::UpdatePosition(float elapsedSec)
+{
+	if (m_IsOnGround)
+	{
+		m_BottomLeft.x += m_Velocity.x * elapsedSec;
+		if (m_Velocity.x > 0)
+			if (m_CollisionRect.left > m_WindowBoundries.left + m_WindowBoundries.width)
+			{
+				m_IsOffScreen = true;
+				m_BottomLeft.x = m_WindowBoundries.left - m_TextureWidthSnipet;
+				if (!m_IsAlive)
+					m_IsAlive = true;
+				if (m_BottomLeft.y < m_InitialHeight)
+				{
+					m_BottomLeft.y = m_InitialHeight;
+				}
+			}
+			else
+			{
+				m_IsOffScreen = false;
+			}
+		if (m_Velocity.x < 0)
+			if (m_CollisionRect.left + m_TextureWidthSnipet < m_WindowBoundries.left)
+			{
+				m_IsOffScreen = true;
+				m_BottomLeft.x = m_WindowBoundries.left + m_WindowBoundries.width + m_TextureWidthSnipet;
+				if (!m_IsAlive)
+					m_IsAlive = true;
+				if (m_BottomLeft.y < m_InitialHeight)
+				{
+					m_BottomLeft.y = m_InitialHeight;
+				}
+			}
+			else
+			{
+				m_IsOffScreen = false;
+			}
+	}
+	else 
+	{
+		m_BottomLeft.x += m_Velocity.x * elapsedSec;
+		m_BottomLeft.y += m_Velocity.y * elapsedSec;
+	}
 }
 
 WalkingEnemy::~WalkingEnemy()
 {
-	delete m_pStalagmite;
+	if (m_StalagmiteCreated)
+	{
+		delete m_pStalagmite;
+	}
 	delete m_pAnimationAlive;
 	delete m_pAnimationDead;
 }
@@ -33,21 +120,6 @@ void WalkingEnemy::InitializeAnimations()
 	m_pAnimationAlive = new Animation(m_pEnemiesAlive, static_cast<int>(m_Type), 0, 4, 10, 4, 3);
 	m_pAnimationDead = new Animation(m_pEnemiesDead, static_cast<int>(m_Type), 0, 4, 10, 4, 3);
 }
-
-
-void WalkingEnemy::Update(float elapsedSec)
-{
-	m_ActorShape = m_pPlayer->GetShape();
-	m_ActorState = State(m_pPlayer->GetPlayerState());
-	if (!m_IsOverlapping)
-	{
-		UpdateAnimations(elapsedSec);
-		NPC::UpdatePosition(elapsedSec);
-	}
-	UpdateStalagmites(elapsedSec);
-	UpdateCollisionTools();
-}
-
 
 void WalkingEnemy::Draw() const
 {
@@ -62,7 +134,6 @@ void WalkingEnemy::Draw() const
 		}
 		//FillRect(m_BottomLeft, m_TextureWidthSnipet, m_TextureHeightSnipet);
 		//FillRect(m_DestRect);
-		//
 		if (m_IsAlive)
 			m_pAnimationAlive->Draw(m_BottomLeft);
 		if(!m_IsAlive)
@@ -73,9 +144,7 @@ void WalkingEnemy::Draw() const
 	FillRect(m_pPlayer->GetShape());
 	//FillRect(m_DestRect);
 	SetColor(Color4f(1, 0, 0, 1));
-	DrawVector(m_VectorCollisonDetection, m_CollisionRect.GetCenter());
-	
-	//DrawLine();
+	DrawLine(m_LineCollisonDetection);
 
 	
 }
@@ -113,36 +182,104 @@ void WalkingEnemy::SetEnemyState(int& state, const Rectf& actorShape)
 			m_pPlayer->SetState(1);
 	if (IsOverlapping(m_CollisionRect, actorShape) && (m_pPlayer->GetPlayerState() == int(State::kill)))
 		m_IsAlive = false;
-	if (IsOverlapping(m_CollisionRect, actorShape) && (m_pPlayer->GetPlayerState() == int(State::kill)))
+	if(m_StalagmiteCreated)
+		if (m_pStalagmite->GetOverlap() && (m_pPlayer->GetPlayerState() != int(State::kill)) && (!m_pStalagmite->GetDestroyed()))
+			m_pPlayer->SetState(1);
+	
+	if (m_VelocityXFlipped && !(m_pGameLevel->IsOnGround(m_CollisionRect, m_Velocity)))
 		m_IsAlive = false;
+	//if (IsOverlapping(m_LineCollisonDetection, actorShape))
+	//	std::cout << "TEST" << '\n';
 }
 
 void WalkingEnemy::InitializeStalagmites()
 {
-	Point2f bottomLeft{};
-	if (m_Velocity.x > 0)
+	if (!m_StalagmiteCreated)
 	{
-		bottomLeft = Point2f{ m_BottomLeft.x + m_TextureWidthSnipet, m_BottomLeft.y };
-		m_pStalagmite = new Stalagmite(m_pGameLevel, bottomLeft, m_TextureWidthSnipet);
+			Point2f bottomLeft{};
+			if (m_Velocity.x > 0)
+			{
+				bottomLeft = Point2f{ m_BottomLeft.x + m_TextureWidthSnipet, m_BottomLeft.y };
+				m_pStalagmite = new Stalagmite(m_pGameLevel, bottomLeft, m_TextureWidthSnipet);
+				m_pStalagmite->SetVelocity(m_Velocity);
+			}
+			if (m_Velocity.x < 0)
+			{
+				bottomLeft = Point2f{ m_BottomLeft.x - m_TextureWidthSnipet - 8, m_BottomLeft.y };
+				m_pStalagmite = new Stalagmite(m_pGameLevel, bottomLeft, m_TextureWidthSnipet);
+				m_pStalagmite->SetVelocity(m_Velocity);
+			}
+			m_pStalagmite->SetWindowWidth(m_WindowBoundries);
+			m_StalagmiteCreated = true;
 	}
-	if (m_Velocity.x < 0)
-	{
-		bottomLeft = Point2f{ m_BottomLeft.x - m_TextureWidthSnipet - 8, m_BottomLeft.y };
-		m_pStalagmite = new Stalagmite(m_pGameLevel, bottomLeft, m_TextureWidthSnipet);
-	}
-	m_pStalagmite->SetWindowWidth(m_WindowWidth);
 }
 
 void WalkingEnemy::DrawStalagmites() const
-{
-	m_pStalagmite->Draw(m_BottomLeft);
+{	
+	if(m_HasStalagmite)
+		m_pStalagmite->Draw(m_BottomLeft);
 }
 
 void WalkingEnemy::UpdateStalagmites(float elapsedSec)
 {
-	m_pStalagmite->Update(elapsedSec);
-	m_pStalagmite->Overlap(m_ActorShape);
-	m_pStalagmite->SetActorState(int(m_ActorState));
+	if (m_NeedsStalagmite && !m_StalagmiteCreated)
+	{
+		if (!m_VelocityXFlipped)
+		{
+			FlipXVelocity();
+		}
+		if (m_IsOffScreen)
+		{
+			m_HasStalagmite = true;
+			InitializeStalagmites();
+		}
+	}
+	if (m_StalagmiteCreated)
+	{
+		if (m_HasStalagmite)
+		{
+			m_pStalagmite->Update(elapsedSec);
+			m_pStalagmite->Overlap(m_ActorShape);
+			m_pStalagmite->SetActorState(int(m_ActorState));
+			m_TimeToDestroy += elapsedSec;
+			if (m_TimeToDestroy > 2)
+			{
+				if (m_pStalagmite->GetDestroyed())
+				{
+					delete m_pStalagmite;
+					m_pStalagmite = nullptr;
+					m_HasStalagmite = false;
+					m_StalagmiteCreated = false;
+					m_TimeToDestroy = 0;
+				}
+				m_NeedsStalagmite = false;
+				m_VelocityXFlipped = false;
+			}
+			if (m_IsOffScreen && m_VelocityXFlipped)
+			{
+				FlipXVelocity();
+				m_VelocityXFlipped = false;
+				m_pStalagmite->SetVelocity(m_Velocity);
+				m_pStalagmite->SetNewBottomLeft(m_BottomLeft);
+			}
+		}
+	}
+}
+
+void WalkingEnemy::FlipXVelocity()
+{
+	if (m_Velocity.x > 0)
+	{
+		m_Velocity.x = m_HorSpeed * -1;
+		m_VelocityXFlipped = true;
+		return;
+	}
+	if (m_Velocity.x < 0)
+	{
+		m_Velocity.x = m_HorSpeed;
+		m_VelocityXFlipped = true;
+		return;
+	}
 }
 
 void WalkingEnemy::UpdateAnimations(float elapsedSec)
@@ -153,7 +290,8 @@ void WalkingEnemy::UpdateAnimations(float elapsedSec)
 
 void WalkingEnemy::SetVelocity()
 {
-	m_pStalagmite->SetVelocity(m_Velocity);
+	if (m_HasStalagmite)
+		m_pStalagmite->SetVelocity(m_Velocity);
 }
 
 void WalkingEnemy::UpdateCollisionTools()
@@ -162,15 +300,17 @@ void WalkingEnemy::UpdateCollisionTools()
 	{
 		m_CollisionRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
 		Point2f center{ m_CollisionRect.GetCenter() };
-		Point2f dot{ m_CollisionRect.GetCenter().x, m_CollisionRect.GetCenter().y - m_TextureHeightSnipet - 10 };
-		m_VectorCollisonDetection = Vector2f{ center, dot };
+		Point2f dot{ m_CollisionRect.GetCenter().x, m_CollisionRect.GetCenter().y - m_TextureHeightSnipet };
+		m_LineCollisonDetection = Line2f{ center, dot };
 	}
 	if (m_Velocity.x < 0)
 	{
 		m_CollisionRect = Rectf{ m_BottomLeft.x - m_TextureWidthSnipet, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
 		Point2f center{ m_CollisionRect.GetCenter() };
-		Point2f dot{ m_CollisionRect.GetCenter().x, m_CollisionRect.GetCenter().y - m_TextureHeightSnipet - 10};
-		m_VectorCollisonDetection = Vector2f{ center, dot };
+		Point2f dot{ m_CollisionRect.GetCenter().x, m_CollisionRect.GetCenter().y - m_TextureHeightSnipet };
+		m_LineCollisonDetection = Line2f{ center, dot };
 	}
-
 }
+
+
+

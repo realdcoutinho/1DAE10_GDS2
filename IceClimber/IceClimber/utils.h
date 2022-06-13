@@ -65,10 +65,17 @@ namespace utils
 	bool IsPointInRect(const Point2f& p, const Rectf& r);
 
 	bool IsPointInCircle(const Point2f& p, const Circlef& c);
+
+	bool IsLineInPolygon(const Line2f& line, const std::vector<Point2f>& vertices);
+
 	bool IsPointInPolygon( const Point2f& p, const std::vector<Point2f>& vertices );
 	bool IsPointInPolygon( const Point2f& p, const Point2f* vertices, size_t nrVertices );
 
+
+
 	bool IsOverlapping( const Point2f& a, const Point2f& b, const Circlef& c );
+
+	bool IsOverlapping(const Line2f& line, const Rectf& r);
 	bool IsOverlapping( const Point2f& a, const Point2f& b, const Rectf& r );
 
 	bool IsOverlapping(const Rectf & r1, const Rectf & r2);

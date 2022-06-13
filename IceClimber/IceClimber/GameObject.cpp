@@ -7,13 +7,14 @@ GameObject::GameObject(Point2f bottomLeft, int nrRows, int nrColumns)
 	: m_BottomLeft{ bottomLeft }
 	, m_NrRows{nrRows}
 	, m_NrColumns{nrColumns}
-	, m_IsOverlapping{false}
+	, m_IsOverlapping{ false }
 	, m_TextureWidth{0} // it will be redefined later on
 	, m_TextureHeight{0} // it will be redefined later on
 	, m_TextureSnipetWidth{0} // it will be redefined later on
 	, m_TextureSnipetHeight{0} // it will be redefined later on
 	, m_SourceRect{} // it will be redefined later on
 	, m_DestRect{} // it will be redefined later on
+	, m_CollisonRect{}
 {
 }
 

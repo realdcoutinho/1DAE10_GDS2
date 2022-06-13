@@ -5,12 +5,16 @@
 #include "Player.h"
 #include "TextureManager.h"
 #include <iostream>
+#include "utils.h"
+using namespace utils;
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
+	, m_Offset{ 100.0f }
 	, m_pTextures{ new TextureManager()}
-	, m_pPlayer{ new Player{this, Point2f{256 / 2, 24}, Point2f{256 / 2, 24} } }
+	, m_pPlayer{ new Player{this, Point2f{256 / 2 + m_Offset, 24}, Point2f{256 / 2 + m_Offset, 24} } }
 	, m_pLevel{ new Level{this, m_pPlayer, window.width, window.height} }
+	, m_Pause{false}
 
 {
 	SetScale();
@@ -53,13 +57,17 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	m_pLevel->GetPlayerState(m_pPlayer->GetPlayerState());
-	m_pPlayer->Update(elapsedSec, m_pLevel);
-	m_pLevel->Update(elapsedSec);
-	m_pLevel->GetActorShape(m_pPlayer->GetShape());
 
-	m_pCamera->Update(elapsedSec);
-	m_pPlayer->SetWinning(m_pLevel->IsWinning());
+	if (!m_Pause) 
+	{
+		m_pLevel->GetPlayerState(m_pPlayer->GetPlayerState());
+		m_pPlayer->Update(elapsedSec, m_pLevel);
+		m_pLevel->Update(elapsedSec);
+		m_pLevel->SetActorShape(m_pPlayer->GetShape());
+		m_pCamera->Update(elapsedSec);
+		m_pPlayer->SetWinning(m_pLevel->IsWinning());
+	}
+
 	//std::cout << time << '\n';
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
@@ -85,8 +93,16 @@ void Game::Draw( ) const
 		m_pCamera->Transform(m_pPlayer->GetShape(), m_pPlayer->GetIsOnGround());
 		DrawBackground();
 		m_pPlayer->Draw();
+		if (m_Pause)
+		{
+			SetColor(Color4f(0, 0, 0, 0.5));
+			FillRect(Point2f{0, 0}, m_Window.width, m_Window.height);
+		}
 	}
 	glPopMatrix();
+
+	Rectf rect{ 0, 0, 50, 100 };
+	//FillRect(rect);
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -117,19 +133,15 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch ( e.keysym.sym )
+	{
+	case SDLK_l:
+		PrintIntructions();
+		break;
+	case SDLK_p:
+		Pause();
+		break;
+	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
@@ -191,10 +203,31 @@ void Game::SetScale()
 void Game::InitializeCamera(const Window& window)
 {
 	m_pCamera = new Camera{ m_pPlayer, window.width / m_Scale, window.height / m_Scale };
+	Rectf cameraPosition{ m_pLevel->GetBoundaries().left + m_Offset, m_pLevel->GetBoundaries().bottom, m_pLevel->GetBoundaries().width, m_pLevel->GetBoundaries().height};
 	m_pCamera->SetLevelBounderies(m_pLevel->GetBoundaries());
 }
 
 TextureManager* Game::GetTextureManager()
 {
 	return m_pTextures;
+}
+
+void Game::PrintIntructions()
+{
+	std::cout << "Follow these Intructions:" << '\n';
+	std::cout << "Press X to jump" << '\n';
+	std::cout << "Press Z to to kill" << '\n';
+	std::cout << "Use either WASD or arrows to move" << '\n';
+	std::cout << "Avoid getting hit by the falling Stalagtites" << '\n';
+	std::cout << "Avoid getting hit by the enemies and their Stalagmites" << '\n';
+	std::cout << "...." << '\n';
+	std::cout << '\n' << '\n' << '\n';
+}
+
+void Game::Pause()
+{
+	if (!m_Pause)
+		m_Pause = true;
+	else
+		m_Pause = false;
 }

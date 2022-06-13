@@ -1,10 +1,14 @@
 #include "pch.h"
 #include "NPC.h"
+#include "Level.h"
+#include "Player.h"
 #include <iostream>
 using namespace utils;
 
-NPC::NPC(Point2f bottomLeft, float windowWidth, int nrRows, int nrColumns, int nrOfFrames, int animFrame, float animTime, float nrOfFramesPerSec)
-	: m_BottomLeft{ bottomLeft }
+NPC::NPC(Player* player, Level* level, Point2f bottomLeft, float windowWidth, int nrRows, int nrColumns, int nrOfFrames, int animFrame, float animTime, float nrOfFramesPerSec)
+	: m_pPlayer{ player }
+	, m_pGameLevel{level}
+	, m_BottomLeft{ bottomLeft }
 	, m_WindowWidth{ windowWidth }
 	, m_NrRows{nrRows}
 	, m_NrColumns{nrColumns}
@@ -14,8 +18,9 @@ NPC::NPC(Point2f bottomLeft, float windowWidth, int nrRows, int nrColumns, int n
 	, m_NrOfFramesPerSec{ nrOfFramesPerSec }
 	, m_IsOverlapping{false}
 	, m_IsAlive{true}
+	, m_WindowBoundries{level->GetBoundaries()}
 {
-
+	
 }
 
 NPC::~NPC()
@@ -53,35 +58,7 @@ void NPC::SetMeasures(float textureWidth, float textureHeight, float textureWidt
 	m_CollisionRect = destRect;
 }
 
-void NPC::UpdatePosition(float elapsedSec)
-{
-	m_BottomLeft.x += m_Velocity.x * elapsedSec;
-	if (m_Velocity.x > 0)
-		if (m_BottomLeft.x > m_WindowWidth)
-		{
-			m_BottomLeft.x = -m_TextureWidthSnipet;
-			if (!m_IsAlive)
-			{
-				m_IsAlive = true;
-			}
-		}
-	if (m_Velocity.x < 0)
-		if (m_BottomLeft.x + m_TextureWidthSnipet < 0)
-		{
-			m_BottomLeft.x = m_WindowWidth + m_TextureWidthSnipet;
-			if (!m_IsAlive)
-			{
-				m_IsAlive = true;
-			}
-		}
 
-	if ((!m_IsAlive) && m_Type == Type::typeThree)
-	{
-		m_BottomLeft.y += m_Velocity.y * elapsedSec;
-	}
-
-	m_CollisionRect = Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_TextureWidthSnipet, m_TextureHeightSnipet };
-}
 
 void NPC::SetVelocity(float horSpeed)
 {

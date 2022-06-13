@@ -1,5 +1,7 @@
 #pragma once
 #include "utils.h"
+
+
 class GameObject
 {
 public:
@@ -17,6 +19,8 @@ public:
 	virtual void Update(float elapsedSec);
 	void Overlap(const Rectf& actorShape);
 
+	
+
 protected:
 	void SetMeasures(float textureWidth, float textureHeight, float textureWidthSnipet, float textureHeightSnipet, Rectf destRect);
 
@@ -24,7 +28,7 @@ protected:
 	int m_NrColumns;
 
 	bool m_IsOverlapping;
-	//float m_WindowWidth;
+	float m_WindowWidth;
 	float m_TextureWidth;
 	float m_TextureHeight;
 	float m_TextureSnipetWidth;
@@ -33,5 +37,7 @@ protected:
 	Point2f m_BottomLeft;
 	Rectf m_SourceRect;
 	Rectf m_DestRect;
+
+	Rectf m_CollisonRect;
 };
 

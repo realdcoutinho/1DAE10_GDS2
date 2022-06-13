@@ -38,10 +38,13 @@ private:
 	void DrawBackground() const;
 	void InitializeCamera(const Window& window);
 
+	void PrintIntructions();
+	void Pause();
 
 	
+	bool m_Pause;
 
-
+	float m_Offset;
 	float m_Scale;
 	float time{};
 

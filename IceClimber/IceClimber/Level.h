@@ -13,6 +13,11 @@
 #include <vector>
 #include "utils.h"
 
+#include "Stalagmite.h"
+#include "Stalagtites.h"
+
+
+
 class Game;
 class PLayer;
 class Level final
@@ -27,7 +32,8 @@ public:
 
 	void Draw() const; // Draws all the Level Objects
 	void Update(float elapsedSec); //updates
-	void GetActorShape(const Rectf& actorShape); // hold the actor shape
+	void SetActorShape(const Rectf& actorShape); // hold the actor shape
+	Rectf GetActorShape();
 	void HandleCollision(Rectf& actorShape, Vector2f& actorVelocity) const; //handles collisons
 	bool IsOnGround(const Rectf& actorShape, Vector2f& actorVelocity) const; //returns a bool value in case the player in on ground
 	bool IsOnCloud(const Rectf& actorShape, Vector2f& actorVelocity) const; // is actor specifically on a cloud
@@ -39,6 +45,11 @@ public:
 	bool IsWinning() const; 
 
 	TextureManager* GetTextureManager() const;
+	std::vector<GameObject*> m_pGameObjects;
+	Player* GetPlayerPointer();
+
+	int GetBlockIndex(Rectf& actorShape, Vector2f& actorVelocity);
+	void SetBlockFixed(int index);
 
 private:
 	void SetMeasures(); //sets measures variables inlcuding background rect
@@ -71,6 +82,9 @@ private:
 	void SetCloudVelocity(const Rectf& actorShape); // in which is the actor on top of?
 	void DeleteTextures(); //deletes textures
 
+
+
+
 	enum class BlockType //enum class of the various block types
 	{
 		green = 0,
@@ -85,6 +99,7 @@ private:
 	};
 
 	float m_Scale; //holds the scale value
+	float m_OffSet;
 
 	float m_TextureHeight; //level height
 	float m_TextureWidth; //level width
@@ -98,7 +113,7 @@ private:
 	Rectf m_ActorShape; // actor shape
 
 	int m_NrOfObjects;
-	std::vector<GameObject*> m_pGameObjects;
+	
 
 	int m_NrOfNPC;
 	std::vector<NPC*> m_pNPC;
@@ -113,6 +128,11 @@ private:
 	Vector2f m_CloudVelocity;
 
 	std::vector<std::vector<Point2f>> m_LevelCollison; // holds collison points
-	const std::string m_LevelCollitionPath{ "./Images/IC_Level_Colission.svg" }; //file name path
+	//const std::string m_LevelCollitionPath{ "./Images/IC_Level_Colission.svg" }; //file name path
+	const std::string m_LevelCollitionPath{ "./Images/Background_BlackAndWhite_LongVersion.svg" }; //file name path
+
+
+	void HandleBlocksEnemyCollison();
+
 };
 

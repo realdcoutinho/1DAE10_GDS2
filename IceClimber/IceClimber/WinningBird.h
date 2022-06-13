@@ -4,11 +4,12 @@
 #include "Animation.h"
 #include "utils.h"
 
+class Player;
 class Level;
 class WinningBird final : public NPC 
 {
 public:
-	explicit WinningBird(Level* level, Point2f bottomLeft, float windowWidth);
+	explicit WinningBird(Player* player, Level* level, Point2f bottomLeft, float windowWidth);
 	WinningBird(const WinningBird& other) = delete; //copy constructor
 	WinningBird& operator=(const WinningBird& other) = delete; // assignment operator
 	WinningBird(WinningBird&& other) = delete; // move constructor

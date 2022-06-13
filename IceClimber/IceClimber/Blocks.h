@@ -4,8 +4,10 @@
 #include <vector>
 #include "Platform.h"
 
+class Stalagtites;
 class Level;
 class Texture;
+class Player;
 class Blocks final : public Platform
 {
 public:
@@ -17,13 +19,28 @@ public:
 	~Blocks(); //destructor
 
 	void Draw() const; // draws all a specific block type
+	void Update(float elapsedSec);
 	float GetWidth() const;  //return blocks width
 	float GetHeight() const; // returns block hieght
+	void FixedBlocked();
 
 private:
 	void SetMeasures(); //Sets block measures
+	void SetStalagmite();
 
+	enum class State
+	{
+		fixed = 0,
+		destroyed = 1,
+	};
+	State m_State;
+
+
+	bool m_HasStalagtites;
+	
 	Level* m_pLevel;
+	//Player* m_pPlayer;
+	Stalagtites* m_pStalagtites;
 
 	Texture* m_pBlocks; //Pointer to the texture
 	std::vector<Point2f> m_BlockCollision; //holds collision points

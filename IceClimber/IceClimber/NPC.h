@@ -2,10 +2,12 @@
 #include "utils.h"
 #include "Texture.h"
 
+class Player;
+class Level;
 class NPC
 {
 public:
-	explicit NPC(Point2f bottomLeft, float windowWidth, int nrRows, int nrColumns, int nrOfFrames,  int animFrame, float animTime, float nrOfFramesPerSec);
+	explicit NPC(Player* player, Level* level, Point2f bottomLeft, float windowWidth, int nrRows, int nrColumns, int nrOfFrames,  int animFrame, float animTime, float nrOfFramesPerSec);
 	NPC(const NPC& other) = delete; //copy constructor
 	NPC& operator=(const NPC& other) = delete; // assignment operator
 	NPC(NPC&& other) = delete; // move constructor
@@ -19,7 +21,7 @@ public:
 protected:
 	void SetVelocity(float horSpeed);
 	void SetMeasures(float textureWidth, float textureHeight, float textureWidthSnipet, float textureHeightSnipet, Rectf destRect);
-	virtual void UpdatePosition(float elapsedSec);
+	//virtual void UpdatePosition(float elapsedSec);
 	
 	enum class Type
 	{
@@ -29,11 +31,12 @@ protected:
 	};
 
 	float m_WindowWidth;
+	Rectf m_WindowBoundries;
 
 	float m_TextureWidth;
 	float m_TextureHeight;
 	float m_TextureWidthSnipet;
-	float m_TextureHeightSnipet;
+	float m_TextureHeightSnipet; 
 
 	int m_NrRows;
 	int m_NrColumns;
@@ -51,7 +54,12 @@ protected:
 	Vector2f m_Velocity;
 	Point2f m_BottomLeft;
 
-	Vector2f m_VectorCollisonDetection;
+	Line2f m_LineCollisonDetection;
 	Rectf m_CollisionRect;
+
+
+
+	Player* m_pPlayer;
+	Level* m_pGameLevel;
 };
 

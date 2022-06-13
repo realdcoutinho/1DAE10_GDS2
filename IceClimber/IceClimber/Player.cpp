@@ -144,11 +144,15 @@ void Player::UpdateTimeState(float elapsedSec)
 	{
 		m_IsDead = true;
 		m_Time += elapsedSec;
-		if (m_Time < 1.5f)
+		if (m_Time > 1.5f)
 		{
 			m_State = State::roll;
-			m_Time = 0;
 		}
+		//if (m_Time > 3.0f)
+		//{
+		//	m_State = State::jump;
+		//	m_Time = 0;
+		//}
 	}
 }
 

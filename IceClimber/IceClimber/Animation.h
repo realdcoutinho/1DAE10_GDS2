@@ -22,6 +22,10 @@ private:
 	void SetMeasures();
 	Rectf GetSourceRect() const;
 
+
+
+	bool m_IsCalled;
+
 	float m_WidthTexture;
 	float m_HeightTexture;
 	float m_ClipWidth;

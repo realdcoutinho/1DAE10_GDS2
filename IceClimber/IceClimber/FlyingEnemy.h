@@ -5,11 +5,12 @@
 #include "Animation.h"
 #include "utils.h"
 
-
+class Player;
+class Level;
 class FlyingEnemy final : public NPC
 {
 public:
-	explicit FlyingEnemy(Level* level, Point2f bottomLeft, float windowWidth);
+	explicit FlyingEnemy(Player* player, Level* level, Point2f bottomLeft, float windowWidth);
 	FlyingEnemy(const FlyingEnemy& other) = delete; //copy constructor
 	FlyingEnemy& operator=(const FlyingEnemy& other) = delete; // assignment operator
 	FlyingEnemy(FlyingEnemy&& other) = delete; // move constructor

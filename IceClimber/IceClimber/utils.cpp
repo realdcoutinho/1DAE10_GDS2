@@ -56,7 +56,7 @@ void utils::DrawLine( const Point2f& p1, const Point2f& p2, float lineWidth )
 	DrawLine( p1.x, p1.y, p2.x, p2.y, lineWidth );
 }
 
-void utils::DrawLine(const Line2f& line, float lineWidth = 1.0f)
+void utils::DrawLine(const Line2f& line, float lineWidth)
 {
 	DrawLine(line.point1.x, line.point1.y, line.point2.x, line.point2.y, lineWidth);
 }
@@ -311,6 +311,33 @@ bool utils::IsPointInCircle( const Point2f& p, const Circlef& c )
 	return ( squaredRadius >= squaredDist );
 }
 
+bool utils::IsOverlapping(const Line2f& line, const Rectf& r)
+{
+	// if one of the line segment end points is in the rect
+	if (utils::IsPointInRect(line.point1, r) || utils::IsPointInRect(line.point2, r))
+	{
+		return true;
+	}
+
+	HitInfo hitInfo{};
+	Point2f vertices[]{ Point2f {r.left, r.bottom},
+		Point2f{ r.left + r.width, r.bottom },
+		Point2f{ r.left + r.width, r.bottom + r.height },
+		Point2f{ r.left, r.bottom + r.height } };
+
+	if (Raycast(vertices, 4, line.point1, line.point2, hitInfo) )
+	{
+		return true;
+	}
+	if (Raycast(vertices, 4, line.point2, line.point1, hitInfo))
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 bool utils::IsOverlapping( const Point2f& a, const Point2f& b, const Rectf& r )
 {
 	// if one of the line segment end points is in the rect
@@ -420,6 +447,24 @@ bool utils::IsOverlapping( const Point2f* vertices, size_t nrVertices, const Cir
 	}
 	return false;
 }
+
+bool utils::IsLineInPolygon(const Line2f& line, const std::vector<Point2f>& vertices)
+{
+	if (IsPointInPolygon(line.point1, vertices.data(), vertices.size()))
+	{
+		return true;
+	}
+	if (IsPointInPolygon(line.point2, vertices.data(), vertices.size()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
 
 bool utils::IsPointInPolygon( const Point2f& p, const std::vector<Point2f>& vertices )
 {

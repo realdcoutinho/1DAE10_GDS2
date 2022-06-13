@@ -27,7 +27,6 @@ void Platform::Draw() const
 
 void Platform::Update(float elapsedSec)
 {
-	
 	if (m_IsMovable)
 	{
 		SetCollision();
@@ -92,6 +91,17 @@ bool Platform::IsOnGround(const Rectf& actorShape) const
 
 	HitInfo hitInfo{};
 	return (Raycast(m_TopLine, actorBottomCenter, actorTopCenter, hitInfo) && hitInfo.lambda < 0.5f);
+}
+
+bool Platform::IsOnGroundStalgmite(const Rectf& actorShape) const
+{
+	Point2f actorBottomCenter{ actorShape.GetBottomCenter(0, -1) };
+	Point2f actorTopCenter{ actorShape.GetTopCenter() };
+	std::vector<Point2f> line;
+	line.push_back(Point2f{ m_BottomLeft.x, m_BottomLeft.y + m_TextureSnipetHeight });
+	line.push_back(Point2f{ m_BottomLeft.x + (m_TextureSnipetWidth * m_NrLenght), m_BottomLeft.y + m_TextureSnipetHeight });
+	HitInfo hitInfo{};
+	return (Raycast(line, actorBottomCenter, actorTopCenter, hitInfo) && hitInfo.lambda < 0.5f);
 }
 
 void Platform::SetCollision()
